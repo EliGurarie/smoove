@@ -1,0 +1,4 @@
+useDynLib(smoove)
+exportPattern("^[[:alpha:]]+")
+S3method(plot, track)
+S3method(scan, track)

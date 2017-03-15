@@ -1,0 +1,26 @@
+Package: smoove
+Type: Package
+Title: Functions and methods for simulating and estimating correlated velocity movement (CVM) models.
+Version: 0.11
+Date: 2016-11-22
+Author: Eliezer Gurarie
+Maintainer: <egurarie@umd.edu>
+Description: ...
+License: Unlimited
+Depends:
+    MASS,
+    Matrix,
+    mvtnorm,
+    CircStats,
+    nlme,
+    numDeriv,
+    crawl,
+    magrittr,
+    plyr,
+    intervals,
+    scales,
+    gtools
+LinkingTo: Rcpp, RcppArmadillo
+VignetteBuilder: knitr
+RoxygenNote: 5.0.1
+Suggests: knitr
