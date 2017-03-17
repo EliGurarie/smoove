@@ -13,7 +13,7 @@ To see a detailed vignette:
 vignette("smoove")
 ```
 
-# Or simply: https://github.com/EliGurarie/smoove/blob/master/vignettes/smoove.pdf.
+Or simply: https://github.com/EliGurarie/smoove/blob/master/vignettes/smoove.pdf.
 
 ### References
 
