@@ -17,4 +17,4 @@ vignette("smoove")
 
 ### References
 
-E. Gurarie, C. Fleming, W.F. Fagan, K. Laidre, J. Hernández-Pliego, O. Ovaskainen. (final review stages) Correlated velocity models as a fundamental unit of animal movement: synthesis and applications. *Movement Ecology* 
+E. Gurarie, C. Fleming, W.F. Fagan, K. Laidre, J. Hernández-Pliego, O. Ovaskainen. (final review stages) Correlated velocity models as a fundamental unit of animal movement: synthesis and applications. *Movement Ecology*. 
