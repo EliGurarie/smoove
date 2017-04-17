@@ -2,9 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
-.Rbuildignore
-smoove.Rproj
-code/
+hidden
+old
 src/*.o
 src/*.so
 src/*.dll
