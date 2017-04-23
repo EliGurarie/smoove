@@ -160,33 +160,3 @@ fitRACVM <- function(T, V, p0, model = "UCVM"){
   
   return(list(results=results, LL = LL)) 
 }
-
-# p0 <- c(logtau = 1, logeta = 1, omega = 2)
-
-getV.spline <- function(Z, T.raw, T.new = NULL, resolution = 1e-2, ... ){
-  
-  fX.spline <- splinefun(T.raw, Re(Z), ...)
-  fY.spline <- splinefun(T.raw, Im(Z), ...)
-  
-  T.raw <- as.numeric(T.raw)
-  if(is.null(T.new)) T.new <- T.raw[-length(T.raw)] + diff(T.raw)/2
-  
-  dT.min <- min(c(diff(T.new), diff(T.raw)))
-  T.spline <- seq(min(T.raw), max(T.raw), dT.min*resolution)
-  
-  X.spline <- fX.spline(T.spline)
-  Y.spline <- fY.spline(T.spline)
-  Z.spline <- X.spline + 1i*Y.spline
-  V.spline <- diff(Z.spline)/diff(as.numeric(T.spline))
-  
-  dt.spline <- as.numeric(diff(T.spline))[1]
-  
-  # find closest match (should be very close!)
-  d.new.spline <- outer(T.new, T.spline, function(x,y) abs(as.numeric(y)-as.numeric(x)))
-  which.spline<- apply(d.new.spline, 1, which.min)
-  
-  # to remove stray NA in the velocity spline
-  which.spline  <- which.spline[-length(which.spline)]
-  
-  return(list(V = V.spline[which.spline], Z = Z.spline[which.spline], T = T.new[-length(T.new)]))
-}
