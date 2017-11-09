@@ -117,4 +117,3 @@ require(smoove)
   with(ucvm8, estimateUCVM(z = Z, t = T, method="crawl"))
 
 }
-

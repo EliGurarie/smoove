@@ -59,4 +59,3 @@ with(racvm1b, scan.track(x = Re(Z), y = Im(Z), time = T))
 \seealso{
 \code{\link{estimateRACVM}}
 }
-

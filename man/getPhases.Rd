@@ -19,4 +19,3 @@ a named list of phases (numbered by roman numerals) containing the selected mode
 \description{
 Takes a set of change points and fits the best model to each phase
 }
-

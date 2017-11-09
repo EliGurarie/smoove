@@ -117,4 +117,3 @@ racvm <- simulateRACVM(tau = 5, eta = 2, omega = 2, mu = 2, Tmax = 100, dt = .1)
 \seealso{
 \code{\link{simulateRACVM}}
 }
-

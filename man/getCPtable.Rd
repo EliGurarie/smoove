@@ -33,4 +33,3 @@ a data frame with: \describe{
 \description{
 Compares selected models with and without changes across a set of change points.
 }
-

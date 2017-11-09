@@ -26,4 +26,3 @@ data(Bowhead)
 par(bty="l", mar = c(0,2,0,2), oma=c(4,0,4,0), xpd=NA) 
  with(Bowhead, scan.track(time = DateTime, x = x.km, y = y.km))
 }
-

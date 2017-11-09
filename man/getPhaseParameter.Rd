@@ -27,4 +27,3 @@ Obtain and Plot Estimates From RACVM Partition
 
 \code{plotVariable}
 }
-

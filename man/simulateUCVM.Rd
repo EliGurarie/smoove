@@ -56,4 +56,3 @@ with(ucvm2, {
 \seealso{
 simulateUCVM, simulateRACVM
 }
-

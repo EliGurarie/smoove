@@ -14,4 +14,3 @@ plotWindowSweep(windowsweep, ...)
 \description{
 Plots a relative likelihood plot for the windowsweep
 }
-

@@ -22,4 +22,3 @@ testCP(Z, T, cp, start, end, modelset = "all", ...)
 \description{
 Identifies appropriate models on either side of a change point
 }
-

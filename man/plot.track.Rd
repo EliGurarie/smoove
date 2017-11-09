@@ -24,4 +24,3 @@ data(Bowhead)
 bh <- data.frame(X = Bowhead$x.km, Y = Bowhead$y.km)
 plot.track(bh)
 }
-

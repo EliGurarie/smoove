@@ -20,4 +20,3 @@ getCov.vz(t1=5,t2=5, nu=2, tau=10)
 getCov.vz(t1=5,t2=10, nu=2, tau=10)
 getCov.vz(t1=95,t2=100, 2,10)
 }
-

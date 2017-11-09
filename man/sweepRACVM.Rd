@@ -27,4 +27,3 @@ sweepRACVM(XY = NULL, Z = NULL, T, windowsize, windowstep, model = "UCVM",
 \description{
 Moves a window, computes likelihoods for all change points, and fills out a likelihood matrix.
 }
-

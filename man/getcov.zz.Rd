@@ -30,4 +30,3 @@ grid.arrange(i1,i2,i3,ncol=3)
 # And the complete matrix (log transformed):
 image(log(Sigma), colorkey=TRUE, main="log(Sigma)")
 }
-
