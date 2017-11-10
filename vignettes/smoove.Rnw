@@ -246,7 +246,7 @@ The Correlated Random Walk (CRW) matching method computes the CRW parameters (sh
 @
 \noindent The diagnosis plots (crudely) illustrates the standard autocorrelation function for the step lengths and turning angles.  Under the normal assumptions of the CRW, these should both be around 0 at lags greater than 0.  The more autocorrelated either of these time series is, the more biased the estimates are likely to be. 
 
-\noindent\emph{NB: This method is illustrative, generally biased, and  recommended except for data that are relatively coarsely sampled.  It is, however, very fast to compute.}
+\noindent\emph{NB: This method is illustrative, generally biased, and not recommended except for data that are relatively coarsely sampled.  It is, however, very fast to compute.}
 
 \subsubsection{Velocity likelihood}
 
@@ -256,7 +256,7 @@ The velocity likelihood method is based on using the known distributional proper
 estimateUCVM(z = ucvm1$Z, t = ucvm1$T, method = "vLike", CI=TRUE)
 @
 
-\noindent  This method gives very reliable confidence intervals, but may underestimate velocities somewhat. We can also run it on the irregularly sampled track from above:
+\noindent  This method gives very reliable confidence intervals, but may underestimate velocities. We can also run it on the irregularly sampled track from above:
 <<vLike.irregular, cache=TRUE>>=
 estimateUCVM(z = ucvm2$Z, t = ucvm2$T, method = "vLike", CI=TRUE)
 @
@@ -282,7 +282,7 @@ with(ucvm2, estimateUCVM(z = Z, t = T, method = "crawl"))
 \noindent The \texttt{crawl} method can handle a very long ($n = 10000$) dataset as well.  
 
 <<crawl2, cache=TRUE>>=
-with(ucvm1, estimateUCVM(z = Z, t = T, method = "crawl"))$nutau
+with(ucvm1, estimateUCVM(z = Z, t = T, method = "crawl"))
 @
 
 \noindent with correspondingly smaller confidence intervals. There are many additional options that can be passed to the \texttt{crawl} solver, detailed in the help file for \texttt{crwMLE}.  

@@ -9,9 +9,10 @@ findCandidateChangePoints <- function(windowsweep, clusterwidth=0){
   starts <- colnames(windowsweep) %>% as.numeric
   
   candidate.CPs <- apply(windowsweep, 2, function(ll) T[which.max(ll)]) 
-  n.raw <- length(candiate.CPs)
+  n.raw <- length(candidate.CPs)
   
-  if(clusterwidth > 0)  candidate.CPs <- clusters(rep(candidate.CPs,2), clusterwidth) %>% sapply(mean) else
+  if(clusterwidth > 0)  candidate.CPs <- clusters(rep(candidate.CPs,2), clusterwidth) %>% 
+    sapply(mean) else
     candidate.CPs <- unique(candidate.CPs)
   
   candidate.CPs <- sort(candidate.CPs)
