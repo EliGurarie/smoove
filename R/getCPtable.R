@@ -28,7 +28,7 @@ getCPtable <- function(CPs, XY = NULL, Z = NULL, T, modelset, tidy = "extremes",
     SelectTable <- data.frame(NULL)
     for(i in 1:length(CPs))
     {
-      CPanalysis <- testCP(Z, T, CPs[i], starts[i], ends[i], modelset = modelset,  ...)
+      CPanalysis <- testCP(Z, T, CPs[i], starts[i], ends[i], modelset = modelset) #, ...)
       
       models <- CPanalysis$models
       testtable <- CPanalysis$testtable

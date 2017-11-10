@@ -34,12 +34,12 @@ testCP <- function(Z, T, cp, start, end, modelset = "all", ...){
   r1 <- fit1$results
   r2 <- fit2$results
   
-  lo.high <- smartbind(r1[2,], r2[3,], fill=0)
-  high.lo <- smartbind(r1[3,], r2[2,], fill=0)
+  extremes <- names(r1)[(r1[1,] < r2[2,] | r1[1,] > r2[3,]) | (r2[1,] < r1[2,] | r2[1,] > r1[3,])]
   
-  which.extreme <- (lo.high[1,] > lo.high[2,]) | (high.lo[1,] < high.lo[2,])
-  
-  extremes <- paste(names(r1)[which.extreme], collapse = "-")
+  #lo.high <- smartbind(r1[2,], r2[3,], fill=0)
+  #high.lo <- smartbind(r1[3,], r2[2,], fill=0)
+  #which.extreme <- (lo.high[1,] > lo.high[2,]) | (high.lo[1,] < high.lo[2,])
+  # extremes <- paste(names(r1)[which.extreme], collapse = "-")
   
   testtable <- data.frame(
     AIC = c(Changepoint = -2*(fit1$LL + fit2$LL) + 2*(fit1$k+fit2$k+1), 
@@ -48,7 +48,7 @@ testCP <- function(Z, T, cp, start, end, modelset = "all", ...){
             NoChangepoint =  -2*fitboth$LL + log(length(Zboth)) * fitboth$k),
     K = c(Changepoint = fit1$k + fit2$k + 1, 
           NoChangepoint = fitboth$k),
-    extremes = c(extremes, NA))
+    extremes = c(paste(extremes, collapse = ", "), NA))
   
   models <- data.frame(M1 = fit1$model, M2 = fit2$model, Mboth = fitboth$model)
   
@@ -59,6 +59,7 @@ testCP <- function(Z, T, cp, start, end, modelset = "all", ...){
 getFit <- function(z, t, modelset, criterion = "BIC", spline = FALSE){
   
   fit <- estimateRACVM(Z = z, T = t, model = "UCVM", modelset = modelset, compare.models = TRUE, spline = spline)
+  
   ct <- fit$CompareTable
   
   if(criterion %in% c("bic", "BIC")) bestmodel <- row.names(ct)[which.min(ct$deltaBIC)] else

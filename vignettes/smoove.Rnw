@@ -476,9 +476,9 @@ We obtain candidate change points by taking all of the most likely change points
 CP.all <- findCandidateChangePoints(windowsweep = simSweep, clusterwidth = 0)
 CP.all
 @
-\noindent The warning lets us know that some of the candiate change points are rather close to each other, and it might be a good idea to cluster them, i.e.~assign multiple points within a given time interval to a single cluster. If we take a rather generous cluster width below: 
+\noindent The warning lets us know that some of the candidate change points are rather close to each other, and it might be a good idea to cluster them, i.e.~assign multiple points within a given time interval to a single cluster. If we take a rather generous cluster width below: 
 <<>>=
-CP.clustered <- findCandidateChangePoints(windowsweep = simSweep, clusterwidth = 4)
+CP.clustered <- findCandidateChangePoints(windowsweep = simSweep, clusterwidth = 10)
 CP.clustered
 @
 \noindent We now have a more limited set of change points to assess.  
@@ -488,14 +488,14 @@ CP.clustered
 We use the set of candidate change points to separate the track into phases and for each change point (i.e.~pair of neighboring phases) we assess the ``significance'' of the change point by comparing the BIC (or AIC) of a two-model versus one-model fit.  The function that performs this is \texttt{getCPtable}
 
 <<simGetCPtable>>=
-getCPtable(CPs = CP.clustered, Z = Z, T = T, modelset = "UCVM", tidy = FALSE, iterate = FALSE)
+getCPtable(CPs = CP.clustered, Z = Z, T = T, modelset = "UCVM", tidy = NULL, iterate = FALSE, criterion = "AIC")
 @
 
-\noindent In the output of \texttt{selectRACVM}, the \texttt{extremes} column indicates which parameter showed significant changes in parameter values defined by no overlap in the 95\% confidence interval, and the \texttt{dAIC} and \texttt{dBIC} compare the change point model to the no change point model.   We can ask this functin to tidy the selection table according to any combination of several criteria: by the extreme, by negative dAIC or dBIC, or by a mismatch in the models selected (see the help file). 
+\noindent In the output of \texttt{selectRACVM}, the \texttt{extremes} column indicates which parameter showed significant changes in parameter values defined by no overlap in the 95\% confidence interval, and the \texttt{dAIC} and \texttt{dBIC} compare the change point model to the no change point model.  We can ask this functin to tidy the selection table according to any combination of several criteria: by the extreme, by negative dAIC or dBIC, or by a mismatch in the models selected (see the help file). 
 
 
 <<simGetCPtable2, cache=TRUE>>=
-getCPtable(CPs = CP.clustered, Z = Z, T = T, modelset = "UCVM", tidy = "extremes", iterate = TRUE)
+getCPtable(CPs = CP.clustered, Z = Z, T = T, modelset = "UCVM", tidy = NULL, iterate = TRUE)
 @ 
 
 \noindent We now have a final selected set of change points and, perhaps more usefully, a summary of which parameters precisely changed.  Note that thanks to the magic of \texttt{magrittr} piping, the process of finding and selecting change points can be reduced to a single line of code, which is convenient for comparing the robustness of the different settings.  Thus, replicating the above for several cluster widths yields the same basic result:
@@ -512,17 +512,17 @@ simSweep %>% findCandidateChangePoints(clusterwidth = 10) %>%
 \noindent Compared to the true values of \Sexpr{round(max(ucvm1$T),2)} and  \Sexpr{round(max(ucvm1$T + ucvm2$T),2)}, these are excellent estimates. Note, we can also expand our "model set" to include all four CVM model:
 
 <<simSweepAllModels, cache=TRUE>>=
-simSweep %>% findCandidateChangePoints(clusterwidth = 4) %>% getCPtable(Z = Z, T = T, modelset ="all")
+simSweep %>% findCandidateChangePoints(clusterwidth = 4, verbose = FALSE) %>% getCPtable(Z = Z, T = T, modelset ="all")
 @
 
-\noindent But the main model selected in each significant partition is still the UCVM, with the only difference being an additional selection of rotation in a (reject) joint model spanning the first two phases. 
+\noindent But the main model selected in most significant partition is still the UCVM, with the only difference being an additional selection of rotation in a (reject) joint model spanning the first two phases. 
 
 \subsubsection{Step IV - estimating the full model}  
 
 The final, straightforward, step is simply to estimate the parameters for the model within each of the phases defined by the selected change points, and thereby obtain a fully parameterized model of the movement.  This is done with the \texttt{getPhases} function, which takes a change point table (i.e.~the output of \texttt{getCPtable}]) and returns a named list of phases and the estimated parameters:
 
 <<>>=
-simCP.table <- simSweep %>% findCandidateChangePoints(clusterwidth = 4) %>% 
+simCP.table <- simSweep %>% findCandidateChangePoints(clusterwidth = 4, verbose = FALSE) %>% 
   getCPtable(Z = Z, T = T, modelset = "UCVM")
 simPhases <- getPhases(simCP.table, Z = Z, T = T)
 @

@@ -12,5 +12,8 @@ plotWindowSweep <- function(windowsweep, ...)
   starts <- colnames(windowsweep) %>% as.numeric
   T <- row.names(windowsweep) %>% as.numeric
   
+  mean.rel.ll <- apply(windowsweep.zeroed, 1, mean, na.rm=TRUE)
+  
   matplot(T, windowsweep.zeroed, type="l", lty = 1, col=rainbow(length(starts)), ylab = "relative log likelihood", ...)
+  lines(T, mean.rel.ll, lwd = 2, col=rgb(0,0,0,.7))
 }
