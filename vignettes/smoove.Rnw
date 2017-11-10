@@ -302,14 +302,14 @@ racvm <- simulateRACVM(tau = 5, eta = 2, omega = 2, mu = 2, Tmax = 100, dt = .1)
 
 \subsubsection{Unbiased CVM}
 \begin{minipage}{0.4\linewidth}  
-  <<ucvm, cache=TRUE, echo=FALSE>>=
-  par(bty="l", mgp = c(1.5,0.25,0), tck=0.01, las=1); plot.track(ucvm$Z)
-  @
+<<ucvm, cache=TRUE, echo=FALSE>>=
+par(bty="l", mgp = c(1.5,0.25,0), tck=0.01, las=1); plot.track(ucvm$Z)
+@
 \end{minipage}
 \begin{minipage}{0.6\linewidth}
-  <<ucvm.fit, cache=TRUE, size = "small">>=
-  with(ucvm, estimateRACVM(Z=Z, T=T, compare.models=TRUE))
-  @
+<<ucvm.fit, cache=TRUE, size = "small">>=
+with(ucvm, estimateRACVM(Z=Z, T=T, compare.models=TRUE))
+@
 \end{minipage}
 
 \noindent The estimation function (by default) fits the most complex RACVM model.  The comparison table indicates that the most parsimonious model, according to both AIC and the more conservative BIC, is the UCVM.  Note, also, that the confidence intervals around $\omega$, $\mu_x$ and $\mu_y$ all include 0 - additional evidence that the model may not be advective or rotational.  The following code estimates the ``selected'' model.  
@@ -318,13 +318,13 @@ racvm <- simulateRACVM(tau = 5, eta = 2, omega = 2, mu = 2, Tmax = 100, dt = .1)
 with(ucvm, estimateRACVM(Z=Z, T=T, model="UCVM", compare.models=FALSE))
 @
 
-\noindent Every time this document is compiled, the results change somewhat.  But in most cases the model selection should return the correct model and the estimated confidence intervals should include the true values ($\eta = 5, \omega = 2, \mu_x = 2, \mu_y = 0$). 
+\noindent Every time this document is compiled, the results change somewhat.  But in most cases the model selection should return the correct model and the estimated confidence intervals should include the true values. 
 
 \subsubsection{Advective CVM}
-    \begin{minipage}{0.4\linewidth}   
-    <<acvm, cache=TRUE, echo=FALSE>>=
-    par(bty="l", mgp = c(1.5,0.25,0), tck=0.01, las=1); plot.track(acvm$Z)
-    @
+\begin{minipage}{0.4\linewidth}   
+<<acvm, cache=TRUE, echo=FALSE>>=
+par(bty="l", mgp = c(1.5,0.25,0), tck=0.01, las=1); plot.track(acvm$Z)
+@
   \end{minipage}
   \begin{minipage}{0.6\linewidth}
     <<acvm.fit, cache=TRUE, size = "small">>=

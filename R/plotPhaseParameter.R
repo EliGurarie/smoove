@@ -21,7 +21,7 @@ plotPhaseParameter <- function(variable, partitionlist, cols = 1:length(partitio
   if(variable == "tau" & is.null(log)) log = "y" else log = ""
   
   with(variabletable,{
-    plot(range(start, end), range(low.plot, high.plot, na.rm=TRUE), type="n", log = log) #, ...)
+    plot(range(start, end), range(low.plot, high.plot, na.rm=TRUE), type="n", log = log, ...)
     if(!is.na(low[1])) rect(start, low.plot, end, high.plot, col = alpha(cols, .5), bor=NA)  
     segments(start, hat, end, hat, lwd = 2, col=cols)
     if(extra)

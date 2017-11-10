@@ -3,7 +3,7 @@ estimateCVM.zLike <- function(Z, T, CI = FALSE, tau.min=1e-10, tau.max = max(T)/
   if(T[1] == 0) {T <- T[-1]; Z <- Z[-1]}
   
   logtau.hat <- 	optimize(Z.like2D, interval = c(log(tau.min), log(tau.max)), Z = Z, T = T)$minimum 
-  logtau.sd <- 1/sqrt(hessian(Z.like2D, logtau.hat, Z=Z, T=T))
+  logtau.sd <- 1/sqrt(hessian(Z.like2D, logtau.hat, Z=Z, T=T)) %>% as.vector
   
   tau.hat <- exp(logtau.hat)
   tau.CIs <- exp(logtau.hat + c(-1,1)*1.96*logtau.sd)
