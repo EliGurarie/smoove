@@ -1,5 +1,3 @@
-  
-
 require(smoove)
 
 mycvm1 <- simulateUCVM(T=cumsum(rexp(100)), nu=1, tau=10, method="exact")
@@ -12,30 +10,32 @@ Z <- c(mycvm1$Z, mycvm1$Z[100] + mycvm2$Z, mycvm1$Z[100] + mycvm2$Z[100] + mycvm
 plot(Z, type="o", asp=1)
 par(mfrow=c(2,1))
 
-ws <- sweepRACVM(Z = Z, T = T, windowsize = 50, windowstep = 5, model = "UCVM")
+ws <- sweepRACVM(Z = Z, T = T, windowsize = 100, windowstep = 5, model = "UCVM")
 
 # select change points
+par(mfrow=c(1,2))
 
 starts <- colnames(ws) %>% as.numeric
 image(T, starts, ws)
-
-CPs <- apply(ws, 2, 
-             function(ll) T[which.max(ll)]) %>% clusters(10) %>% sapply(mean)
-
-SelectTable <- selectRACVM(Z,T,CPs, modelset = "UCVM")
-
-while("" %in% SelectTable$extremes){
-  CPs <- subset(SelectTable, extremes != "")$CP
-  SelectTable <- selectRACVM(Z,T,CPs, modelset = "UCVM")
-}
+surface3d(T, starts, ws)
+require(fields)
+image.plot(T, starts, ws)
 
 
+require(rgl); require(fields)
+ws2 <- apply(ws, 2, function(x) x - min(x, na.rm=TRUE))
+ws2.range <- range(ws2, na.rm=TRUE)
+cols <- topo.colors(round(diff(ws2.range)))[round(ws2.range)]
+image(T, starts, ws2)
+surface3d(T, starts, ws2, col=cols)
+image.plot(T, starts, ws2)
 
 CPs <- SelectTable$CP
 
 phase <- cut(T, c(0, CPs, max(T)))
 
 
+plot(T, apply(ws2, 1, mean, na.rm=TRUE), type="l")
 plot(Z, asp=1, col=phase)
 
 
