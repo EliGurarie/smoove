@@ -22,7 +22,7 @@ findCandidateChangePoints <- function(windowsweep, clusterwidth=0, verbose = TRU
   n.new <- length(candidate.CPs)
   
   if(verbose)
-  cat(paste("Note: clustering candidate change points at", clusterwidth, "time units collapsed", n.raw, "candidate change points to", n.new, "change points.\n"))
+  message(paste("Note: clustering candidate change points at", clusterwidth, "time units collapsed", n.raw, "candidate change points to", n.new, "change points.\n"))
   
   # compute number of points per segment
   dTs <- table(cut(T, c(T[1]-1, candidate.CPs, T[length(T)]+1)))

@@ -1,6 +1,6 @@
 #' Sweep RACVM 
 #' 
-#' Moves a window, computes likelihoods for all change points, and fills out a likelihood matrix.
+#' Sets a window (a subset of movement data), computes likelihoods for a set of candidate change points within the window, and steps the window forward, filling out a likelihood matrix.
 #' 
 #' @param XY two column location data (if Z is not provided)
 #' @param Z complex location data (if XY is not provided)
@@ -11,7 +11,6 @@
 #' @param {progress} whether or not to show a progress bar
 #' @param {...} additional parameters to pass to the \code{\link{estimateRACVM}} function
 
-
 sweepRACVM <- function(XY = NULL, Z=NULL, T, windowsize, windowstep, 
                        model = "UCVM", 
                        progress = TRUE, ...){
@@ -19,12 +18,17 @@ sweepRACVM <- function(XY = NULL, Z=NULL, T, windowsize, windowstep,
   if(is.null(Z)) Z <- XY[,1] + 1i*XY[,2]
   
   n <- length(Z)
-  starts <- seq(1,n-windowsize, windowstep)
   
-  breaks <- round(windowsize*c(.2)):round(windowsize*(.8))
+  cut.wstep <- cut(T, seq(min(T), max(T) - windowsize, windowstep), include.lowest = TRUE, labels = FALSE) %>% na.omit
+  starts <- c(1, which(diff(cut.wstep) == 1))
+  
+  ends <- c(sapply(starts[-1], function(s) which.max(T[T < (T[s] + windowsize)])), length(T))
+  
+  #starts <- seq(1,n-windowsize, windowstep)
+  #breaks <- round(windowsize*c(.2)):round(windowsize*(.8))
   
   if (progress) 
-    pb <- txtProgressBar(min = 0, max = length(breaks), style = 3)
+    pb <- txtProgressBar(min = 0, max = end-starts, style = 3)
   
   LLs <- matrix(NA, ncol=length(Z), nrow = length(Z) - windowsize)
   for(start in starts){
@@ -51,3 +55,11 @@ sweepRACVM <- function(XY = NULL, Z=NULL, T, windowsize, windowstep,
   
   return(LL)
 }
+
+windowstep <- 5
+windowsize <- 50
+
+
+ends - starts
+for(i in 1:length(starts))
+  print(T[ends[i]] - T[starts[i]])

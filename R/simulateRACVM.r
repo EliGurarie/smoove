@@ -2,11 +2,11 @@
 #' 
 #' Simulates 2D correlated velocity movement model with rotation and advection
 #' 
-#' @details This function simulates a RoAdCVM explicitly using the governing OU equation, using a discretization in which dt << tau.  The model is written   
+#' @details This function simulates a Rotational-Advective CVM explicitly using the governing OU equation, using a discretization in which dt << tau.  
 #' @param tau characteristic time scale of autocorrelation
-#' @param eta random rms speed parameter. In the case where \eqn{\omega = 0}, the mean square speed of movement is \eqn{E(|V|^2) = \eta^2 + \mu^2}.  In the case were \eqn{mu = \omega = 0}, the mean tangential speed (elsewhere: \eqn{\nu}) is given by\eqn{ E(|V|) = \eta \sqrt(\pi)/2}. 
-#' @param omega rotational velocity.
-#' @param mu advective velocity (can be complex value)
+#' @param eta random speed parameter. In the case where \eqn{\omega = 0}, the mean square speed of movement is \eqn{E(|V|^2) = \eta^2 + \mu^2}.  In the case were \eqn{\mu = \omega = 0}, the mean tangential speed is \eqn{ E(|V|) = \eta \sqrt(\pi)/2}. 
+#' @param omega rotational velocity
+#' @param mu advective velocity (can be complex value where real and imaginary parts are x and y components of velocity)
 #' @param v0 initial velocity
 #' @param Tmax max time
 #' @param dt time interval of simulation

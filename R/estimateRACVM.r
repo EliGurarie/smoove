@@ -101,8 +101,6 @@ estimateRACVM <- function(XY, Z=NULL, T, track = NULL,
     return(fit)
   }
 
-lognorm <- function(x, m, s) -log(sqrt(2*pi)) - log(s) - (x-m)^2/(2*s^2)
-  
 
 fitRACVM <- function(T, V, p0, model = "UCVM"){
   
@@ -115,9 +113,7 @@ fitRACVM <- function(T, V, p0, model = "UCVM"){
   V.like <- function(p, V, T, fit.omega, fit.mu){
     
     tau <- exp(p["logtau"])
-    #eta <- exp(p["logeta"])
     eta <- p["eta"]
-    
      
     if(fit.omega) omega <- p["omega"] else omega <- 0
     if(fit.mu) mu <- p["mu.x"] + 1i*p["mu.y"] else mu <- 0
@@ -127,9 +123,9 @@ fitRACVM <- function(T, V, p0, model = "UCVM"){
     V2 <- V[-1] - mu
     V.mu <- V1 * exp(-(1/tau + 1i*omega)*dt)
     V.sigma2 <- (eta^2/2) * (1 - exp(-2*dt/tau)) 
-    
-    -sum(c(lognorm(Re(V2), Re(V.mu), sqrt(V.sigma2)), 
-           lognorm(Im(V2), Im(V.mu), sqrt(V.sigma2))))
+   
+    - sum(c(dnorm(Re(V2), Re(V.mu), sqrt(V.sigma2), log = TRUE),
+          dnorm(Im(V2), Im(V.mu), sqrt(V.sigma2), log = TRUE)))
   }
 
   if(!fit.omega) p0 <- p0[-which(names(p0) == "omega")]
@@ -137,6 +133,7 @@ fitRACVM <- function(T, V, p0, model = "UCVM"){
   
   p.fit <- optim(p0, V.like, V = V, T = T, 
                  fit.omega = fit.omega, fit.mu = fit.mu, hessian = TRUE)
+  
   p.hat <- p.fit$par
   keep.se.params <- which(diag(p.fit$hessian) != 0)
   hessian <- p.fit$hessian[keep.se.params, keep.se.params]
@@ -157,6 +154,28 @@ fitRACVM <- function(T, V, p0, model = "UCVM"){
   
   results <- rbind(Estimate = p.hat, CI.low, CI.high) %>% 
     as.data.frame %>% mutate(logtau=NULL, logeta=NULL)
+  
+  # Computing approximate confidence intervals around eta (propagating the error)
+  # W = eta^2 + mu.x^2 + mu.y^2
+  # V = sqrt(W)
+  # EW and VarW come from (transformations) of non-central Chi distribution
+  # EV and VarV come from Taylor expansion around moments
+  
+  if(!("mu.x" %in% names(results))) results$rms = results$eta else{
+    r <- mutate(results, tau = NULL, omega = NULL)
+    
+    mu2 <- r[1,]^2
+    sigma2 <- ((r[2,] - r[1,])/2)^2
+    ms <- 2 * sum(sigma2 *(1 + 2*mu2))
+    
+    EW <- sum(mu2 + sigma2)
+    varW <- 2 * sum(sigma2 * (sigma2 + 2*mu2)) 
+    EV <- sqrt(EW) - (varW/8) * EW^(-3/2)
+    varV <- (1/(4*EW)) * varW
+    sdV <- sqrt(varV)
+    
+    results$rms = c(EV, max(EV - 2*sdV, 0), EV + 2*sdV)
+  }
   
   return(list(results=results, LL = LL)) 
 }

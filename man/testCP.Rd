@@ -17,7 +17,7 @@ testCP(Z, T, cp, start, end, modelset = "all", ...)
 
 \item{spline}{whether or not to use the spline approximation for the final estimate.}
 
-\item{criterion}{selection criterion - either BIC (or 'bic')}
+\item{criterion}{selection criterion - either BIC or AIC (can be upper- or lowercased)}
 }
 \description{
 Identifies appropriate models on either side of a change point

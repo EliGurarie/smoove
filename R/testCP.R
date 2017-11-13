@@ -7,8 +7,16 @@
 #' @param {start,end} beginning and end time of segment to analyze
 #' @param modelset set of models to compare (combination of UCVM, ACVM, RCVM, RACVM, or \code{all}, which includes all of them)
 #' @param spline whether or not to use the spline approximation for the final estimate. 
-#' @param criterion selection criterion - either BIC (or 'bic')
+#' @param criterion selection criterion - either BIC or AIC (can be upper- or lowercased)
 #' 
+#' 
+#' 
+# TESTING
+i <- 16
+cp <- CPs[i]
+start <- starts[i]
+end <- ends[i]
+
 testCP <- function(Z, T, cp, start, end, modelset = "all", ...){
   
   if(identical(modelset, "all")) modelset <- c("UCVM", "ACVM", "RCVM", "RACVM")
@@ -31,24 +39,24 @@ testCP <- function(Z, T, cp, start, end, modelset = "all", ...){
   
   #  Which (if any) of the parameters in the most complex SHARED model are significantly different
   
-  r1 <- fit1$results
-  r2 <- fit2$results
+  r1 <- fit1$results %>% subset(select = -eta)
+  r2 <- fit2$results %>% subset(select = -eta)
+  r1r2 <- smartbind(r1, r2)
+  r1 <- r1r2[1:3,]
+  r2 <- r1r2[4:6,]
   
-  extremes <- names(r1)[(r1[1,] < r2[2,] | r1[1,] > r2[3,]) | (r2[1,] < r1[2,] | r2[1,] > r1[3,])]
-  
-  #lo.high <- smartbind(r1[2,], r2[3,], fill=0)
-  #high.lo <- smartbind(r1[3,], r2[2,], fill=0)
-  #which.extreme <- (lo.high[1,] > lo.high[2,]) | (high.lo[1,] < high.lo[2,])
-  # extremes <- paste(names(r1)[which.extreme], collapse = "-")
+  differences <- names(r1)[(r1[1,] < r2[2,] | r1[1,] > r2[3,]) | 
+                           (r2[1,] < r1[2,] | r2[1,] > r1[3,])] %>% na.omit
+  if(fit1$model != fit2$model) differences <- c(differences, "model")
   
   testtable <- data.frame(
-    AIC = c(Changepoint = -2*(fit1$LL + fit2$LL) + 2*(fit1$k+fit2$k+1), 
-            NoChangepoint =  -2*fitboth$LL + 2 * fitboth$k),
-    BIC = c(Changepoint = -2*(fit1$LL + fit2$LL) + log(length(Zboth))*(fit1$k+fit2$k+1), 
-            NoChangepoint =  -2*fitboth$LL + log(length(Zboth)) * fitboth$k),
+    AIC = c(-2*(fit1$LL + fit2$LL) + 2*(fit1$k+fit2$k+1), 
+            -2*fitboth$LL + 2 * fitboth$k),
+    BIC = c(-2*(fit1$LL + fit2$LL) + log(length(Zboth))*(fit1$k+fit2$k+1), 
+            -2*fitboth$LL + log(length(Zboth)) * fitboth$k),
     K = c(Changepoint = fit1$k + fit2$k + 1, 
           NoChangepoint = fitboth$k),
-    extremes = c(paste(extremes, collapse = ", "), NA))
+    differences = c(paste(differences, collapse = ", "), NA))
   
   models <- data.frame(M1 = fit1$model, M2 = fit2$model, Mboth = fitboth$model)
   
@@ -59,7 +67,6 @@ testCP <- function(Z, T, cp, start, end, modelset = "all", ...){
 getFit <- function(z, t, modelset, criterion = "BIC", spline = FALSE){
   
   fit <- estimateRACVM(Z = z, T = t, model = "UCVM", modelset = modelset, compare.models = TRUE, spline = spline)
-  
   ct <- fit$CompareTable
   
   if(criterion %in% c("bic", "BIC")) bestmodel <- row.names(ct)[which.min(ct$deltaBIC)] else
@@ -75,3 +82,6 @@ getFit <- function(z, t, modelset, criterion = "BIC", spline = FALSE){
   
   return(fit)
 }  
+
+
+
