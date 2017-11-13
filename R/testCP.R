@@ -8,14 +8,6 @@
 #' @param modelset set of models to compare (combination of UCVM, ACVM, RCVM, RACVM, or \code{all}, which includes all of them)
 #' @param spline whether or not to use the spline approximation for the final estimate. 
 #' @param criterion selection criterion - either BIC or AIC (can be upper- or lowercased)
-#' 
-#' 
-#' 
-# TESTING
-i <- 16
-cp <- CPs[i]
-start <- starts[i]
-end <- ends[i]
 
 testCP <- function(Z, T, cp, start, end, modelset = "all", ...){
   
@@ -42,8 +34,8 @@ testCP <- function(Z, T, cp, start, end, modelset = "all", ...){
   r1 <- fit1$results %>% subset(select = -eta)
   r2 <- fit2$results %>% subset(select = -eta)
   r1r2 <- smartbind(r1, r2)
-  r1 <- r1r2[1:3,]
-  r2 <- r1r2[4:6,]
+  r1 <- subset(r1r2, grepl("1:", row.names(r1r2)))
+  r2 <- subset(r1r2, grepl("2:", row.names(r1r2)))
   
   differences <- names(r1)[(r1[1,] < r2[2,] | r1[1,] > r2[3,]) | 
                            (r2[1,] < r1[2,] | r2[1,] > r1[3,])] %>% na.omit

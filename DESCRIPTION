@@ -20,6 +20,7 @@ Depends:
     intervals,
     scales,
     gtools
+Import: foreach, doParallel
 LinkingTo: Rcpp, RcppArmadillo
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1

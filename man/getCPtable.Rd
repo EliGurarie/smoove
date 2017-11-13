@@ -4,30 +4,32 @@
 \alias{getCPtable}
 \title{CVM change point model selection table}
 \usage{
-getCPtable(CPs, XY = NULL, Z = NULL, T, modelset, tidy = "extremes",
+getCPtable(CPs, XY = NULL, Z = NULL, T, modelset, tidy = "strict",
   iterate = TRUE, ...)
 }
 \arguments{
-\item{{CPs}}{candidate change points}
+\item{CPs}{candidate change points}
+
+\item{T}{times of observations}
+
+\item{modelset}{set of models to compare (combination of UCVM, ACVM, RCVM, RACVM, or \code{all}, which includes all of them)}
+
+\item{tidy}{criteria by which change points are retained or rejected.  By default, filters by \code{differences}, meaning that if estimates on either side of a change point are outside of the 95\% confidence interval bounds, the change point is considered significant. Other options are \code{AIC} and \code{BIC}, meaning that if the dAIC or dBIC of the change point model is negative, the change point is thrown out.}
+
+\item{iterate}{whether or not to continue removing candidate change points until the most parsimonious set is selected.  Should, generally, be true.}
 
 \item{{XY, Z}}{XY two-column matrix or complex location vector.  One of these must be specified.}
 
-\item{{T}}{times of observations}
-
-\item{{modelset}}{set of models to compare (combination of UCVM, ACVM, RCVM, RACVM, or \code{all}, which includes all of them)}
-
-\item{{tidy}}{criteria by which to tidy the change point selection table.  By default, filters by \code{extremes}, meaning if estimates on either side of a change point are outside of the 95\% confidence interval bounds, the change point is considered no significant, and \code{AIC} and \code{BIC}, meaning that if the dAIC or dBIC of the change point model is negative, the change point is thrown out.}
-
 \item{spline}{whether or not to use the spline approximation for the final estimate.}
 
-\item{criterion}{selection criterion - either BIC (or 'bic')}
+\item{criterion}{model selection criterion (choosing between UCVM, ACVM, etc.)- can be either BIC, AIC.  Note, this is different from Change Point retention criterion (in \code{tidy})}
 }
 \value{
 a data frame with: \describe{
 \item{\code{CP}}{index of change point}
 \item{\code{start,end}}{index of beginning and end of change point window}
 \item{\code{dAIC,dBIC}}{delta AIC and BIC values}
-\item{\code{extremes}}{which - if any - of the estimated parameters are outside of the 95\% range across the change point}
+\item{\code{differences}}{which - if any - of the estimated parameters are outside of the 95\% range across the change point}
 \item{\code{models}}{which models are selected on either side of change point.}}
 }
 \description{

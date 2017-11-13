@@ -5,7 +5,7 @@
 \title{Sweep RACVM}
 \usage{
 sweepRACVM(XY = NULL, Z = NULL, T, windowsize, windowstep, model = "UCVM",
-  progress = TRUE, ...)
+  progress = TRUE, ..., .parallel = FALSE)
 }
 \arguments{
 \item{XY}{two column location data (if Z is not provided)}
@@ -14,16 +14,57 @@ sweepRACVM(XY = NULL, Z = NULL, T, windowsize, windowstep, model = "UCVM",
 
 \item{T}{time vector}
 
-\item{{model}}{model to fit for the change point sweep - typically the most complex model in the candidate model set.}
+\item{windowsize}{time window of analysis to scan, IMPORTANTLY: in units of time (T).}
 
-\item{{windowsize}}{size of window to scan}
+\item{windowstep}{step (in time) by which the window advances.  The smaller the step, the slower but more thorough the estimation.}
 
-\item{{windowstep}}{step by which the window advances}
+\item{model}{model to fit for the change point sweep - typically the most complex model in the candidate model set.}
+
+\item{.parallel}{if set TRUE, will use \code{\link{foreach}} to parallelize the optimization.  Requires establishing the}
 
 \item{{progress}}{whether or not to show a progress bar}
 
-\item{{...}}{additional parameters to pass to the \code{\link{estimateRACVM}} function}
+\item{{...}}{additional parameters to pass to the \code{\link{estimateRACVM}} function, notably the option "criterion" allows you to select models based on AIC or BIC (the former is more liberal with more complex models).}
 }
 \description{
-Moves a window, computes likelihoods for all change points, and fills out a likelihood matrix.
+Sets a window (a subset of movement data within specific time window), computes likelihoods for a set of candidate change points within the window, and steps the window forward, filling out a likelihood matrix.
+}
+\examples{
+# Three stage example (from vignette)
+
+taus <- c(3, 3, 1)
+mus <- c(3, 0, 0)
+etas <- c(2, 1, 1)
+tmaxes <- c(40,60,100)
+
+Z.raw <- 0
+T.raw <- 0
+mycvm <- list()
+
+for(i in 1:length(taus)){
+  if(i > 1)  v0 <- mycvm$V[length(mycvm)]  else v0 = mus[1]
+  mycvm <- simulateRACVM(tau = taus[i], eta = etas[i], mu = mus[i], v0 = v0,
+                         Tmax = tmaxes[i], dt = 0.01)
+  Z.raw <- c(Z.raw, mycvm$Z + Z.raw[length(Z.raw)])
+  T.raw <- c(T.raw, mycvm$T + T.raw[length(T.raw)])
+}
+
+multicvm <- data.frame(Z = Z.raw, T = T.raw)[sample(1:length(Z.raw), 400),] \%>\% arrange(T)
+plot.track(multicvm$Z)
+
+# Perform sweep
+simSweep <- with(multicvm, sweepRACVM(Z=Z, T=T, windowsize = 80, windowstep = 10, model = "ACVM"))
+
+# Perform sweep in parallel (can greatly improve speed)
+## Not run:** 
+cl <- makeCluster(detectCores())
+registerDoParallel(cl)
+simSweep <- with(multicvm, sweepRACVM(Z=Z, T=T, windowsize = 80, windowstep = 5, model = "UCVM", .parallel = TRUE))
+## End(Not run)
+
+# plot result of window sweep
+plotWindowSweep(simSweep)
+}
+\seealso{
+\code{\link{plotWindowSweep}}, \code{\link{estimateRACVM}}, \code{\link{testCP}}
 }
