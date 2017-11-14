@@ -66,37 +66,7 @@ sweepRACVM <- function(XY = NULL, Z=NULL, T, windowsize, windowstep,
       LLs[,i] <- getLLbreaks(start, end, breaks, Z, T, ...)
     }
   }
-  
   colnames(LLs) <- starts
   rownames(LLs) <- T
-  
   return(LLs)
 }
-
-
-# for(j in 1:length(starts)){
-#   start <- starts[j]
-#   end <- ends[j]
-#   if(progress) print(paste(start, "of", max(starts)))
-#   
-#   mywindow <- end - start
-#   if(mywindow < 30){
-#     warning("Too few (less than 30) data points in this analysis window. I'll skip it and move on.")
-#     LLs[start,] <- NA } else {
-#       
-#       breaks <- round(mywindow*.2):round(mywindow*.8)
-#       
-#       lls <- breaks*NA
-#       for(i in 1:length(breaks)){	
-#         left <- start:(start + breaks[i])
-#         right <- (start + breaks[i]):end
-#         
-#         lls[i] <- 
-#           estimateRACVM(Z = Z[left], T = T[left], model = model, compare.models = FALSE)$LL + 
-#           estimateRACVM(Z = Z[right], T = T[right], model = model, compare.models = FALSE)$LL
-#         
-#         if (progress)  setTxtProgressBar(pb, i)
-#       }
-#       LLs[start,  start+breaks] <- lls
-#     }
-# }

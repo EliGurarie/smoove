@@ -96,7 +96,7 @@ estimateUCVM(z = ucvm2$Z, t = ucvm2$T, method = "zLike", CI=TRUE)
 with(ucvm2, estimateUCVM(z = Z, t = T, method = "crawl"))
 
 ## ----crawl2, cache=TRUE--------------------------------------------------
-with(ucvm1, estimateUCVM(z = Z, t = T, method = "crawl"))$nutau
+with(ucvm1, estimateUCVM(z = Z, t = T, method = "crawl"))
 
 ## ----cache=TRUE----------------------------------------------------------
 ucvm <- simulateRACVM(tau = 5, eta = 2, omega = 0, mu = 0, Tmax = 100, dt = .1)
@@ -168,62 +168,90 @@ plot.track(Z)
 par(bty="l")
 findSingleBreakPoint(Z,T, method = "sweep")
 
-## ------------------------------------------------------------------------
-max(ucvm1$T)
-
 ## ----simSweepGenerate, echo=-1, out.width = "4in", fig.height = 4, fig.width = 4, cache=FALSE, fig.align="center"----
-par(bty="l"); set.seed(101)
-ucvm1 <- simulateUCVM(T=cumsum(rexp(100)), nu=2, tau=1, method="exact")
-ucvm2 <- simulateUCVM(T=cumsum(rexp(100)), nu=5, tau=5, v0 = ucvm1$V[100], method="exact")
-ucvm3 <- simulateUCVM(T=cumsum(rexp(100)), nu=5, tau=1, v0 = ucvm2$V[100], method="exact")
+par(bty="l"); palette(rainbow(4)); set.seed(7) #set.seed(101)
 
-T <- c(ucvm1$T, ucvm1$T[100] + ucvm2$T, ucvm1$T[100] + ucvm2$T[100] + ucvm3$T)
-Z <- c(ucvm1$Z, ucvm1$Z[100] + ucvm2$Z, ucvm1$Z[100] + ucvm2$Z[100] + ucvm3$Z)
-plot.track(Z)
+taus <- c(3, 3, 1)
+mus <- c(2, 0, 0)
+etas <- c(2, 1, 1)
+durations <- c(40,60,100)
 
-## ----simSweep1, cache=TRUE-----------------------------------------------
-simSweep <- sweepRACVM(Z=Z, T=T, windowsize = 100, windowstep = 10, model = "UCVM", progress=FALSE)
+Z.raw <- 0
+T.raw <- 0
+mycvm <- list()
+
+for(i in 1:length(taus)){
+  if(i > 1)  v0 <- mycvm$V[length(mycvm)]  else v0 = mus[1]
+  mycvm <- simulateRACVM(tau = taus[i], eta = etas[i], mu = mus[i], v0 = v0,
+                         Tmax = durations[i], dt = 0.01)
+  Z.raw <- c(Z.raw, mycvm$Z + Z.raw[length(Z.raw)])
+  T.raw <- c(T.raw, mycvm$T + T.raw[length(T.raw)])
+}
+
+## ----plotMulticvm, echo -1, fig.height = 3-------------------------------
+par(bty = "l", mar = c(0,4,0,0), oma = c(4,0,2,2), xpd = NA)
+multicvm <- data.frame(Z = Z.raw, T = T.raw)[sample(1:length(Z.raw), 400),] %>% arrange(T)
+with(multicvm, scan.track(z = Z, time = T))
+
+## ----simSweep1, eval=FALSE-----------------------------------------------
+#  Z <- multicvm$Z
+#  T <- multicvm$T
+#  simSweep <- sweepRACVM(Z=Z, T=T, windowsize = 80, windowstep = 5, model = "ACVM", progress=FALSE)
+
+## ----simSweep.parallel, cache=TRUE, warning = FALSE, eval=FALSE, message = FALSE----
+#  require(foreach); require(doParallel)
+#  cl <- makeCluster(detectCores())
+#  registerDoParallel(cl)
+#  simSweep <- sweepRACVM(Z=Z, T=T, windowsize = 80, windowstep = 5, model = "ACVM", .parallel = TRUE)
 
 ## ----eval=FALSE, include=FALSE-------------------------------------------
 #  save(simSweep, file = "simSweep.robj")
 
-## ----echo=-1, fig.height=3-----------------------------------------------
-par(bty="l")
+## ----loadsimSweep, echo=-1, fig.height=3---------------------------------
+par(bty="l"); load("simSweep.robj"); Z <- multicvm$Z; T <- multicvm$T
 plotWindowSweep(simSweep)
 
-## ------------------------------------------------------------------------
+## ----simCP---------------------------------------------------------------
 CP.all <- findCandidateChangePoints(windowsweep = simSweep, clusterwidth = 0)
 CP.all
 
-## ------------------------------------------------------------------------
+## ----simCP.clustered-----------------------------------------------------
 CP.clustered <- findCandidateChangePoints(windowsweep = simSweep, clusterwidth = 4)
 CP.clustered
 
 ## ----simGetCPtable-------------------------------------------------------
-getCPtable(CPs = CP.clustered, Z = Z, T = T, modelset = "UCVM", tidy = FALSE, iterate = FALSE)
+getCPtable(CPs = CP.clustered, Z = Z, T = T, modelset = c("UCVM", "ACVM"), tidy = NULL)
 
 ## ----simGetCPtable2, cache=TRUE------------------------------------------
-getCPtable(CPs = CP.clustered, Z = Z, T = T, modelset = "UCVM", tidy = "extremes", iterate = TRUE)
+getCPtable(CPs = CP.clustered, Z = Z, T = T, modelset = c("UCVM", "ACVM"),  iterate = TRUE)
 
-## ----exampleCPtables, cache=TRUE-----------------------------------------
-simSweep %>% findCandidateChangePoints(clusterwidth = 1) %>% 
-  getCPtable(Z = Z, T = T, modelset = "UCVM")
+## ----exampleCPtables-----------------------------------------------------
+simSweep %>% findCandidateChangePoints(clusterwidth = 2) %>% 
+  getCPtable(Z = Z, T = T, modelset = c("UCVM", "ACVM"))
 simSweep %>% findCandidateChangePoints(clusterwidth = 4) %>% 
-  getCPtable(Z = Z, T = T, modelset = "UCVM")
+  getCPtable(Z = Z, T = T, modelset = c("UCVM", "ACVM"))
 simSweep %>% findCandidateChangePoints(clusterwidth = 10) %>% 
-  getCPtable(Z = Z, T = T, modelset = "UCVM")
+  getCPtable(Z = Z, T = T, modelset = c("UCVM", "ACVM"))
+
+## ----simSweep.AIC--------------------------------------------------------
+simSweep %>% findCandidateChangePoints(clusterwidth = 4) %>% 
+  getCPtable(Z = Z, T = T, modelset = c("UCVM", "ACVM"), criterion = "AIC")
 
 ## ----simSweepAllModels, cache=TRUE---------------------------------------
-simSweep %>% findCandidateChangePoints(clusterwidth = 4) %>% getCPtable(Z = Z, T = T, modelset ="all")
+simSweep %>% findCandidateChangePoints(clusterwidth = 10, verbose = FALSE) %>% getCPtable(Z = Z, T = T, modelset ="all", criterion = "AIC")
 
-## ------------------------------------------------------------------------
-simCP.table <- simSweep %>% findCandidateChangePoints(clusterwidth = 4) %>% 
-  getCPtable(Z = Z, T = T, modelset = "UCVM")
+## ----simPhases-----------------------------------------------------------
+simCP.table <- simSweep %>% 
+  findCandidateChangePoints(clusterwidth = 4, verbose = FALSE) %>% 
+  getCPtable(Z = Z, T = T, modelset = c("UCVM", "ACVM"), criterion = "AIC")
 simPhases <- getPhases(simCP.table, Z = Z, T = T)
 
-## ----echo=-(1:2), message=FALSE------------------------------------------
-  layout(c(1,1,1,1,1,1,2,2,3,3)) 
+## ------------------------------------------------------------------------
+simPhases[[1]]
+
+## ----SimPhasePlot, message=FALSE, echo = -1------------------------------
   par(mar=c(4,0,1,0), oma = c(5,5,1,2), xpd=NA, las = 1, cex.lab = 1.5, tck = 0.01, mgp = c(1.5,0.25,0), bty="n")
+  layout(c(1,1,1,2:6)) 
   
   require(gplots)
   cols <- rich.colors(length(simPhases))
@@ -234,66 +262,75 @@ simPhases <- getPhases(simCP.table, Z = Z, T = T)
   
   plot(Z, asp=1, type="l", xpd=FALSE)
   points(Z, col=Z.cols, pch=21, bg = alpha(Z.cols, 0.5), cex=0.8)
-  legend("topright", legend = paste0(phaseTable$phase, ": ", phaseTable$model), 
-         fill=cols, ncol=1, bty="n", title = "Phase: model")
+  legend("top", legend = paste0(phaseTable$phase, ": ", phaseTable$model), 
+         fill=cols, ncol=3, bty="n", title = "Phase: model")
 
-  par(mar=c(1,0,1,0), xpd=NA)
-  plotPhaseParameter("tau", simPhases, ylab="time units", xaxt="n", xlab="", col=cols, log="y")
-  plotPhaseParameter("eta", simPhases,  ylab="distance / time", xlab="time", col=cols)
+  par(mar=c(0,0,1,0), xpd=NA)
+  plotPhaseParameter("tau", simPhases, ylab="", xaxt="n", xlab="", col=cols, log="y")
+  plotPhaseParameter("eta", simPhases,  ylab="", xaxt="n", xlab="", col=cols)
+  plotPhaseParameter("mu.x", simPhases,  ylab= "", xaxt="n", xlab="", col=cols)
+  plotPhaseParameter("mu.y", simPhases,  ylab= "", xaxt="n", xlab="", col=cols)
+  plotPhaseParameter("rms", simPhases,  ylab= "", xlab="time", col=cols)
 
-## ----subsetKestrel, echo=-1, out.height = "4in", fig.height=4------------
+## ------------------------------------------------------------------------
+data.frame(durations, taus, etas, mus)
+
+## ----subsetKestrel, echo=-1, fig.height=4--------------------------------
 par(bty="l", mar = c(0,5,0,0), xpd=NA, oma= c(4,0,4,2))
 data(Kestrel)
 k <- Kestrel[3730:4150,]
 head(k)
 with(k, scan.track(x=X, y=Y))
-
-## ----sweepKestrel, cache=TRUE, message=FALSE-----------------------------
 k$T <- as.numeric(k$timestamp - min(k$timestamp))
-k.sweep <- with(k, sweepRACVM(XY=cbind(X,Y), T=T, windowsize = 50, windowstep = 5, model = "RACVM", time.units = "sec", progress=FALSE))
+
+## ----sweepKestrel, cache=TRUE, message=FALSE, eval = FALSE---------------
+#  k.sweep <- with(k, sweepRACVM(XY=cbind(X,Y), T=T, windowsize = 50, windowstep = 5,
+#                                model = "RACVM", time.units = "sec", progress=FALSE,
+#                                .parallel = TRUE))
 
 ## ----eval=FALSE, include=FALSE-------------------------------------------
 #  save(k.sweep, file = "./vignettes/k.sweep.robj")
 
 ## ----plotKestrelSweep, echo=-1, fig.height=3, cache=TRUE-----------------
-par(bty="l")
+par(bty="l"); load("k.sweep.robj")
 plotWindowSweep(k.sweep)
 
-## ----findKestrelCPs, cache=TRUE------------------------------------------
-k.CPs <- findCandidateChangePoints(windowsweep = k.sweep, clusterwidth = 2)
+## ----findKestrelCPs------------------------------------------------------
+k.CPs <- findCandidateChangePoints(windowsweep = k.sweep, clusterwidth = 4)
 
-## ----filterKestrelCPs, cache=TRUE----------------------------------------
+## ----filterKestrelCPs----------------------------------------------------
 XY <- cbind(k$X, k$Y)
 k.CPtable <- getCPtable(CPs = k.CPs, XY = XY, T = k$T, 
-           modelset = "all", tidy = c("extremes"), iterate = FALSE, spline=TRUE)
+           modelset = "all", spline=TRUE)
 
 ## ----set-options, echo=FALSE, cache=FALSE-----------------------------------------------
 options(width=90)
 
-## ----size = "footnotesize", width=100---------------------------------------------------
+## ----width=100--------------------------------------------------------------------------
 Z <- XY[,1] + 1i*XY[,2]
 k.phases <- getPhases(k.CPtable, T=k$T, Z=Z, verbose=FALSE)
 summarizePhases(k.phases)
 
-## ----kestrelMegaPlot, echo=-(1:2), eval=TRUE, cache=TRUE--------------------------------
-  layout(c(1,1,1,1,2,3,4,5,6)) 
-  par(mar=c(4,0,1,0), oma = c(5,5,1,2), xpd=NA, las = 1, cex.lab = 1.25, tck = 0.01, mgp = c(1.5,0.25,0), bty="n")
-  
-  cols <- rich.colors(length(k.phases))
-  T.cuts <- c(k$T[1], k.CPtable$CP, k$T[length(k$T)])
-  Z.cols <- cols[cut(k$T, T.cuts, include.lowest = TRUE)]
-  
-  phaseTable <- summarizePhases(k.phases)
-  
-  plot(Z, asp=1, type="l", xpd=FALSE, xlab="X (m)")
-  points(Z, col=Z.cols, pch=21, bg = alpha(Z.cols, 0.5), cex=0.8)
-  legend("topleft", legend = paste0(phaseTable$phase, ": ", phaseTable$model), 
-         fill=cols, ncol=2, bty="n", title = "Phase: model")
+## ----kestrelMegaPlot, echo=-1, eval=TRUE, cache=TRUE------------------------------------
+par(mar=c(4,0,1,0), oma = c(5,5,1,2), xpd=NA, las = 1, cex.lab = 1.25, tck = 0.01, mgp = c(1.5,0.25,0), bty="n")
 
-  par(mar=c(1,0,1,0), xpd=NA)
-  plotPhaseParameter("tau", k.phases, ylab="sec", xaxt="n", xlab="", col=cols, log="y")
-  plotPhaseParameter("eta", k.phases,  ylab="m / sec", xlab="time", col=cols)
-  plotPhaseParameter("omega", k.phases,  ylab="rad / sec", xlab="time", col=cols)
-  plotPhaseParameter("mu.x", k.phases,  ylab="m / sec", xlab="time", col=cols)
-  plotPhaseParameter("mu.y", k.phases,  ylab="m / sec", xlab="time", col=cols)
+layout(c(1,1,1,1,2:6)) 
+
+cols <- rich.colors(length(k.phases)/2)
+T.cuts <- c(k$T[1], k.CPtable$CP, k$T[length(k$T)])
+Z.cols <- c(cols,cols)[cut(k$T, T.cuts, include.lowest = TRUE)]
+
+phaseTable <- summarizePhases(k.phases)
+
+plot(Z, asp=1, type="l", xpd=FALSE, xlab="X (m)")
+points(Z, col=Z.cols, pch=21, bg = alpha(Z.cols, 0.5), cex=0.8)
+legend("topleft", legend = paste0(phaseTable$phase, ": ", phaseTable$model), 
+       fill=cols, ncol=2, bty="n", title = "Phase: model")
+
+par(mar=c(1,0,1,0), xpd=NA)
+plotPhaseParameter("tau", k.phases, ylab="sec", xaxt="n", xlab="", col=cols, log="y")
+plotPhaseParameter("eta", k.phases,  ylab="m / sec", xaxt="n", xlab="",  col=cols)
+plotPhaseParameter("omega", k.phases,  ylab="rad / sec", xaxt="n", xlab="", col=cols)
+plotPhaseParameter("mu.x", k.phases,  ylab="m / sec", xaxt="n", xlab="", col=cols)
+plotPhaseParameter("mu.y", k.phases,  ylab="m / sec", xaxt="n", xlab="", col=cols)
 
