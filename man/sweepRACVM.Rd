@@ -4,8 +4,9 @@
 \alias{sweepRACVM}
 \title{Sweep RACVM}
 \usage{
-sweepRACVM(XY = NULL, Z = NULL, T, windowsize, windowstep, model = "UCVM",
-  progress = TRUE, ..., .parallel = FALSE)
+sweepRACVM(XY = NULL, Z = NULL, T, windowsize, windowstep,
+  time.unit = "auto", model = "UCVM", progress = TRUE, ...,
+  .parallel = FALSE)
 }
 \arguments{
 \item{XY}{two column location data (if Z is not provided)}
@@ -17,6 +18,8 @@ sweepRACVM(XY = NULL, Z = NULL, T, windowsize, windowstep, model = "UCVM",
 \item{windowsize}{time window of analysis to scan, IMPORTANTLY: in units of time (T).}
 
 \item{windowstep}{step (in time) by which the window advances.  The smaller the step, the slower but more thorough the estimation.}
+
+\item{time.unit}{of the windowsize and windowstep.  Only needed if time is a POSIX. Must be one of "auto", "secs", "mins", "hours", "days", "weeks" (See \code{\link{difftime}}).}
 
 \item{model}{model to fit for the change point sweep - typically the most complex model in the candidate model set.}
 

@@ -72,7 +72,11 @@ sweepRACVM <- function(XY = NULL, Z=NULL, T,
       LLs[,i] <- getLLbreaks(start, end, breaks, Z, T, ...)
     }
   }
+  
   colnames(LLs) <- starts
   rownames(LLs) <- T.raw
+  attr(LLs,"time") <- T.raw
+  attr(LLs,"time.unit") <- time.unit
+  
   return(LLs)
 }
