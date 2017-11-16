@@ -6,7 +6,7 @@
 #' @param clusterwidth A time span within which very close change points are considered a single chagne point.  
 #' @param verbose Whether or not to report the number of change points that are clustered away. 
 
-findCandidateChangePoints <- function(windowsweep, clusterwidth=0, verbose = TRUE){
+findCandidateChangePoints <- function(windowsweep, clusterwidth=0, time.unit = "auto", verbose = TRUE){
   
   T <- row.names(windowsweep) %>% as.numeric
   starts <- colnames(windowsweep) %>% as.numeric
