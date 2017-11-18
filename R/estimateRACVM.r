@@ -8,26 +8,30 @@
 #' 
 #' The \code{fitRACVM} function is an (internal) helper function.  
 
-#' @param {XY,Z,T} respectively, XY two-column matrix, optional complex location matrix, and times of observations
-#' @param {track} a possible \code{track} object (i.e. data frame with columns called X, Y and Time) to provide instead of Z and T.
-#' @param {model} one of UCVM, RCVM, ACVM or RACVM. 
-#' @param {compare.models} whether to compare four models: with both rotation and advection, only rotation, only advection, or neither.  The comparison provides a table with the log likelihood, number of parameters, AIC, BIC, delta AIC and delta BIC values.  A limited comparison set may be useful when running the fit many times (e.g. when performing change point analysis). 
-#' @param {modelset} which models to fit and compare (if \code{compare.models}) is TRUE)
-#' @param {p0} optional named list of initial parameter values in the form: c(tau, eta, omega, mu.x, mu.y).
-#' @param {spline} whether to implement the spline correction on the positions 
-#' @param {spline.res} resolution of spline (see \code{\link{getV.spline}})
-#' @param {T.spline} new times for spline estimation (best left as NULL)
-#' @param {time.units} time units of calculations (e.g. "sec", "min", "hour", "day")
-#' @aliases fitRACVM 
+#' @param XY XY two-column matrix
+#' @param Z optional complex location matrix
+#' @param T times of observations
+#' @param track a possible \code{track} object (i.e. data frame with columns called X, Y and Time) to provide instead of Z and T.
+#' @param model one of UCVM, RCVM, ACVM or RACVM. 
+#' @param compare.models whether to compare four models: with both rotation and advection, only rotation, only advection, or neither.  The comparison provides a table with the log likelihood, number of parameters, AIC, BIC, delta AIC and delta BIC values.  A limited comparison set may be useful when running the fit many times (e.g. when performing change point analysis). 
+#' @param modelset which models to fit and compare (if \code{compare.models}) is TRUE)
+#' @param p0 optional named list of initial parameter values in the form: c(tau, eta, omega, mu.x, mu.y).
+#' @param spline whether to implement the spline correction on the positions 
+#' @param spline.res resolution of spline.
+#' @param T.spline new times for spline estimation (best left as NULL)
+#' @param time.units time units of calculations (e.g. "sec", "min", "hour", "day")
+#' @param verbose vebose message
+#' @aliases fitRACVM
 #' @seealso \code{\link{simulateRACVM}}
-#' @example ./examples/estimateRACVMexamples.r
-
-estimateRACVM <- function(XY, Z=NULL, T, track = NULL, 
-                          model = "RACVM", 
-                          compare.models = TRUE, 
+#' @example ./demo/estimateRACVM_examples.r
+#' @export
+#' 
+estimateRACVM <- function(XY, Z = NULL, T, track = NULL,
+                          model = "RACVM",
+                          compare.models = TRUE,
                           modelset = c("UCVM", "ACVM", "RCVM", "RACVM"),
-                          p0 = NULL, 
-                          spline = FALSE, spline.res = 1e-2, T.spline= NULL,  
+                          p0 = NULL,
+                          spline = FALSE, spline.res = 1e-2, T.spline = NULL,
                           time.units = "day", verbose = FALSE){  
     
     all <- c("UCVM", "ACVM", "RCVM", "RACVM")
@@ -163,6 +167,19 @@ fitRACVM <- function(T, V, p0, model = "UCVM"){
 
 # p0 <- c(logtau = 1, logeta = 1, omega = 2)
 
+
+#' getV.spline
+#'
+#' @param Z 
+#' @param T.raw 
+#' @param T.new 
+#' @param resolution 
+#' @param ... 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 getV.spline <- function(Z, T.raw, T.new = NULL, resolution = 1e-2, ... ){
   
   fX.spline <- splinefun(T.raw, Re(Z), ...)

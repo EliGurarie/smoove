@@ -5,22 +5,28 @@
 \title{CVM change point model selection table}
 \usage{
 getCPtable(CPs, XY = NULL, Z = NULL, T, modelset, tidy = "extremes",
-  iterate = TRUE, ...)
+  iterate = TRUE, spline = FALSE, criterion = "BIC", ...)
 }
 \arguments{
-\item{{CPs}}{candidate change points}
+\item{CPs}{candidate change points}
 
-\item{{XY, Z}}{XY two-column matrix or complex location vector.  One of these must be specified.}
+\item{XY}{two-column matrix of location vector.}
 
-\item{{T}}{times of observations}
+\item{Z}{Complex location vector (instead of XY).}
 
-\item{{modelset}}{set of models to compare (combination of UCVM, ACVM, RCVM, RACVM, or \code{all}, which includes all of them)}
+\item{T}{time vector}
 
-\item{{tidy}}{criteria by which to tidy the change point selection table.  By default, filters by \code{extremes}, meaning if estimates on either side of a change point are outside of the 95\% confidence interval bounds, the change point is considered no significant, and \code{AIC} and \code{BIC}, meaning that if the dAIC or dBIC of the change point model is negative, the change point is thrown out.}
+\item{modelset}{set of models to compare (combination of UCVM, ACVM, RCVM, RACVM, or \code{all}, which includes all of them)}
+
+\item{tidy}{criteria by which to tidy the change point selection table.  By default, filters by \code{extremes}, meaning if estimates on either side of a change point are outside of the 95\% confidence interval bounds, the change point is considered no significant, and \code{AIC} and \code{BIC}, meaning that if the dAIC or dBIC of the change point model is negative, the change point is thrown out.}
+
+\item{iterate}{whether to iterate}
 
 \item{spline}{whether or not to use the spline approximation for the final estimate.}
 
 \item{criterion}{selection criterion - either BIC (or 'bic')}
+
+\item{...}{other optional arguments to pass to \code{\link{testCP}}}
 }
 \value{
 a data frame with: \describe{
@@ -33,4 +39,3 @@ a data frame with: \describe{
 \description{
 Compares selected models with and without changes across a set of change points.
 }
-

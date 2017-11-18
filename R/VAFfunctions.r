@@ -17,7 +17,7 @@
 #' plot(evaf)
 #' eta <- 2/sqrt(pi)*nu
 #' curve(eta^2 * exp(-x/tau), add=TRUE, col=2, lwd=2)
-
+#' @export
 getEVAF <- function(Z, XY=NULL, V=NULL, T, lagmax = max(T)/2){
   T <- T-T[1]
   dT <- mean(diff(T))

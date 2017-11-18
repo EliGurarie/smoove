@@ -3,12 +3,14 @@
 #' @details \code{getVariable} takes a partitionlist and generates a table indicating the start time, end time, estimate, low and high 95\% C.I. and selected model for a given parameter. 
 #' @details \code{plotVariable} 
 #' 
+#' @param extra also plot segments
 #' @param variable one of: \code{omega}, \code{mu.x}, \code{mu.y}, \code{eta}, \code{tau}
 #' @param partitionlist output of \code{\link{getPhases}}, i.e. a list of information on each of the selected phases
 #' @param label whether to label the plotted parameter
+#' @param cols colors
 #' @param ... additional arguments to pass to plotting function. 
+#'
 #' @return \code{getVariable} returns a data.frame with start time, end time, estimate, low and high 95\% C.I. and selected model for a given parameter, with each row corresponding to an enumerated partition phase.  
-#' @aliases getPhaseParameter
 
 plotPhaseParameter <- function(variable, partitionlist, cols = 1:length(partitionlist), extra = TRUE, label = TRUE, ...){
   variabletable <- getPhaseParameter(variable, partitionlist)

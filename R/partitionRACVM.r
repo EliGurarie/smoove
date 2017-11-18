@@ -2,11 +2,12 @@
 #' 
 #' Takes a set of change points and fits the best model to each phase
 #' 
-#' @param {Z,T} locations and times
-#' @param {CPs} change points (as indices)
-#' @param {criterion} One of \code{"AIC"} or \code{"BIC"} - which information criterion to use for the model selection.
+#' @param Z locations as a complex vector
+#' @param T times vector
+#' @param CPs change points (as indices)
+#' @param criterion One of \code{"AIC"} or \code{"BIC"} - which information criterion to use for the model selection.
 #' @return a named list of phases (numbered by roman numerals) containing the selected model, estimates, and confidence intervals for each parameter.
-
+#' @export
 partitionRACVM <- function(Z,T,CPs, criterion = "BIC"){
   phase.start <- c(T[1], CPs)
   phase.end <- c(CPs, T[length(T)])
@@ -25,7 +26,8 @@ partitionRACVM <- function(Z,T,CPs, criterion = "BIC"){
     
     pick <- ifelse(criterion == "AIC", lowAIC, lowBIC)
     
-    model <- row.names(fit$CompareTable)[pick] %>% stripModel
+    # stripModel is not defined (CRAN check error)! Later comment this out.
+    #model <- stripModel(row.names(fit$CompareTable)[pick])
     if(model$fit.omega & model$fit.mu) myresults <- fit$results else
       myresults <- with(model, estimateRACVM(Z = z, T= t, 
                                              fit.mu = fit.mu, 

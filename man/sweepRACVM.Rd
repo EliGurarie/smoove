@@ -14,17 +14,16 @@ sweepRACVM(XY = NULL, Z = NULL, T, windowsize, windowstep, model = "UCVM",
 
 \item{T}{time vector}
 
-\item{{model}}{model to fit for the change point sweep - typically the most complex model in the candidate model set.}
+\item{windowsize}{size of window to scan}
 
-\item{{windowsize}}{size of window to scan}
+\item{windowstep}{step by which the window advances}
 
-\item{{windowstep}}{step by which the window advances}
+\item{model}{model to fit for the change point sweep - typically the most complex model in the candidate model set.}
 
-\item{{progress}}{whether or not to show a progress bar}
+\item{progress}{whether or not to show a progress bar}
 
-\item{{...}}{additional parameters to pass to the \code{\link{estimateRACVM}} function}
+\item{...}{additional parameters to pass to the \code{\link{estimateRACVM}} function}
 }
 \description{
 Moves a window, computes likelihoods for all change points, and fills out a likelihood matrix.
 }
-

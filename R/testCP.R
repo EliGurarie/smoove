@@ -2,14 +2,17 @@
 #' 
 #' Identifies appropriate models on either side of a change point
 #' 
-#' @param {Z,T} location and time of data
-#' @param {cp} change point
-#' @param {start,end} beginning and end time of segment to analyze
+#' @param Z location of data
+#' @param T T
+#' @param cp change point
+#' @param start begining timoe of segment
+#' @param end end time of segment to analyze
+#' @param criterion criterion
+#' @param spline spline
 #' @param modelset set of models to compare (combination of UCVM, ACVM, RCVM, RACVM, or \code{all}, which includes all of them)
-#' @param spline whether or not to use the spline approximation for the final estimate. 
-#' @param criterion selection criterion - either BIC (or 'bic')
-#' 
-testCP <- function(Z, T, cp, start, end, modelset = "all", ...){
+#'
+#' @export
+testCP <- function(Z, T, cp, start, end, modelset = "all", criterion = "BIC", spline = FALSE){
   
   if(identical(modelset, "all")) modelset <- c("UCVM", "ACVM", "RCVM", "RACVM")
   
@@ -25,9 +28,9 @@ testCP <- function(Z, T, cp, start, end, modelset = "all", ...){
   T2 <- T[i2]
   Tboth <- T[iboth]
   
-  fit1 <- getFit(Z1, T1, modelset = modelset, ...)
-  fit2 <- getFit(Z2, T2, modelset = modelset, ...)
-  fitboth <- getFit(Zboth, Tboth, modelset = modelset, ...)
+  fit1 <- getFit(Z1, T1, modelset = modelset, criterion = criterion, spline = spline)
+  fit2 <- getFit(Z2, T2, modelset = modelset, criterion = criterion, spline = spline)
+  fitboth <- getFit(Zboth, Tboth, modelset = modelset, criterion = criterion  , spline = spline)
   
   #  Which (if any) of the parameters in the most complex SHARED model are significantly different
   

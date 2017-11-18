@@ -2,15 +2,23 @@
 % Please edit documentation in R/getS.r
 \name{getcov.zz}
 \alias{getcov.zz}
+\alias{getS.zz}
 \title{Obtain 1D complete S.zz matrix}
 \usage{
-getcov.zz(T, tau, v0=nu)
-getS.ZZ(T, tau, v0=nu)
+getcov.zz(t1, t2, tau, t0 = 0)
+
+getS.zz(T, tau, t0 = 0)
 }
 \arguments{
+\item{t1}{first time}
+
+\item{t2}{second time}
+
 \item{tau}{characteristic time scale.}
 
-\item{T}{vector of times (length n).}
+\item{t0}{initial time}
+
+\item{T}{time vector of length n}
 }
 \value{
 either a 2n x 2n VV-VZ-ZZ matrix or n x n ZZ matrix.
@@ -30,4 +38,3 @@ grid.arrange(i1,i2,i3,ncol=3)
 # And the complete matrix (log transformed):
 image(log(Sigma), colorkey=TRUE, main="log(Sigma)")
 }
-

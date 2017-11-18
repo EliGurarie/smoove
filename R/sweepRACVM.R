@@ -5,13 +5,12 @@
 #' @param XY two column location data (if Z is not provided)
 #' @param Z complex location data (if XY is not provided)
 #' @param T time vector
-#' @param {model} model to fit for the change point sweep - typically the most complex model in the candidate model set. 
-#' @param {windowsize} size of window to scan
-#' @param {windowstep} step by which the window advances
-#' @param {progress} whether or not to show a progress bar
-#' @param {...} additional parameters to pass to the \code{\link{estimateRACVM}} function
-
-
+#' @param model model to fit for the change point sweep - typically the most complex model in the candidate model set. 
+#' @param windowsize size of window to scan
+#' @param windowstep step by which the window advances
+#' @param progress whether or not to show a progress bar
+#' @param ... additional parameters to pass to the \code{\link{estimateRACVM}} function
+#' @export
 sweepRACVM <- function(XY = NULL, Z=NULL, T, windowsize, windowstep, 
                        model = "UCVM", 
                        progress = TRUE, ...){

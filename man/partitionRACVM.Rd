@@ -7,11 +7,13 @@
 partitionRACVM(Z, T, CPs, criterion = "BIC")
 }
 \arguments{
-\item{{Z, T}}{locations and times}
+\item{Z}{locations as a complex vector}
 
-\item{{CPs}}{change points (as indices)}
+\item{T}{times vector}
 
-\item{{criterion}}{One of \code{"AIC"} or \code{"BIC"} - which information criterion to use for the model selection.}
+\item{CPs}{change points (as indices)}
+
+\item{criterion}{One of \code{"AIC"} or \code{"BIC"} - which information criterion to use for the model selection.}
 }
 \value{
 a named list of phases (numbered by roman numerals) containing the selected model, estimates, and confidence intervals for each parameter.
@@ -19,4 +21,3 @@ a named list of phases (numbered by roman numerals) containing the selected mode
 \description{
 Takes a set of change points and fits the best model to each phase
 }
-

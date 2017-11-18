@@ -5,8 +5,9 @@
 \alias{getSigma.ZZ}
 \title{Obtain 1D complete VV-VZ-ZZ or ZZ covariance matrix}
 \usage{
-getSigma.VZ(T, nu, tau, v0=nu)
-getSigma.ZZ(T, nu, tau, v0=nu)
+getSigma.VZ(T, nu, tau, t0 = 0)
+
+getSigma.ZZ(T, nu, tau, t0 = 0)
 }
 \arguments{
 \item{T}{vector of times (length n).}
@@ -14,6 +15,8 @@ getSigma.ZZ(T, nu, tau, v0=nu)
 \item{nu}{mean speed.}
 
 \item{tau}{characteristic time scale.}
+
+\item{t0}{initial time defaults to 0}
 }
 \value{
 either a 2n x 2n VV-VZ-ZZ matrix or n x n ZZ matrix.
@@ -33,4 +36,3 @@ grid.arrange(i1,i2,i3,ncol=3)
 # And the complete matrix (log transformed):
 image(log(Sigma), colorkey=TRUE, main="log(Sigma)")
 }
-

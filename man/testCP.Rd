@@ -4,22 +4,24 @@
 \alias{testCP}
 \title{Test RACVM change point}
 \usage{
-testCP(Z, T, cp, start, end, modelset = "all", ...)
+testCP(Z, T, cp, start, end, modelset = "all", criterion = "BIC",
+  spline = FALSE)
 }
 \arguments{
+\item{Z}{location of data}
+
+\item{cp}{change point}
+
+\item{start}{begining timoe of segment}
+
+\item{end}{end time of segment to analyze}
+
 \item{modelset}{set of models to compare (combination of UCVM, ACVM, RCVM, RACVM, or \code{all}, which includes all of them)}
 
-\item{{Z, T}}{location and time of data}
+\item{criterion}{}
 
-\item{{cp}}{change point}
-
-\item{{start, end}}{beginning and end time of segment to analyze}
-
-\item{spline}{whether or not to use the spline approximation for the final estimate.}
-
-\item{criterion}{selection criterion - either BIC (or 'bic')}
+\item{spline}{}
 }
 \description{
 Identifies appropriate models on either side of a change point
 }
-

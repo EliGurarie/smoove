@@ -1,13 +1,14 @@
 Package: smoove
 Type: Package
-Title: Functions and methods for simulating and estimating correlated velocity movement (CVM) models.
-Version: 0.11
-Date: 2016-11-22
-Author: Eliezer Gurarie
-Maintainer: <egurarie@umd.edu>
-Description: ...
-License: Unlimited
+Title: Simulation and estimation of correlated velocity movement (CVM) models
+Version: 0.0-3
+Date: 2017-04-17
+Authors@R: c(person("Eliezer", "Gurarie", role = c("aut", "cre"), email = "egurarie@umd.edu"), person("Faridedin", "Cheraghi", role = "aut", email = "fcheraghi@ut.ac.ir"))
+Description: a collection of functions to work with continuous time correlated velocity movement (CVM) models as described in Gurarie et al. (nearly in press is *Movement Ecology*).   There are functions that simulate, diagnose and estimate these movement models, as well as functions for facilitating a change point analysis.
+License: GPL-2
 Depends:
+    R (>= 3.3.0)
+Imports:
     MASS,
     Matrix,
     mvtnorm,
@@ -19,8 +20,11 @@ Depends:
     plyr,
     intervals,
     scales,
-    gtools
+    gtools,
+    methods,
+    gridExtra
 LinkingTo: Rcpp, RcppArmadillo
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
-Suggests: knitr
+BugReports: https://github.com/EliGurarie/smoove/issues
+RoxygenNote: 6.0.1.9000
+Suggests: knitr, rmarkdown, lubridate

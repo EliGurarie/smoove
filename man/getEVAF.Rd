@@ -34,4 +34,3 @@ plot(evaf)
 eta <- 2/sqrt(pi)*nu
 curve(eta^2 * exp(-x/tau), add=TRUE, col=2, lwd=2)
 }
-

@@ -1,4 +1,11 @@
-estimateCVM.vaf <- function(Z, T, lagmax = (max(T) - min(T))/2, CI = FALSE, diagnose = FALSE, spline=FALSE)
+estimateCVM.vaf <-
+  function(Z,
+           T,
+           lagmax = (max(T) - min(T)) / 2,
+           CI = FALSE,
+           diagnose = FALSE,
+           spline = FALSE
+  )
 {
   T <- T-min(T)
   dT <- mean(diff(T))

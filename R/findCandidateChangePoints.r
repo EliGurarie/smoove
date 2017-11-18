@@ -1,3 +1,10 @@
+#' findCandidateChangePoints
+#' 
+#' @param windowsweep windowsweep
+#'
+#' @param clusterwidth clusterwidth
+#'
+#' @export
 findCandidateChangePoints <- function(windowsweep, clusterwidth=0){
   
   T <- row.names(windowsweep) %>% as.numeric

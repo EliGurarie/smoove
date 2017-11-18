@@ -7,11 +7,15 @@
 getPhases(CP.table, Z, T, criterion = "BIC", verbose = TRUE)
 }
 \arguments{
+\item{CP.table}{change point table, i.e. output of \code{\link{getCPtable}} which contains a column of change points and a column of selected models.}
+
+\item{Z}{locations}
+
+\item{T}{time vector}
+
+\item{criterion}{the criterion to use; defaults to BIC}
+
 \item{verbose}{whether to print a summary of the results}
-
-\item{{Z, T}}{locations and times}
-
-\item{{CP.table}}{change point table, i.e. output of \code{\link{getCPtable}} which contains a column of change points and a column of selected models.}
 }
 \value{
 a named list of phases (numbered by roman numerals) containing the selected model, estimates, and confidence intervals for each parameter.
@@ -19,4 +23,3 @@ a named list of phases (numbered by roman numerals) containing the selected mode
 \description{
 Takes a set of change points and fits the best model to each phase
 }
-

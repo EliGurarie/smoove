@@ -8,7 +8,7 @@
 #' @param resolution of spline, i.e. the fraction of the smallest interval in T.raw.
 #' @param ... further arguments to \code{\link{splinefun}}.  Importantly, the method. 
 #' @return a list with the estimated velocity (V), as well as the position (Z) and time (T).  
-
+#' @export
 getV.spline <- function(Z, T.raw, T.new = NULL, resolution = 1e-2, ... ){
   
   fX.spline <- splinefun(T.raw, Re(Z), ...)

@@ -4,7 +4,7 @@
 #' 
 #' @param windowsweep output of \code{\link{sweepRACVM}} function
 #' @param ... additional parameters to pass to \code{\link{plot}}
-
+#' @export
 plotWindowSweep <- function(windowsweep, ...)
 {
   windowsweep.zeroed <- aaply(windowsweep, 2, function(x) x - min(x, na.rm=TRUE)) %>% t

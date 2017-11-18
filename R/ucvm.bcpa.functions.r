@@ -3,13 +3,21 @@ getUCVMLikelihoodAtBreak <- function(tbreak, T, Z, ...)
   nbreak <- max(which((T-tbreak)<0))
   n <- length(Z)
   
-  Hat1 <- estimateUCVM(z = Z[1:nbreak],     t = T[1:nbreak],     like = TRUE, ...)
-  Hat2 <- estimateUCVM(z = Z[(nbreak+1):n], t = T[(nbreak+1):n], like = TRUE, ...)
+  Hat1 <- estimateUCVM(Z = Z[1:nbreak],     T = T[1:nbreak],     like = TRUE, ...)
+  Hat2 <- estimateUCVM(Z = Z[(nbreak+1):n], T = T[(nbreak+1):n], like = TRUE, ...)
   
   Hat1$LL + Hat2$LL
 }
 
-
+#' findSingleBreakPoint
+#' 
+#' @param Z Z
+#' @param T vector of times
+#' @param plotme plotme
+#' @param method method
+#' @param ... ...
+#'
+#' @export
 findSingleBreakPoint <- function(Z,T, plotme=TRUE, method = "sweep", ...){
   
   T.mids <- (T[-1] + T[-length(T)])/2

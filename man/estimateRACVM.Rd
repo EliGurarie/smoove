@@ -11,25 +11,31 @@ estimateRACVM(XY, Z = NULL, T, track = NULL, model = "RACVM",
   time.units = "day", verbose = FALSE)
 }
 \arguments{
-\item{{XY, Z, T}}{respectively, XY two-column matrix, optional complex location matrix, and times of observations}
+\item{XY}{XY two-column matrix}
 
-\item{{track}}{a possible \code{track} object (i.e. data frame with columns called X, Y and Time) to provide instead of Z and T.}
+\item{Z}{optional complex location matrix}
 
-\item{{model}}{one of UCVM, RCVM, ACVM or RACVM.}
+\item{T}{times of observations}
 
-\item{{compare.models}}{whether to compare four models: with both rotation and advection, only rotation, only advection, or neither.  The comparison provides a table with the log likelihood, number of parameters, AIC, BIC, delta AIC and delta BIC values.  A limited comparison set may be useful when running the fit many times (e.g. when performing change point analysis).}
+\item{track}{a possible \code{track} object (i.e. data frame with columns called X, Y and Time) to provide instead of Z and T.}
 
-\item{{modelset}}{which models to fit and compare (if \code{compare.models}) is TRUE)}
+\item{model}{one of UCVM, RCVM, ACVM or RACVM.}
 
-\item{{p0}}{optional named list of initial parameter values in the form: c(tau, eta, omega, mu.x, mu.y).}
+\item{compare.models}{whether to compare four models: with both rotation and advection, only rotation, only advection, or neither.  The comparison provides a table with the log likelihood, number of parameters, AIC, BIC, delta AIC and delta BIC values.  A limited comparison set may be useful when running the fit many times (e.g. when performing change point analysis).}
 
-\item{{spline}}{whether to implement the spline correction on the positions}
+\item{modelset}{which models to fit and compare (if \code{compare.models}) is TRUE)}
 
-\item{{spline.res}}{resolution of spline (see \code{\link{getV.spline}})}
+\item{p0}{optional named list of initial parameter values in the form: c(tau, eta, omega, mu.x, mu.y).}
 
-\item{{T.spline}}{new times for spline estimation (best left as NULL)}
+\item{spline}{whether to implement the spline correction on the positions}
 
-\item{{time.units}}{time units of calculations (e.g. "sec", "min", "hour", "day")}
+\item{spline.res}{resolution of spline.}
+
+\item{T.spline}{new times for spline estimation (best left as NULL)}
+
+\item{time.units}{time units of calculations (e.g. "sec", "min", "hour", "day")}
+
+\item{verbose}{vebose message}
 }
 \description{
 Estimate rotational-advectice correlated velocity movement model
@@ -49,72 +55,75 @@ rcvm <- simulateRACVM(tau = 5, eta = 2, omega = 2, mu = 0, Tmax = 100, dt = .1)
 racvm <- simulateRACVM(tau = 5, eta = 2, omega = 2, mu = 2, Tmax = 100, dt = .1)
 
 # estimating a model with no advection
-	plot.track(ucvm$Z)
-	with(ucvm, estimateRACVM(Z=Z, T=T, model = "UCVM", compare.models=TRUE))
+plot_track(ucvm$Z)
+with(ucvm, estimateRACVM(Z=Z, T=T, model = "UCVM", compare.models=TRUE))
 
 # estimating a model with advection
-	plot.track(acvm$Z)
-	## compare all models
-	with(acvm, estimateRACVM(Z=Z, T=T, compare.models=TRUE))
-	with(acvm, estimateRACVM(Z=Z, T=T, model = "ACVM", compare.models=FALSE))
+plot_track(acvm$Z)
+## compare all models
+with(acvm, estimateRACVM(Z=Z, T=T, compare.models=TRUE))
+with(acvm, estimateRACVM(Z=Z, T=T, model = "ACVM", compare.models=FALSE))
 
 # estimating a model with rotation
-	plot.track(rcvm$Z)
-	## compare all models
-	with(rcvm, estimateRACVM(Z=Z, T=T, compare.models=TRUE))
-	with(rcvm, estimateRACVM(Z=Z, T=T, model = "RCVM", compare.models=FALSE))
+plot_track(rcvm$Z)
+## compare all models
+with(rcvm, estimateRACVM(Z=Z, T=T, compare.models=TRUE))
+with(rcvm, estimateRACVM(Z=Z, T=T, model = "RCVM", compare.models=FALSE))
 
 # estimating a model with both rotation and advection
-	plot.tracl(racvm$Z)
-	## compare all models
-	with(racvm, estimateRACVM(Z=Z, T=T, compare.models=TRUE))
-	with(racvm, estimateRACVM(Z=Z, T=T, model = "RCVM", compare.models=FALSE))
-
-
+plot_track(racvm$Z)
+## compare all models
+with(racvm, estimateRACVM(Z=Z, T=T, compare.models=TRUE))
+with(racvm, estimateRACVM(Z=Z, T=T, model = "RCVM", compare.models=FALSE))
 
 ## Using the kestrel data
 
-  data(Kestrel)
-  K1 <- Kestrel[3360:3450,]
+data(Kestrel)
+K1 <- Kestrel[3360:3450,]
 
 # 90 data points - rotational and advective
 
-  K1$Z <- K1$X + 1i*K1$Y
+K1$Z <- K1$X + 1i*K1$Y
 
-  par(mar = c(0,2,0,0), oma = c(4,4,2,2))
-  with(K1, scan.track(x=X, y=Y))
-  
-  (fit1 <- with(K1, estimateRACVM(Z = X + 1i*Y, T = timestamp, spline=TRUE, compare.models=TRUE, time.units = "sec")))
+par(mar = c(0,2,0,0), oma = c(4,4,2,2))
+with(K1, scan_track(x=X, y=Y))
+
+(fit1 <- with(K1, estimateRACVM(Z = X + 1i*Y, T = timestamp, 
+                                spline=TRUE, compare.models=TRUE, 
+                                time.units = "sec")))
 
 # Note: the rotational + advective model was selected both by BIC and AIC
 
-	(fit1 <- with(K1, estimateRACVM(Z = X + 1i*Y, T = timestamp, spline=TRUE, model = "RACVM", time.units = "sec")))
+(fit1 <- with(K1, estimateRACVM(Z = X + 1i*Y, T = timestamp, 
+                                spline=TRUE, model = "RACVM", 
+                                time.units = "sec")))
 
 
 # simulate from this fit
 
-  p.fit1 <- with(fit1$results, list(eta=eta[1],
-                                  tau = tau[1],
-                                  mu = mu.x[1] + 1i*mu.y[1],
-                                  omega = omega[1],
-                                  v0 = diff(K1$Z)[1]))
-  
-  K1.sim <- with(p.fit1, simulateRACVM(eta=eta, tau=tau, mu = mu, omega=omega, Tmax = nrow(K1), v0 = v0, dt = 1))
-  with(K1.sim, scan.track(z=Z))
+p.fit1 <- with(fit1$results, list(eta=eta[1],
+                                tau = tau[1],
+                                mu = mu.x[1] + 1i*mu.y[1],
+                                omega = omega[1],
+                                v0 = diff(K1$Z)[1]))
+
+K1.sim <- with(p.fit1, simulateRACVM(eta=eta, tau=tau, mu = mu, 
+                                     omega=omega, Tmax = nrow(K1), v0 = v0, dt = 1))
+with(K1.sim, scan_track(z=Z))
 
 
 # Analyze a second portion: 
-  
-  K2 <- Kestrel[3470:3590,]
-  K2$Z <- K2$X + 1i*K2$Y
-  par(mar = c(0,2,0,0), oma = c(4,4,2,2))
-  with(K2, scan.track(x=X, y=Y))
-  
-  with(K2, estimateRACVM(Z = X + 1i*Y, T = timestamp, spline=TRUE, compare.models=TRUE, time.units = "sec"))
-  # Note: Here, the advective model is selected by AIC, and the simple CVM by BIC.  
-  
+
+K2 <- Kestrel[3470:3590,]
+K2$Z <- K2$X + 1i*K2$Y
+par(mar = c(0,2,0,0), oma = c(4,4,2,2))
+with(K2, scan_track(x=X, y=Y))
+
+with(K2, estimateRACVM(Z = X + 1i*Y, T = timestamp, spline=TRUE, 
+                       compare.models=TRUE, time.units = "sec"))
+# Note: Here, the advective model is selected by AIC, and the simple CVM by BIC.  
+
 }
 \seealso{
 \code{\link{simulateRACVM}}
 }
-

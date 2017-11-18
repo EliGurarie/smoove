@@ -1,0 +1,5 @@
+estimateRACVM_examples		demo script for estimating rotational advective correlated velocity model
+estimateUCVM_examples		demo script to fit unbiased correlated velocity model
+simulateRACVM_examples		demo script to simulate using rotational advective correlated velocity model
+testCP_example	script for simulating a single change point
+ucvmChangePoint_examples			demo script for simulating and estimating change point using unbiased correlated velocity model

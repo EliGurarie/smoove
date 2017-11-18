@@ -1,8 +1,8 @@
-estimateCVM.crawl <- function(z, t, p0 = NULL, verbose = TRUE, CI = NULL, ...)
+estimateCVM.crawl <- function(Z, T, p0 = NULL, verbose = TRUE, CI = NULL, ...)
 {
-  x = Re(z)
-  y = Im(z)
-  data <- data.frame(x, y, t)
+  x = Re(Z)
+  y = Im(Z)
+  data <- data.frame(x, y, T)
   
   initial.state <- list(
     a1.x=c(x[1],0),
@@ -17,7 +17,7 @@ estimateCVM.crawl <- function(z, t, p0 = NULL, verbose = TRUE, CI = NULL, ...)
   Fit.crawl <- crwMLE(
     mov.model=~1, 
     data=data, coord=c("x","y"), 
-    Time.name="t", 
+    Time.name="T", 
     #theta = ,# initial parameters,
     initial.state=initial.state, 
     fixPar=c(NA, NA), ...)

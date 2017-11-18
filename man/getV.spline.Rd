@@ -23,4 +23,3 @@ a list with the estimated velocity (V), as well as the position (Z) and time (T)
 \description{
 Computes the locations and velocities of a cubic spline of a 2D track over time.
 }
-
