@@ -9,7 +9,7 @@ plotWindowSweep(windowsweep, ...)
 \arguments{
 \item{windowsweep}{output of \code{\link{sweepRACVM}} function}
 
-\item{...}{additional parameters to pass to \code{\link{plot}}}
+\item{...}{additional parameters to pass to \code{\link{matplot}}}
 }
 \description{
 Plots a relative likelihood plot for the windowsweep

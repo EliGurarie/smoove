@@ -1,21 +1,33 @@
-#' findCandidateChangePoints
+#' Find Candidate Change Points
 #' 
-#' @param windowsweep windowsweep
-#'
-#' @param clusterwidth clusterwidth
-#'
-#' @export
-findCandidateChangePoints <- function(windowsweep, clusterwidth=0){
+#' @details The raw output of the window sweep (\code{\link{sweepRACVM}})
+#' 
+#' @param windowsweep A windowsweep opject (matrix), output of \code{\link{sweepRACVM}} function
+#' @param clusterwidth A time span within which very close change points are considered a single change point.  If the raw time data are POSIX, it will inherit the same time unit as the one chosen for the windowsize and windowstep.
+#' @param verbose Whether or not to report the number of change points that are clustered away. 
+
+findCandidateChangePoints <- function(windowsweep, clusterwidth=0, verbose = TRUE){
   
-  T <- row.names(windowsweep) %>% as.numeric
+  T <- attr(windowsweep, "time")
+  
+  if(inherits(T, "POSIXt")){
+    time.unit <- attr(windowsweep, "time.unit")
+    T <- difftime(T, T[1], unit = time.unit) %>% as.numeric 
+  }
+  
   starts <- colnames(windowsweep) %>% as.numeric
-  
   candidate.CPs <- apply(windowsweep, 2, function(ll) T[which.max(ll)]) 
+  n.raw <- length(candidate.CPs)
   
-  if(clusterwidth > 0)  candidate.CPs <- clusters(candidate.CPs, clusterwidth) %>% sapply(mean) else
+  if(clusterwidth > 0)  candidate.CPs <- clusters(rep(candidate.CPs,2), clusterwidth) %>% 
+    sapply(mean) else
     candidate.CPs <- unique(candidate.CPs)
   
-  candidate.CPs<- sort(candidate.CPs)
+  candidate.CPs <- sort(candidate.CPs)
+  n.new <- length(candidate.CPs)
+  
+  if(verbose)
+  message(paste("Note: clustering candidate change points at", clusterwidth, "time units collapsed", n.raw, "candidate change points to", n.new, "change points.\n"))
   
   # compute number of points per segment
   dTs <- table(cut(T, c(T[1]-1, candidate.CPs, T[length(T)]+1)))

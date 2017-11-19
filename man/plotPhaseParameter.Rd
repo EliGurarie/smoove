@@ -2,10 +2,11 @@
 % Please edit documentation in R/plotPhaseParameter.R
 \name{plotPhaseParameter}
 \alias{plotPhaseParameter}
+\alias{getPhaseParameter}
 \title{Plot Estimates From RACVM Partition}
 \usage{
 plotPhaseParameter(variable, partitionlist, cols = 1:length(partitionlist),
-  extra = TRUE, label = TRUE, ...)
+  extra = TRUE, label = TRUE, log = NULL, ...)
 }
 \arguments{
 \item{variable}{one of: \code{omega}, \code{mu.x}, \code{mu.y}, \code{eta}, \code{tau}}
@@ -17,6 +18,8 @@ plotPhaseParameter(variable, partitionlist, cols = 1:length(partitionlist),
 \item{extra}{also plot segments}
 
 \item{label}{whether to label the plotted parameter}
+
+\item{log}{default behavior is to plot the log of tau, but not of other parameters. ANy other value of log}
 
 \item{...}{additional arguments to pass to plotting function.}
 }

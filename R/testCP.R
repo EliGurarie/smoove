@@ -2,17 +2,14 @@
 #' 
 #' Identifies appropriate models on either side of a change point
 #' 
-#' @param Z location of data
-#' @param T T
-#' @param cp change point
-#' @param start begining timoe of segment
-#' @param end end time of segment to analyze
-#' @param criterion criterion
-#' @param spline spline
+#' @param {Z,T} location and time of data
+#' @param {cp} change point
+#' @param {start,end} beginning and end time of segment to analyze
 #' @param modelset set of models to compare (combination of UCVM, ACVM, RCVM, RACVM, or \code{all}, which includes all of them)
-#'
-#' @export
-testCP <- function(Z, T, cp, start, end, modelset = "all", criterion = "BIC", spline = FALSE){
+#' @param spline whether or not to use the spline approximation for the final estimate. 
+#' @param criterion selection criterion - either BIC or AIC (can be upper- or lowercased)
+
+testCP <- function(Z, T, cp, start, end, modelset = "all", ...){
   
   if(identical(modelset, "all")) modelset <- c("UCVM", "ACVM", "RCVM", "RACVM")
   
@@ -28,30 +25,30 @@ testCP <- function(Z, T, cp, start, end, modelset = "all", criterion = "BIC", sp
   T2 <- T[i2]
   Tboth <- T[iboth]
   
-  fit1 <- getFit(Z1, T1, modelset = modelset, criterion = criterion, spline = spline)
-  fit2 <- getFit(Z2, T2, modelset = modelset, criterion = criterion, spline = spline)
-  fitboth <- getFit(Zboth, Tboth, modelset = modelset, criterion = criterion  , spline = spline)
+  fit1 <- getFit(Z1, T1, modelset = modelset, ...)
+  fit2 <- getFit(Z2, T2, modelset = modelset, ...)
+  fitboth <- getFit(Zboth, Tboth, modelset = modelset, ...)
   
   #  Which (if any) of the parameters in the most complex SHARED model are significantly different
   
-  r1 <- fit1$results
-  r2 <- fit2$results
+  r1 <- fit1$results %>% subset(select = -eta)
+  r2 <- fit2$results %>% subset(select = -eta)
+  r1r2 <- smartbind(r1, r2)
+  r1 <- subset(r1r2, grepl("1:", row.names(r1r2)))
+  r2 <- subset(r1r2, grepl("2:", row.names(r1r2)))
   
-  lo.high <- smartbind(r1[2,], r2[3,], fill=0)
-  high.lo <- smartbind(r1[3,], r2[2,], fill=0)
-  
-  which.extreme <- (lo.high[1,] > lo.high[2,]) | (high.lo[1,] < high.lo[2,])
-  
-  extremes <- paste(names(r1)[which.extreme], collapse = "-")
+  differences <- names(r1)[(r1[1,] < r2[2,] | r1[1,] > r2[3,]) | 
+                           (r2[1,] < r1[2,] | r2[1,] > r1[3,])] %>% na.omit
+  if(fit1$model != fit2$model) differences <- c(differences, "model")
   
   testtable <- data.frame(
-    AIC = c(Changepoint = -2*(fit1$LL + fit2$LL) + 2*(fit1$k+fit2$k+1), 
-            NoChangepoint =  -2*fitboth$LL + 2 * fitboth$k),
-    BIC = c(Changepoint = -2*(fit1$LL + fit2$LL) + log(length(Zboth))*(fit1$k+fit2$k+1), 
-            NoChangepoint =  -2*fitboth$LL + log(length(Zboth)) * fitboth$k),
+    AIC = c(-2*(fit1$LL + fit2$LL) + 2*(fit1$k+fit2$k+1), 
+            -2*fitboth$LL + 2 * fitboth$k),
+    BIC = c(-2*(fit1$LL + fit2$LL) + log(length(Zboth))*(fit1$k+fit2$k+1), 
+            -2*fitboth$LL + log(length(Zboth)) * fitboth$k),
     K = c(Changepoint = fit1$k + fit2$k + 1, 
           NoChangepoint = fitboth$k),
-    extremes = c(extremes, NA))
+    differences = c(paste(differences, collapse = ", "), NA))
   
   models <- data.frame(M1 = fit1$model, M2 = fit2$model, Mboth = fitboth$model)
   
@@ -77,3 +74,6 @@ getFit <- function(z, t, modelset, criterion = "BIC", spline = FALSE){
   
   return(fit)
 }  
+
+
+

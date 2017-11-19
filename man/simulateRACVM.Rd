@@ -10,11 +10,11 @@ simulateRACVM(tau = 1, eta = 1, omega = 0, mu = 0, v0 = NULL,
 \arguments{
 \item{tau}{characteristic time scale of autocorrelation}
 
-\item{eta}{random rms speed parameter. In the case where \eqn{\omega = 0}, the mean square speed of movement is \eqn{E(|V|^2) = \eta^2 + \mu^2}.  In the case were \eqn{mu = \omega = 0}, the mean tangential speed (elsewhere: \eqn{\nu}) is given by\eqn{ E(|V|) = \eta \sqrt(\pi)/2}.}
+\item{eta}{random speed parameter. In the case where \eqn{\omega = 0}, the mean square speed of movement is \eqn{E(|V|^2) = \eta^2 + \mu^2}.  In the case were \eqn{\mu = \omega = 0}, the mean tangential speed is \eqn{ E(|V|) = \eta \sqrt(\pi)/2}.}
 
-\item{omega}{rotational velocity.}
+\item{omega}{rotational velocity}
 
-\item{mu}{advective velocity (can be complex value)}
+\item{mu}{advective velocity (can be complex value where real and imaginary parts are x and y components of velocity)}
 
 \item{v0}{initial velocity}
 
@@ -29,7 +29,7 @@ a list with the following elements \describe{\item{T}{the time vector} \item{V}{
 Simulates 2D correlated velocity movement model with rotation and advection
 }
 \details{
-This function simulates a RoAdCVM explicitly using the governing OU equation, using a discretization in which dt << tau.  The model is written
+This function simulates a Rotational-Advective CVM explicitly using the governing OU equation, using a discretization in which dt << tau.
 }
 \examples{
 racvm1 <- simulateRACVM(tau = 4, eta = 1, omega = 2, mu = 0, Tmax = 100, dt = .01)
