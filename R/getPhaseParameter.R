@@ -10,7 +10,7 @@
 #' @export
 getPhaseParameter <- function(variable, partitionlist)
 {
-  ldply(partitionlist, 
+  plyr::ldply(partitionlist, 
         function(pl){
           e <- pl$estimates
           if(variable %in% names(e)){ 

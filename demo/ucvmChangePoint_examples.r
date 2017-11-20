@@ -1,4 +1,6 @@
+if(interactive()){
 require(smoove)
+require(magrittr)
 
 mycvm1 <- simulateUCVM(T=cumsum(rexp(100)), nu=1, tau=10, method="exact")
 mycvm2 <- simulateUCVM(T=cumsum(rexp(100)), nu=5, tau=4, v0 = mycvm1$V[100], method="exact")
@@ -14,6 +16,7 @@ ws <- sweepRACVM(Z = Z, T = T, windowsize = 100, windowstep = 5, model = "UCVM")
 
 # select change points
 par(mfrow=c(1,2))
+require(rgl)
 
 starts <- colnames(ws) %>% as.numeric
 image(T, starts, ws)
@@ -22,7 +25,7 @@ require(fields)
 image.plot(T, starts, ws)
 
 
-require(rgl); require(fields)
+require(fields)
 ws2 <- apply(ws, 2, function(x) x - min(x, na.rm=TRUE))
 ws2.range <- range(ws2, na.rm=TRUE)
 cols <- topo.colors(round(diff(ws2.range)))[round(ws2.range)]
@@ -47,3 +50,4 @@ SelectPhases(ws, 2)
 
 E <- GetCVMforPhases(Z,T,SelectPhases(ws, 2), method="crawl")
 PlotResults(E)
+}

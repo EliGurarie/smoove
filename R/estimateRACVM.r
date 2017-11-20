@@ -6,22 +6,25 @@
 #' 
 #' The parameterization is: \eqn{\tau} - characteristic time scale, \eqn{\mu} - advective velocity, \eqn{\eta} - random rms speed, \eqn{\omega} - angular speed. 
 #' 
-#' The \code{fitRACVM} function is an (internal) helper function.  
-
-#' @param {XY,Z,T} respectively, XY two-column matrix, optional complex location matrix, and times of observations
-#' @param {track} a possible \code{track} object (i.e. data frame with columns called X, Y and Time) to provide instead of Z and T.
-#' @param {model} one of UCVM, RCVM, ACVM or RACVM. 
-#' @param {compare.models} whether to compare four models: with both rotation and advection, only rotation, only advection, or neither.  The comparison provides a table with the log likelihood, number of parameters, AIC, BIC, delta AIC and delta BIC values.  A limited comparison set may be useful when running the fit many times (e.g. when performing change point analysis). 
-#' @param {modelset} which models to fit and compare (if \code{compare.models}) is TRUE)
-#' @param {p0} optional named list of initial parameter values in the form: c(tau, eta, omega, mu.x, mu.y).
-#' @param {spline} whether to implement the spline correction on the positions 
-#' @param {spline.res} resolution of spline (see \code{\link{getV.spline}})
-#' @param {T.spline} new times for spline estimation (best left as NULL)
-#' @param {time.units} time units of calculations (e.g. "sec", "min", "hour", "day")
+#' The \code{fitRACVM} function is an (internal) helper function. 
+#' 
+#' @param XY XY two-column matrix
+#' @param Z optional complex location matrix
+#' @param T times of observations
+#' @param track a possible \code{track} object (i.e. data frame with columns called X, Y and Time) to provide instead of Z and T.
+#' @param model one of UCVM, RCVM, ACVM or RACVM. 
+#' @param compare.models whether to compare four models: with both rotation and advection, only rotation, only advection, or neither.  The comparison provides a table with the log likelihood, number of parameters, AIC, BIC, delta AIC and delta BIC values.  A limited comparison set may be useful when running the fit many times (e.g. when performing change point analysis). 
+#' @param modelset which models to fit and compare (if \code{compare.models}) is TRUE)
+#' @param p0 optional named list of initial parameter values in the form: c(tau, eta, omega, mu.x, mu.y).
+#' @param spline whether to implement the spline correction on the positions 
+#' @param spline.res resolution of spline (see \code{\link{getV.spline}})
+#' @param T.spline new times for spline estimation (best left as NULL)
+#' @param time.units time units of calculations (e.g. "sec", "min", "hour", "day")
+#' @param verbose whether to output verbose message. defaults to FALSE#'
 #' @aliases fitRACVM 
 #' @seealso \code{\link{simulateRACVM}}
-#' @example ./examples/estimateRACVMexamples.r
-
+#' @example ./demo/estimateRACVM_examples.r
+#' @export
 estimateRACVM <- function(XY, Z=NULL, T, track = NULL, 
                           model = "RACVM", 
                           compare.models = TRUE, 
@@ -153,7 +156,8 @@ fitRACVM <- function(T, V, p0, model = "UCVM"){
   LL <- -p.fit$value
   
   results <- rbind(Estimate = p.hat, CI.low, CI.high) %>% 
-    as.data.frame %>% mutate(logtau=NULL, logeta=NULL)
+    as.data.frame %>% 
+    plyr::mutate(logtau=NULL, logeta=NULL)
   
   # Computing approximate confidence intervals around eta (propagating the error)
   # W = eta^2 + mu.x^2 + mu.y^2
@@ -162,7 +166,7 @@ fitRACVM <- function(T, V, p0, model = "UCVM"){
   # EV and VarV come from Taylor expansion around moments
   
   if(!("mu.x" %in% names(results))) results$rms = results$eta else{
-    r <- mutate(results, tau = NULL, omega = NULL)
+    r <- plyr::mutate(results, tau = NULL, omega = NULL)
     
     mu2 <- r[1,]^2
     sigma2 <- ((r[2,] - r[1,])/2)^2

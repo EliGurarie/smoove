@@ -1,3 +1,4 @@
+if(interactive()){
 require(smoove)
 ucvm <- simulateRACVM(tau = 5, eta = 2, omega = 0, mu = 0, Tmax = 100, dt = .1)
 acvm <- simulateRACVM(tau = 5, eta = 2, omega = 0, mu = 2, Tmax = 100, dt = .1)
@@ -73,3 +74,4 @@ with(K2, estimateRACVM(Z = X + 1i*Y, T = timestamp, spline=TRUE,
                        compare.models=TRUE, time.units = "sec"))
 # Note: Here, the advective model is selected by AIC, and the simple CVM by BIC.  
 
+}

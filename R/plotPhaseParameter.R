@@ -7,10 +7,12 @@
 #' @param partitionlist output of \code{\link{getPhases}}, i.e. a list of information on each of the selected phases
 #' @param label whether to label the plotted parameter
 #' @param log default behavior is to plot the log of tau, but not of other parameters. ANy other value of log
+#' @param cols cols
+#' @param extra extra
 #' @param ... additional arguments to pass to plotting function. 
+#'
 #' @return \code{getVariable} returns a data.frame with start time, end time, estimate, low and high 95\% C.I. and selected model for a given parameter, with each row corresponding to an enumerated partition phase.  
-#' @aliases getPhaseParameter
-
+#' @export
 plotPhaseParameter <- function(variable, partitionlist, cols = 1:length(partitionlist), extra = TRUE, label = TRUE, log = NULL, ...){
   variabletable <- getPhaseParameter(variable, partitionlist)
   

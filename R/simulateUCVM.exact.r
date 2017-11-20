@@ -31,6 +31,10 @@
 #' lines(cvm2$T, Im(cvm2$Z), col=3, type="l")
 #' title("CVM(2, 5): 0-1000, 100 random samples", outer=TRUE, cex=1.5)
 #' @export
+#' @usage 
+#' simulateUCVM.exact(T, nu = 1, tau = 1, v0 = nu * exp((0+1i) *
+#' runif(1, 0, 2 * pi)))
+#' 
 simulateUCVM.exact <-  function(T, nu = 1, tau = 1, v0 = nu * exp((0+1i) * runif(1, 0, 2 * pi)))
   {
     X <- matrix(c(Re(v0), 0, Im(v0), 0), nrow=1)

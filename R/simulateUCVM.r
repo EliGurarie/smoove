@@ -9,7 +9,8 @@
 #' @param v0 initial velocity vector.  Default is randomly oriented vector with magnitude \code{nu}
 #' @param T.max maximum time of simulations.
 #' @param dt time interval of simulations.
-#' @param method one of \code{direct}, referring to a direct numerical integration of the process which requires a fixed (and small) interval, or \code{exact} which samples from the likelihood of the complete process and can take any random vector or times \code{T}.  The "exact" sampling can be much slower for a large vector of observations.  See the package \code{vignette("smoove")} for more details. 
+#' @param T time vector
+#' @param method one of \code{direct}, referring to a direct numerical integration of the process which requires a fixed (and small) interval, or \code{exact} which samples from the likelihood of the complete process and can take any random vector or times \code{T}.  The "exact" sampling can be much slower for a large vector of observations.  See the package \code{vignette("smoove",package="smoove")} for more details. 
 #'
 #' @return a list with the following elements \describe{\item{T}{the time vector} \item{V}{the (complex) vector of velocities} \item{Z}{the (complex) vector of locations} \item{XY}{a 2 x n matrix containing columns for the X and Y coordinates of the location} \item{dt, tau, nu,vo}{the parameters of the model.}}
 #' 
@@ -23,7 +24,7 @@
 #' ## Also plotting the velocity and using the plot_track function.
 #' par(mfrow=c(1,2))
 #' plot(ucvm$V[1:1000], asp=1, type="l", main = "Velocity")
-#' plot_track(ucvm$Z[1:1000], asp=1, pch=19, cex=0.5, col=rgb(0,0,0,.1), main = "Location")
+#' plot_track(ucvm$Z[1:1000], pch=19, cex=0.5, col=rgb(0,0,0,.1), main = "Location")
 #' 
 #' # Exact simulation of UCVM, with illustration of velocity and position samples
 #' T <- cumsum(rexp(100))
@@ -40,7 +41,11 @@
 #'     lines(T, Im(Z), col=3, type="o", pch=19, cex=0.5)
 #' })
 #' @export
-simulateUCVM <- function(nu = 1, tau=1, v0= nu * exp(1i * runif(1, 0, 2 * pi)), 
+#' @usage 
+#' simulateUCVM(nu = 1, tau = 1, v0 = nu * exp((0+1i) * runif(1, 0, 2 * pi)), 
+#' T.max = NULL, dt = NULL, T = NULL, method = c("direct","exact")[1])
+#' 
+simulateUCVM <- function(nu = 1, tau=1, v0= nu * exp((0+1i) * runif(1, 0, 2 * pi)), 
                          T.max=NULL, dt=NULL, T = NULL,
                          method = c("direct", "exact")[1])
 {

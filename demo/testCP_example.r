@@ -1,3 +1,4 @@
+require(smoove)
 # Simulate a single change point
 
 set.seed(101)
@@ -6,7 +7,6 @@ ucvm2 <- simulateUCVM(T=cumsum(rexp(100)), nu=5, tau=10, v0 = ucvm1$V[100], meth
 T <- c(ucvm1$T, ucvm1$T[100] + ucvm2$T)
 Z <- c(ucvm1$Z, ucvm1$Z[100] + ucvm2$Z)
 plot_track(Z)
-
 
 # testing the true changepoint
 testCP(Z, T, 100, 1, 200)

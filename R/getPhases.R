@@ -46,9 +46,10 @@ summarizePhases <- function(phases){
     a$estimates
   })
   
-  summary <- data.frame(ldply(phases, 
+  summary <- data.frame(plyr::ldply(phases, 
                               function(a) with(a, data.frame(start, end, model))),
-                        ldply(estimates, function(a) a[1,])) %>% mutate(.id.1 = NULL) %>% 
+                        plyr::ldply(estimates, function(a) a[1,])) %>% 
+    plyr::mutate(.id.1 = NULL) %>% 
     plyr::rename(c(".id" = "phase"))
   
   which.NA <- apply(summary, 2, function(x) all(is.na(x)))

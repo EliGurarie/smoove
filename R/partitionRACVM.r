@@ -26,9 +26,10 @@ partitionRACVM <- function(Z,T,CPs, criterion = "BIC"){
     
     pick <- ifelse(criterion == "AIC", lowAIC, lowBIC)
     
-    # stripModel is not defined (CRAN check error)! Later comment this out.
-    #model <- stripModel(row.names(fit$CompareTable)[pick])
-    if(model$fit.omega & model$fit.mu) myresults <- fit$results else
+    model <- strip.model(row.names(fit$CompareTable)[pick])
+    if(model$fit.omega & model$fit.mu) 
+      myresults <- fit$results 
+    else
       myresults <- with(model, estimateRACVM(Z = z, T= t, 
                                              fit.mu = fit.mu, 
                                              fit.omega = fit.omega, 

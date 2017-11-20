@@ -21,8 +21,11 @@ Imports:
     intervals,
     scales,
     gtools,
+    gplots,
     methods,
-    gridExtra
+    gridExtra,
+    foreach, 
+    doParallel
 LinkingTo: Rcpp, RcppArmadillo
 VignetteBuilder: knitr
 BugReports: https://github.com/EliGurarie/smoove/issues

@@ -11,9 +11,9 @@
 #' @param set.layout whether to automatically change the layout
 #' 
 #' @examples 
-#' data(Bowhead)
+#' data(Kestrel, package='smoove')
 #' par(bty="l", mar = c(0,2,0,2), oma=c(4,0,4,0), xpd=NA) 
-#' with(Bowhead, scan_track(time = DateTime, x = x.km, y = y.km))
+#' with(Kestrel, scan_track(time = timestamp, x = X, y = Y))
 #' @export
 scan_track <- function(track=NULL, time=NULL, x = NULL, y=NULL, z = NULL, set.layout = TRUE, ...)
 {

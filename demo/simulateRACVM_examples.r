@@ -1,3 +1,5 @@
+require(smoove)
+
 racvm1 <- simulateRACVM(tau = 4, eta = 1, omega = 2, mu = 0, Tmax = 100, dt = .01)
 racvm2 <- simulateRACVM(tau = 4, eta = 1, omega = 0, mu = 1, Tmax = 100, dt = .01)
 racvm3 <- simulateRACVM(tau = 4, eta = 1, omega = 2, mu = 1, Tmax = 100, dt = .01)
@@ -17,11 +19,11 @@ with(racvm1, scan_track(x = Re(Z), y = Im(Z), time = T))
 
 # Compare with simulateRACVM2
 
-racvm1b <- simulateRACVM2(tau = 4, eta = 1, omega = 2, mu = 0, Tmax = 100, dt = .01)
-racvm2b <- simulateRACVM2(tau = 4, eta = 1, omega = 0, mu = 1, Tmax = 100, dt = .01)
-racvm3b <- simulateRACVM2(tau = 4, eta = 1, omega = 2, mu = 1, Tmax = 100, dt = .01)
-
-racvm1 <- simulateRACVM(tau = 4, eta = 1, omega = 1, mu = 0, Tmax = 10, dt = .01)
-racvm1b <- simulateRACVM2(tau = 4, eta = 1, omega = 1, mu = 0, Tmax = 10, dt = .01)
-with(racvm1, scan_track(x = Re(Z), y = Im(Z), time = T))
-with(racvm1b, scan_track(x = Re(Z), y = Im(Z), time = T))
+# racvm1b <- simulateRACVM2(tau = 4, eta = 1, omega = 2, mu = 0, Tmax = 100, dt = .01)
+# racvm2b <- simulateRACVM2(tau = 4, eta = 1, omega = 0, mu = 1, Tmax = 100, dt = .01)
+# racvm3b <- simulateRACVM2(tau = 4, eta = 1, omega = 2, mu = 1, Tmax = 100, dt = .01)
+# 
+# racvm1 <- simulateRACVM(tau = 4, eta = 1, omega = 1, mu = 0, Tmax = 10, dt = .01)
+# racvm1b <- simulateRACVM2(tau = 4, eta = 1, omega = 1, mu = 0, Tmax = 10, dt = .01)
+# with(racvm1, scan_track(x = Re(Z), y = Im(Z), time = T))
+# with(racvm1b, scan_track(x = Re(Z), y = Im(Z), time = T))

@@ -11,8 +11,8 @@
 #' @param plotme whether to plot the resulting likelihood (only if method is "sweep"). 
 #' @param ... additional parameters to pass to \code{\link{estimateUCVM}} function, in particular the method of estimation.  Under most conditions, fairly reliable and fast results are provided by the default \code{vLike} (velocity likelihood) method. 
 #' 
-#' @example ./examples/findSingleBreakPointexamples.r
-
+#' @example ./demo/findSingleBreakPoint_examples.r
+#' @export
 findSingleBreakPoint <- function(Z, T, method = "sweep", plotme=TRUE,  ...){
   
   T.mids <- (T[-1] + T[-length(T)])/2
@@ -51,8 +51,8 @@ getUCVMLikelihoodAtBreak <- function(tbreak, T, Z, ...)
   nbreak <- max(which((T-tbreak)<0))
   n <- length(Z)
   
-  Hat1 <- estimateUCVM(z = Z[1:nbreak],     t = T[1:nbreak],     like = TRUE, ...)
-  Hat2 <- estimateUCVM(z = Z[(nbreak+1):n], t = T[(nbreak+1):n], like = TRUE, ...)
+  Hat1 <- estimateUCVM(Z = Z[1:nbreak],     T = T[1:nbreak],     like = TRUE, ...)
+  Hat2 <- estimateUCVM(Z = Z[(nbreak+1):n], T = T[(nbreak+1):n], like = TRUE, ...)
   
   Hat1$LL + Hat2$LL
 }

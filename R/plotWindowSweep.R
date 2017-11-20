@@ -4,9 +4,9 @@
 #' 
 #' @param windowsweep output of \code{\link{sweepRACVM}} function
 #' @param ... additional parameters to pass to \code{\link{matplot}}
-
+#' @export
 plotWindowSweep <- function(windowsweep, ...){
-  windowsweep.zeroed <- aaply(windowsweep, 2, function(x) x - min(x, na.rm=TRUE)) %>% t
+  windowsweep.zeroed <- plyr::aaply(windowsweep, 2, function(x) x - min(x, na.rm=TRUE)) %>% t
   starts <- colnames(windowsweep) %>% as.numeric
   T <- row.names(windowsweep) %>% as.numeric
   mean.rel.ll <- apply(windowsweep.zeroed, 1, mean, na.rm=TRUE)
