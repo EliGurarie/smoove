@@ -1,61 +1,67 @@
 #' Estimating parameters of unbiased CVM
 #' 
-#' This  function  estimates the mean speed \eqn{nu}, the time-scale \eqn{tau} and (occasionally) the initial speed \eqn{v_0}of the unbiased correlated velocity movement (UCVM).  See Gurarie et al. (in review) and the \code{\link{smoove}} vignette for more details. 
-
+#' This  function  estimates the mean speed \eqn{nu}, the time-scale \eqn{tau} and (occasionally) the initial speed \eqn{v_0}of the unbiased correlated velocity movement (UCVM).  See Gurarie et al. (in review) and the \code{vignette("smoove", package = "smoove")} vignette for more details. 
 #' @param Z location data in complex form (X + iY)
 #' @param XY ... or, optionally, as a two column matrix of x and y coordinates. 
 #' @param T time of observations (NOTE: must be regularly spaced for methods "vaf" and "crw")
-#' @param {method} the method to use for the estimation.  These are (in increasing : velocity auto-correlation fitting (\code{vaf}), correlated random walk matching (\code{crw}), velocity likelihood (\code{vLike}), position likelihood (\code{zLike}) and position likelihood with Kalman filter (\code{crawl}). This last method is generally he best method, since it  fits the position likelihood more efficiently by using a Kalman filter. It is based on Johnson et al (2008) and is a wrapper for the \code{\link{crwMLE}} in the (excellent) \code{\link{crawl}} package.  The default method is \code{vLike}.
+#' @param method the method to use for the estimation.  These are (in increasing : velocity auto-correlation fitting (\code{vaf}), correlated random walk matching (\code{crw}), velocity likelihood (\code{vLike}), position likelihood (\code{zLike}) and position likelihood with Kalman filter (\code{crawl}). This last method is generally he best method, since it  fits the position likelihood more efficiently by using a Kalman filter. It is based on Johnson et al (2008) and is a wrapper for the \code{\link{crwMLE}} in the (excellent) \code{\link{crawl}} package.  The default method is \code{vLike}.
 #' @param parameters which parameters to estimate.  For most methods "tau" and "nu" are always both estimated, but some computation can be saved for the velocity likelihood method by providing an estimate for "nu".
 #' @param CI whether or not to compute 95\% confidence intervals for parameters. In some cases, this can slow the computation down somewhat.
 #' @param spline whether or not to use the spline correction (only relevant for \code{vaf} and \code{vLike}).
 #' @param diagnose whether to draw a diagnostic plot.  Varies for different methods.
-#' @param ... additional parameters to pass to estimation functions.  These are particularly involved in the \code{crawl} method (see \code{\link{crwMLE}}). 
+#' @param ... additional parameters to pass to estimation functions.  These are particularly involved in the \code{crawl} method (see \code{\link[crawl]{crwMLE}}). 
 #' @return A data frame with point estimates of mean speed `nu' and time-scale `tau' 
-#' @example ./examples/estimateUCVMexamples.r
-
-estimateUCVM <- 
-function(z, xy, t, method = c("vaf", "crw", "vLike", "zLike", "crawl")[3], ...)
+#' @example ./demo/estimateUCVM_examples.r
+#' @export
+estimateUCVM <- function(Z,
+           XY,
+           T,
+           method = c("vaf", "crw", "vLike", "zLike", "crawl")[3],
+           parameters = c("tau", "nu"),
+           CI = FALSE,
+           spline = FALSE,
+           diagnose = FALSE,
+           ...)
 {
-   if(is.null(z)) z <- xy[,1] + 1i*xy[,2]
+   if(is.null(Z)) Z <- XY[,1] + 1i*XY[,2]
     
   if(method == "crw")
-    return(estimateCVM.crw(z,t,...))
+    return(estimateCVM.crw(Z,T, CI = CI, diagnose = diagnose, ...))
     
   if(method == "vaf")
-    return(estimateCVM.vaf(z,t,...))
+    return(estimateCVM.vaf(Z,T, CI = CI, diagnose = diagnose, spline = spline, ...))
   
   if(method == "vLike")
-    return(estimateCVM.vLike(z,t,...))
+    return(estimateCVM.vLike(Z,T, CI = CI, parameters = parameters, spline = spline, ...))
   
   if(method == "zLike")
-    return(estimateCVM.zLike(z,t,...))
+    return(estimateCVM.zLike(Z,T, CI = CI, ...))
   
   if(method == "crawl")
-    return(estimateCVM.crawl(z,t,...))
+    return(estimateCVM.crawl(Z,T, CI = CI,...))
   }
 
 
-estimateCVM.crawl <- function(z, t, p0 = NULL, verbose = TRUE, CI = NULL, ...)
+estimateCVM.crawl <- function(Z, T, p0 = NULL, verbose = TRUE, CI = NULL, ...)
 {
-  x = Re(z)
-  y = Im(z)
-  data <- data.frame(x, y, t)
+  X = Re(Z)
+  Y = Im(Z)
+  data <- data.frame(X, Y, T)
   
   initial.state <- list(
-    a1.x=c(x[1],0),
-    a1.y=c(y[1],0),
+    a1.x=c(X[1],0),
+    a1.y=c(Y[1],0),
     P1.x=diag(c(1,1)),
     P1.y=diag(c(1,1)))
   
   initial.state <- list(
-    a=c(x[1],0,y[1],0),
+    a=c(X[1],0,Y[1],0),
     P=diag(rep(1,4)))
   
   Fit.crawl <- crwMLE(
     mov.model=~1, 
-    data=data, coord=c("x","y"), 
-    Time.name="t", 
+    data=data, coord=c("X","Y"), 
+    Time.name="T", 
     #theta = ,# initial parameters,
     initial.state=initial.state, 
     fixPar=c(NA, NA), ...)

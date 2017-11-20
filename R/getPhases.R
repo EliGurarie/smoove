@@ -2,11 +2,14 @@
 #' 
 #' Takes a set of change points and fits the best model to each phase
 #' 
-#' @param {Z,T} locations and times
-#' @param {CP.table} change point table, i.e. output of \code{\link{getCPtable}} which contains a column of change points and a column of selected models. 
+#' @param Z locations
+#' @param T time vector
+#' @param CP.table change point table, i.e. output of \code{\link{getCPtable}} which contains a column of change points and a column of selected models. 
+#' @param criterion the criterion to use; defaults to BIC
 #' @param verbose whether to print a summary of the results
+#'
 #' @return a named list of phases (numbered by roman numerals) containing the selected model, estimates, and confidence intervals for each parameter.
-
+#' @export
 getPhases <- function(CP.table, Z, T, criterion = "BIC", verbose = TRUE){
   CPs <- CP.table$CP
   
@@ -30,6 +33,11 @@ getPhases <- function(CP.table, Z, T, criterion = "BIC", verbose = TRUE){
   return(phases)
 }
 
+#' summarizePhases
+#' 
+#' @param phases phases 
+#'
+#' @export
 summarizePhases <- function(phases){
   estimates <- plyr::llply(phases, function(a){
     if(!("omega" %in% names(a$estimates))) a$estimates$omega = NA
@@ -38,9 +46,10 @@ summarizePhases <- function(phases){
     a$estimates
   })
   
-  summary <- data.frame(ldply(phases, 
+  summary <- data.frame(plyr::ldply(phases, 
                               function(a) with(a, data.frame(start, end, model))),
-                        ldply(estimates, function(a) a[1,])) %>% mutate(.id.1 = NULL) %>% 
+                        plyr::ldply(estimates, function(a) a[1,])) %>% 
+    plyr::mutate(.id.1 = NULL) %>% 
     plyr::rename(c(".id" = "phase"))
   
   which.NA <- apply(summary, 2, function(x) all(is.na(x)))

@@ -5,14 +5,14 @@
 #' @param windowsweep A windowsweep opject (matrix), output of \code{\link{sweepRACVM}} function
 #' @param clusterwidth A time span within which very close change points are considered a single change point.  If the raw time data are POSIX, it will inherit the same time unit as the one chosen for the windowsize and windowstep.
 #' @param verbose Whether or not to report the number of change points that are clustered away. 
-
+#' @export
 findCandidateChangePoints <- function(windowsweep, clusterwidth=0, verbose = TRUE){
   
   T <- attr(windowsweep, "time")
   
   if(inherits(T, "POSIXt")){
     time.unit <- attr(windowsweep, "time.unit")
-    T <- difftime(T, T[1], unit = time.unit) %>% as.numeric 
+    T <- difftime(T, T[1], units = time.unit) %>% as.numeric 
   }
   
   starts <- colnames(windowsweep) %>% as.numeric
