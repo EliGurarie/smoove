@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // Mahalanobis
 arma::vec Mahalanobis(arma::mat x, arma::rowvec center, arma::mat cov);
-RcppExport SEXP _smoove_Mahalanobis(SEXP xSEXP, SEXP centerSEXP, SEXP covSEXP) {
+RcppExport SEXP smoove_Mahalanobis(SEXP xSEXP, SEXP centerSEXP, SEXP covSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -18,14 +18,4 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(Mahalanobis(x, center, cov));
     return rcpp_result_gen;
 END_RCPP
-}
-
-static const R_CallMethodDef CallEntries[] = {
-    {"_smoove_Mahalanobis", (DL_FUNC) &_smoove_Mahalanobis, 3},
-    {NULL, NULL, 0}
-};
-
-RcppExport void R_init_smoove(DllInfo *dll) {
-    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
-    R_useDynamicSymbols(dll, FALSE);
 }

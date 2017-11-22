@@ -8,15 +8,15 @@
 #' @param model model to fit for the change point sweep - typically the most complex model in the candidate model set. 
 #' @param windowsize time window of analysis to scan, IMPORTANTLY: in units of time (T).
 #' @param windowstep step (in time) by which the window advances.  The smaller the step, the slower but more thorough the estimation. 
-#' @param time.unit of the windowsize and windowstep.  Only needed if time is a POSIX. Must be one of "auto", "secs", "mins", "hours", "days", "weeks" (See \code{\link{difftime}}).
+#' @param time.unit of the windowsize and windowstep.  Must be one of "secs", "mins", "hours", "days", "weeks" (See \code{\link{difftime}}). Ignored if time is not POSIX. 
 #' @param {progress} whether or not to show a progress bar
 #' @param {...} additional parameters to pass to the \code{\link{estimateRACVM}} function, notably the option "criterion" allows you to select models based on AIC or BIC (the former is more liberal with more complex models).
 #' @param .parallel if set TRUE, will use \code{\link{foreach}} to parallelize the optimization.  Requires establishing the 
 #' @seealso \code{\link{plotWindowSweep}}, \code{\link{estimateRACVM}}, \code{\link{testCP}}
 #' @example ./examples/sweepRACVMexamples.R
 
-sweepRACVM <- function(XY = NULL, Z=NULL, T,
-                       windowsize, windowstep, time.unit = "auto",
+sweepRACVM <- function(XY = NULL, Z = NULL, T,
+                       windowsize, windowstep, time.unit = "days",
                        model = "UCVM", 
                        progress = TRUE,  ..., 
                        .parallel = FALSE){
@@ -76,7 +76,10 @@ sweepRACVM <- function(XY = NULL, Z=NULL, T,
   colnames(LLs) <- starts
   rownames(LLs) <- T.raw
   attr(LLs,"time") <- T.raw
+  attr(LLs,"Z") <- Z
   attr(LLs,"time.unit") <- time.unit
   
   return(LLs)
 }
+
+

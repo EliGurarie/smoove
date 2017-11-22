@@ -302,16 +302,16 @@ racvm <- simulateRACVM(tau = 5, eta = 2, omega = 2, mu = 2, Tmax = 100, dt = .1)
 @
 
 \subsubsection{Unbiased CVM}
-\begin{minipage}{0.4\linewidth}  
-<<ucvm, cache=TRUE, echo=FALSE>>=
+ 
+<<ucvm, cache=TRUE, echo=FALSE, out.width = "4in">>=
 par(bty="l", mgp = c(1.5,0.25,0), tck=0.01, las=1); plot.track(ucvm$Z)
 @
-\end{minipage}
-\begin{minipage}{0.6\linewidth}
+
+
 <<ucvm.fit, cache=TRUE, size = "small">>=
 with(ucvm, estimateRACVM(Z=Z, T=T, compare.models=TRUE))
 @
-\end{minipage}
+
 
 \noindent The estimation function (by default) fits the most complex RACVM model.  The comparison table indicates that the most parsimonious model, according to both AIC and the more conservative BIC, is the UCVM.  Note, also, that the confidence intervals around $\omega$, $\mu_x$ and $\mu_y$ all include 0 - additional evidence that the model may not be advective or rotational.  The following code estimates the ``selected'' model.  
 
@@ -322,46 +322,31 @@ with(ucvm, estimateRACVM(Z=Z, T=T, model="UCVM", compare.models=FALSE))
 \noindent Every time this document is compiled, the results change somewhat.  But in most cases the model selection should return the correct model and the estimated confidence intervals should include the true values. 
 
 \subsubsection{Advective CVM}
-\begin{minipage}{0.4\linewidth}   
-<<acvm, cache=TRUE, echo=FALSE>>=
+
+<<acvm, cache=TRUE, echo=FALSE, fig.height = 3>>=
 par(bty="l", mgp = c(1.5,0.25,0), tck=0.01, las=1); plot.track(acvm$Z)
 @
-  \end{minipage}
-  \begin{minipage}{0.6\linewidth}
-    <<acvm.fit, cache=TRUE, size = "small">>=
-    with(acvm, estimateRACVM(Z=Z, T=T, model = "ACVM", 
-                             compare.models=TRUE))
-    @
-  \end{minipage}
-
+<<acvm.fit, cache=TRUE, size = "small">>=
+with(acvm, estimateRACVM(Z=Z, T=T, model = "ACVM", compare.models=TRUE))
+@
 
 \subsubsection{Rotational CVM}
-     \begin{minipage}{0.4\linewidth}   
-    <<rcvm, cache=TRUE, echo=-1>>=
-    par(bty="l", mgp = c(1.5,0.25,0), tck=0.01, las=1, col=rgb(0,0,0,.5)); plot.track(rcvm$Z)
-    @
-   \end{minipage}
-  \begin{minipage}{0.6\linewidth}
-    <<rcvm.fit, cache=TRUE, size = "small">>=
-    with(rcvm, estimateRACVM(Z=Z, T=T, model = "RCVM", 
-                             compare.models=TRUE))
-    @
-     \end{minipage}
+<<rcvm, cache=TRUE, echo=-1, out.width = "4in">>=
+par(bty="l", mgp = c(1.5,0.25,0), tck=0.01, las=1, col=rgb(0,0,0,.5)); plot.track(rcvm$Z)
+@
+<<rcvm.fit, cache=TRUE, size = "small">>=
+with(rcvm, estimateRACVM(Z=Z, T=T, model = "RCVM", compare.models=TRUE))
+@
 
 
 \subsubsection{Rotational-Advective CVM}
-     \begin{minipage}{0.4\linewidth}   
-  \noindent
-    <<racvm, cache=TRUE, echo=-1>>=
-    par(bty="l", mgp = c(1.5,0.25,0), tck=0.01, las=1); plot.track(racvm$Z)
-    @
-   \end{minipage}
-  \begin{minipage}{0.6\linewidth}
-    <<racvm.fit, cache=TRUE, size = "footnotesize">>=
-    with(racvm, estimateRACVM(Z=Z, T=T, model = "RACVM", 
-                              compare.models=TRUE))
-    @
-     \end{minipage}
+     
+<<racvm, cache=TRUE, echo=-1, fig.height = 3>>=
+par(bty="l", mgp = c(1.5,0.25,0), tck=0.01, las=1); plot.track(racvm$Z)
+@
+<<racvm.fit, cache=TRUE, size = "footnotesize">>=
+with(racvm, estimateRACVM(Z=Z, T=T, model = "RACVM", compare.models=TRUE))
+@
 
 Note that the results of these fits also report the root mean squared (\emph{rms}) speed.  This is a derived quantity equal to:
 $$rms = \sqrt{\eta^2 + \mu_x^2 +\mu_y^2}$$
@@ -444,16 +429,14 @@ To find multiple change points where the number of changes is unknown \emph{a pr
 \item estimate the final models and parameter values within the final selected set of phases.
 \end{enumerate}
 
-We perform an example of this analysis on a simulated trajectory with 3 behavioral phases, switching from an advective, fairly high speed movement, to an unbiased, moderately fast movement, to a highly uncorrelated slower movement. Roughly, this might approximate the shifts between commuting to a foraging site, switching to a searching behavior, and switching to an intensive foraging behavior.  
+\noindent We perform an example of this analysis on a simulated trajectory with 3 behavioral phases, switching from an advective, fairly high speed movement, to an unbiased, moderately fast movement, to a highly uncorrelated slower movement. Roughly, this might approximate the shifts between commuting to a foraging site, switching to a searching behavior, and switching to an intensive foraging behavior.  
 
-<<simSweepGenerate, echo=-1, out.width = "4in", fig.height = 4, fig.width = 4, cache=FALSE, fig.align="center">>=
-par(bty="l"); palette(rainbow(4)); set.seed(7) #set.seed(101)
-
+<<simSweepGenerate, echo=-1>>=
+par(bty="l"); palette(rainbow(4)); set.seed(7)
 taus <- c(3, 3, 1)
 mus <- c(2, 0, 0)
 etas <- c(2, 1, 1)
 durations <- c(40,60,100)
-
 Z.raw <- 0
 T.raw <- 0
 mycvm <- list()
@@ -467,9 +450,9 @@ for(i in 1:length(taus)){
 }
 @
 
-For the analysis, we will randomly sample 400 observations from the complete data:
+For the analysis, we will randomly sample (and order) 400 observations from the complete data:
 
-<<plotMulticvm, echo -1, fig.height = 3>>=
+<<plotMulticvm, echo =-1, fig.height = 4, fig.width = 8, cache=TRUE, fig.align="center">>=
 par(bty = "l", mar = c(0,4,0,0), oma = c(4,0,2,2), xpd = NA)
 multicvm <- data.frame(Z = Z.raw, T = T.raw)[sample(1:length(Z.raw), 400),] %>% arrange(T)
 with(multicvm, scan.track(z = Z, time = T))
@@ -483,12 +466,12 @@ To perform a window sweep, we need to set two variables: the \emph{windowsize} o
 
 Setting the analysis window size is totally the user's choice. The size should be driven by biological considerations. Ideally, it will be large enough to encompass one, but not two or more change points.  The smaller the window step, the more ``thorough'' the analysis, but ultimately its size is not very important as long as it is much smaller than the analysis window.  Ultimately, for strong changes, the analysis will not be very sensitive to reasonable values of either of these parameters.  
 
-Note that if there are gaps in the data or they are irregular, the data extent of the window will be smaller, and if there are fewer than 30 data points in the window, the window will be skipped.  Note also, that the window sweep is only working with a single model which should be specified. It should be the most complex model you are interested (in our case, the ACVM).   
+Note that if there are gaps in the data or they are irregular, the data extent of the window will be smaller, and if there are fewer than 30 data points in the window, the window will be skipped.  Note also, that the window sweep is only working with a single model which should be specified. It should be the most complex model you are interested in (in our case, the ACVM).   
 
 <<simSweep1, eval=FALSE>>=
-Z <- multicvm$Z
-T <- multicvm$T
-simSweep <- sweepRACVM(Z=Z, T=T, windowsize = 80, windowstep = 5, model = "ACVM", progress=FALSE)
+simSweep <- with(mutlicvm, sweepRACVM(Z = Z, T = T, 
+                                      windowsize = 80, windowstep = 5, 
+                                      model = "ACVM", progress=FALSE))
 @
 
 \noindent Toggling the \texttt{progress} to TRUE will provide reports on the progress of the analysis.  There is also an option to parallelize the analysis using the \texttt{doParallel} and \texttt{foreach} R packages.  This which can speed things up considerably (roughly in proportion to the number of cores on your processor).  An example of implementation: 
@@ -497,17 +480,18 @@ simSweep <- sweepRACVM(Z=Z, T=T, windowsize = 80, windowstep = 5, model = "ACVM"
 require(foreach); require(doParallel)
 cl <- makeCluster(detectCores())
 registerDoParallel(cl)
-simSweep <- sweepRACVM(Z=Z, T=T, windowsize = 80, windowstep = 5, model = "ACVM", .parallel = TRUE)
+simSweep <- with(multicvm, sweepRACVM(Z = Z, T = T, windowsize = 80, windowstep = 5, 
+                                      model = "ACVM", .parallel = TRUE))
 @
 
 <<eval=FALSE, include=FALSE>>=
-save(simSweep, file = "simSweep.robj")
+#save(simSweep, file = "simSweep.robj")
 @
 
 This function outputs a jagged matrix of likelihood estimates, which can be visualized: 
 
 <<loadsimSweep, echo=-1, fig.height=3>>=
-par(bty="l"); load("simSweep.robj"); Z <- multicvm$Z; T <- multicvm$T
+par(bty="l"); data(simSweep)
 plotWindowSweep(simSweep)
 @
 
@@ -519,71 +503,81 @@ We obtain candidate change points by taking all of the most likely change points
 
 <<simCP>>=
 CP.all <- findCandidateChangePoints(windowsweep = simSweep, clusterwidth = 0)
-CP.all
+CP.all %>% as.vector
 @
 
-\noindent The warning lets us know that some of the candidate change points are rather too close (in time) to each other, and it might be a good idea to cluster them, i.e.~assign multiple points within a given time interval to a single cluster. If we take a rather generous cluster width below: 
+\noindent The warning lets us know that some of the candidate change points are rather too close (in time) to each other, and it might be a good idea to cluster them, i.e.~assign multiple points within a given time interval to a single cluster.  NB: the output object ``carries'' with it the location and time data as ``attributes'' - the \texttt{as.vector} command simplies tidies the output. 
+
+If we take a rather generous cluster width below: 
 
 <<simCP.clustered>>=
 CP.clustered <- findCandidateChangePoints(windowsweep = simSweep, clusterwidth = 4)
-CP.clustered
+CP.clustered %>% as.vector
 @
 
-\noindent We now have a somewhat smaller set of change points to assess.  
+\noindent We now have (probably) a slightly smaller set of change points to assess.  
 
 \subsubsection{Step III - Selecting Significant Change Points}  
 
 We use the set of candidate change points to separate the track into phases and for each change point (i.e.~pair of neighboring phases) we assess the ``significance'' of the change point by comparing the BIC (or AIC) of a two-model versus one-model fit.  The function that performs this is \texttt{getCPtable}
 
 <<simGetCPtable>>=
-getCPtable(CPs = CP.clustered, Z = Z, T = T, modelset = c("UCVM", "ACVM"), tidy = NULL)
+getCPtable(CPs = CP.clustered, modelset = c("UCVM", "ACVM"), tidy = NULL)
 @
 
-\noindent In the output of \texttt{selectRACVM}, the \texttt{extremes} column indicates which parameter showed significant changes in parameter values defined by no overlap in the 95\% confidence interval, and the \texttt{dAIC} and \texttt{dBIC} compare the change point model to the no change point model.  We can ask this function to tidy the selection table according to any combination of several criteria: - by the differences, or by negative dAIC or dBIC, or by a mismatch in the models selected (see the help file). 
+\noindent In the output of \texttt{selectRACVM}, the \texttt{extremes} column indicates which parameter showed significant changes in parameter values defined by no overlap in the 95\% confidence interval, and the \texttt{dAIC} and \texttt{dBIC} compare the change point model to the no change point model.  We can ask this function to tidy the selection table according to any combination of several criteria: - by the differences, or by negative dAIC or dBIC, or by a mismatch in the models selected (see the help file for details). 
 
 <<simGetCPtable2, cache=TRUE>>=
-getCPtable(CPs = CP.clustered, Z = Z, T = T, modelset = c("UCVM", "ACVM"),  iterate = TRUE)
+getCPtable(CPs = CP.clustered, modelset = c("UCVM", "ACVM"),  iterate = TRUE)
 @ 
 
 \noindent We now have a final selected set of change points and, perhaps more usefully, a summary of which parameters precisely changed.  Note that thanks to the magic of \texttt{magrittr} piping, the process of finding and selecting change points can be reduced to a single line of code, which is convenient for comparing the robustness of the different settings.  Replicating the above analysis for several cluster widths yield the same result:
 
 <<exampleCPtables>>=
 simSweep %>% findCandidateChangePoints(clusterwidth = 2) %>% 
-  getCPtable(Z = Z, T = T, modelset = c("UCVM", "ACVM"))
+  getCPtable(modelset = c("UCVM", "ACVM"))
 simSweep %>% findCandidateChangePoints(clusterwidth = 4) %>% 
-  getCPtable(Z = Z, T = T, modelset = c("UCVM", "ACVM"))
+  getCPtable(modelset = c("UCVM", "ACVM"))
 simSweep %>% findCandidateChangePoints(clusterwidth = 10) %>% 
-  getCPtable(Z = Z, T = T, modelset = c("UCVM", "ACVM"))
+  getCPtable(modelset = c("UCVM", "ACVM"))
 @
 
 \noindent Compared to the true values (\Sexpr{durations[1]} and  \Sexpr{sum(durations[1:2])}), these are excellent estimates of the change points themselves.  However, the analysis didn't pick out the "true" advective model for the initial period.  This is because the model selection step (by default) uses BIC, which tend to select simpler models.  If we use AIC as the criterion instead:  
 
 <<simSweep.AIC>>=
 simSweep %>% findCandidateChangePoints(clusterwidth = 4) %>% 
-  getCPtable(Z = Z, T = T, modelset = c("UCVM", "ACVM"), criterion = "AIC")
+  getCPtable(modelset = c("UCVM", "ACVM"), criterion = "AIC")
 @
 
 \noindent we get the correct result.  We can also expand our "model set" to include all four CVM model:
 
 <<simSweepAllModels, cache=TRUE>>=
-simSweep %>% findCandidateChangePoints(clusterwidth = 10, verbose = FALSE) %>% getCPtable(Z = Z, T = T, modelset ="all", criterion = "AIC")
+simSweep %>% findCandidateChangePoints(clusterwidth = 10, verbose = FALSE) %>% 
+  getCPtable(modelset ="all", criterion = "AIC")
 @
 
-\noindent Which (using AIC as the criterion) suggests that the second phase might, in fact, be rotational.  Note that because this analyses is selecting from multiple models (of which, in this case, only one is the correct one), it is more likely to give a "spurious" (i.e. overdetermined) analysis. 
+\noindent Which (using AIC as the criterion) suggests that the second phase might, in fact, be rotational.  Note that because this analysis is selecting from multiple models (of which, in this case, only one is the correct one), it is more likely to give a "spurious" (i.e. overdetermined) analysis. 
 
-\subsubsection{Step IV - estimating the full model}  
+\subsubsection{Step IV - estimating the full model} 
+
 The final step is to estimate the parameters for the model within each of the phases defined by the selected change points, and thereby obtain a fully parameterized model of the movement.  This is done with the \texttt{getPhases} function, which takes a change point table (i.e.~the output of \texttt{getCPtable}]) and returns a named list of phases and the estimated parameters:
 
 <<simPhases>>=
 simCP.table <- simSweep %>% 
   findCandidateChangePoints(clusterwidth = 4, verbose = FALSE) %>% 
-  getCPtable(Z = Z, T = T, modelset = c("UCVM", "ACVM"), criterion = "AIC")
-simPhases <- getPhases(simCP.table, Z = Z, T = T)
+  getCPtable(modelset = c("UCVM", "ACVM"), criterion = "AIC")
+simPhaselist <- estimatePhases(simCP.table)
 @
 
-The \texttt{simPhases} object itself contains more information about each phase, e.g.:
+The \texttt{simPhaselist} object is a list that contains more information about each phase, notably, confidence intervals:
+
 <<>>=
-simPhases[[1]]
+simPhaselist[[1]]
+@
+
+\noindent  To actually obtain (and not merely print) the summary table, you need to run:
+<<>>=
+summarizePhases(simPhaselist)
 @
 
 You can see that the estimates for the three parameters we set ($\tau$, $\eta$ and $\mu$) are within the confidence intervals. 
@@ -592,14 +586,22 @@ You can see that the estimates for the three parameters we set ($\tau$, $\eta$ a
 
 <<SimPhasePlot, message=FALSE, echo = -1>>=
   par(mar=c(4,0,1,0), oma = c(5,5,1,2), xpd=NA, las = 1, cex.lab = 1.5, tck = 0.01, mgp = c(1.5,0.25,0), bty="n")
-  layout(c(1,1,1,2:6)) 
+  layout(c(1,1,1,2:6))
+  # extract locations and times
+  Z <- multicvm$Z
+  T <- multicvm$T
   
-  require(gplots)
-  cols <- rich.colors(length(simPhases))
+  # Note, these are also contained in the attributes of *any* of the 
+  # intermediate objects, e.g.
+  Z <- attributes(simPhaselist)$Z
+  T <- attributes(simPhaselist)$time
+    
+  require(gplots) # for rich colors
+  cols <- rich.colors(length(simPhaselist))
   T.cuts <- c(T[1], simCP.table$CP, T[length(T)])
   Z.cols <- cols[cut(T, T.cuts, include.lowest = TRUE)]
   
-  phaseTable <- summarizePhases(simPhases)
+  phaseTable <- summarizePhases(simPhaselist)
   
   plot(Z, asp=1, type="l", xpd=FALSE)
   points(Z, col=Z.cols, pch=21, bg = alpha(Z.cols, 0.5), cex=0.8)
@@ -607,11 +609,11 @@ You can see that the estimates for the three parameters we set ($\tau$, $\eta$ a
          fill=cols, ncol=3, bty="n", title = "Phase: model")
 
   par(mar=c(0,0,1,0), xpd=NA)
-  plotPhaseParameter("tau", simPhases, ylab="", xaxt="n", xlab="", col=cols, log="y")
-  plotPhaseParameter("eta", simPhases,  ylab="", xaxt="n", xlab="", col=cols)
-  plotPhaseParameter("mu.x", simPhases,  ylab= "", xaxt="n", xlab="", col=cols)
-  plotPhaseParameter("mu.y", simPhases,  ylab= "", xaxt="n", xlab="", col=cols)
-  plotPhaseParameter("rms", simPhases,  ylab= "", xlab="time", col=cols)
+  plotPhaseParameter("tau", simPhaselist, ylab="", xaxt="n", xlab="", col=cols, log="y")
+  plotPhaseParameter("eta", simPhaselist,  ylab="", xaxt="n", xlab="", col=cols)
+  plotPhaseParameter("mu.x", simPhaselist,  ylab= "", xaxt="n", xlab="", col=cols)
+  plotPhaseParameter("mu.y", simPhaselist,  ylab= "", xaxt="n", xlab="", col=cols)
+  plotPhaseParameter("rms", simPhaselist,  ylab= "", xlab="time", col=cols)
 @
 
 \noindent The estimates are fairly accurate with respect to the true values:
@@ -622,7 +624,7 @@ data.frame(durations, taus, etas, mus)
 
 \section{Kestrel data BCPA}
 
-We perform this analysis now on a portion of the kestrel data analyzed in the Gurarie et al. (in review) manuscript.  The basic steps are the same as above, but the selection occurs across all four models. The portion of data we analyze is:
+We perform this analysis now on a portion of the kestrel data analyzed in the Gurarie et al. (2017) manuscript.  The basic steps are the same as above, but the selection occurs across all four models.  Note that the data arae formatted, more or less, the in the raw (and increasingly standard) Movebank format, and we perform the analysis using POSIX time variables. The portion of data we analyze is:
 
 <<subsetKestrel, echo=-1, fig.height=4>>=
 par(bty="l", mar = c(0,5,0,0), xpd=NA, oma= c(4,0,4,2))
@@ -630,15 +632,21 @@ data(Kestrel)
 k <- Kestrel[3730:4150,]
 head(k)
 with(k, scan.track(x=X, y=Y))
-k$T <- as.numeric(k$timestamp - min(k$timestamp))
+#k$T <- as.numeric(k$timestamp - min(k$timestamp))
 @
 
 \noindent The window sweep can take some time. Note that we convert the time to seconds from start (in this case, exactly 420 seconds), which is somewhat more convenient for the analysis (though feeding POSIX objects will also work). 
 
+<<echo = FALSE, eval= FALSE>>=
+cl <- makeCluster(detectCores())
+registerDoParallel(cl)
+@
+
+
 <<sweepKestrel, cache=TRUE, message=FALSE, eval = FALSE>>=
-k.sweep <- with(k, sweepRACVM(XY=cbind(X,Y), T=T, windowsize = 50, windowstep = 5, 
-                              model = "RACVM", time.units = "sec", progress=FALSE,
-                              .parallel = TRUE))
+k.sweep <- with(k, sweepRACVM(XY=cbind(X,Y), T=timestamp, windowsize = 50, windowstep = 5, 
+                            model = "RACVM", time.unit = "secs", progress=FALSE,
+                            .parallel = TRUE))
 @
 <<eval=FALSE, include=FALSE>>=
 save(k.sweep, file = "./vignettes/k.sweep.robj")
@@ -646,7 +654,7 @@ save(k.sweep, file = "./vignettes/k.sweep.robj")
 
 \noindent Note that the time data are POSIX objects, and it is important to specify the time units of the analysis (in this case, seconds).  We plot the relative likelihoods: 
 
-<<plotKestrelSweep, echo=-1, fig.height=3, cache=TRUE>>=
+<<plotKestrelSweep, echo=-1, fig.height=3>>=
 par(bty="l"); load("k.sweep.robj")
 plotWindowSweep(k.sweep)
 @
@@ -660,9 +668,7 @@ k.CPs <- findCandidateChangePoints(windowsweep = k.sweep, clusterwidth = 4)
 \noindent The selected cluster width (4) was the minimum one that did not produce a warning for clusters that were ``too close''.  We now iteratively test all of the change points for parameter values and model changes.  Specifying \texttt{modelset = `all'} is a shortcut for  \texttt{modelset = c(`UCVM', `ACVM', `RCVM', `RACVM')}: 
 
 <<filterKestrelCPs>>=
-XY <- cbind(k$X, k$Y)
-k.CPtable <- getCPtable(CPs = k.CPs, XY = XY, T = k$T, 
-           modelset = "all", spline=TRUE)
+k.CPtable <- getCPtable(CPs = k.CPs, modelset = "all", spline=TRUE)
 @
 \noindent Note that in this implementation, we chose the option \texttt{spline=TRUE}, as the regularity and apparent precision of these data and the curvature of the track suggest that the spline approximation will give improved estimates of the parameters. 
 
@@ -671,24 +677,27 @@ options(width=90)
 @
 
 <<width=100>>=
-Z <- XY[,1] + 1i*XY[,2]
-k.phases <- getPhases(k.CPtable, T=k$T, Z=Z, verbose=FALSE)
+k.phases <- estimatePhases(k.CPtable, verbose=FALSE)
 summarizePhases(k.phases)
 @
 
-<<kestrelMegaPlot, echo=-1, eval=TRUE, cache=TRUE>>=
+<<kestrelMegaPlot, echo=-1, eval=TRUE, warning = FALSE>>=
 par(mar=c(4,0,1,0), oma = c(5,5,1,2), xpd=NA, las = 1, cex.lab = 1.25, tck = 0.01, mgp = c(1.5,0.25,0), bty="n")
 
-layout(c(1,1,1,1,2:6)) 
 
 cols <- rich.colors(length(k.phases)/2)
-T.cuts <- c(k$T[1], k.CPtable$CP, k$T[length(k$T)])
-Z.cols <- c(cols,cols)[cut(k$T, T.cuts, include.lowest = TRUE)]
+
+XY <- cbind(k$X, k$Y)
+time <- k$timestamp
+
+T.cuts <- c(time[1], k.CPtable$CP, time[nrow(k)])
+XY.cols <- c(cols,cols)[cut(time, T.cuts, include.lowest = TRUE)]
 
 phaseTable <- summarizePhases(k.phases)
 
-plot(Z, asp=1, type="l", xpd=FALSE, xlab="X (m)")
-points(Z, col=Z.cols, pch=21, bg = alpha(Z.cols, 0.5), cex=0.8)
+layout(c(1,1,1,1,2:6)) 
+plot(XY, asp=1, type="l", xpd=FALSE, xlab="X (m)")
+points(XY, col=XY.cols, pch=21, bg = alpha(XY.cols, 0.5), cex=0.8)
 legend("topleft", legend = paste0(phaseTable$phase, ": ", phaseTable$model), 
        fill=cols, ncol=2, bty="n", title = "Phase: model")
 
@@ -697,8 +706,10 @@ plotPhaseParameter("tau", k.phases, ylab="sec", xaxt="n", xlab="", col=cols, log
 plotPhaseParameter("eta", k.phases,  ylab="m / sec", xaxt="n", xlab="",  col=cols)
 plotPhaseParameter("omega", k.phases,  ylab="rad / sec", xaxt="n", xlab="", col=cols)
 plotPhaseParameter("mu.x", k.phases,  ylab="m / sec", xaxt="n", xlab="", col=cols)
-plotPhaseParameter("mu.y", k.phases,  ylab="m / sec", xaxt="n", xlab="", col=cols)
+plotPhaseParameter("mu.y", k.phases,  ylab="m / sec", xlab="", col=cols, xaxis = TRUE)
 @
+
+\noindent A subtle nuance: Leaving the \texttt{xaxt= "n"} out provided a nicely formatted time axis.  Because R is R, if you try doing this post-facto (e.g., via \texttt{axis(1)}), it won't quite work. 
 
 
 \noindent 

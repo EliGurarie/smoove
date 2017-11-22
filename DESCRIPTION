@@ -19,7 +19,8 @@ Depends:
     plyr,
     intervals,
     scales,
-    gtools
+    gtools,
+    lubridate
 Import: foreach, doParallel
 LinkingTo: Rcpp, RcppArmadillo
 VignetteBuilder: knitr

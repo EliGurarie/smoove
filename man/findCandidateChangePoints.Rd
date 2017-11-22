@@ -9,7 +9,7 @@ findCandidateChangePoints(windowsweep, clusterwidth = 0, verbose = TRUE)
 \arguments{
 \item{windowsweep}{A windowsweep opject (matrix), output of \code{\link{sweepRACVM}} function}
 
-\item{clusterwidth}{A time span within which very close change points are considered a single change point.  If the raw time data are POSIX, it will inherit the same time unit as the one chosen for the windowsize and windowstep.}
+\item{clusterwidth}{A time span within which very close change points are considered a single chagne point.}
 
 \item{verbose}{Whether or not to report the number of change points that are clustered away.}
 }

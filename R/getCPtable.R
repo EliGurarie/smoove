@@ -3,13 +3,13 @@
 #' Compares selected models with and without changes across a set of change points. 
 #' 
 #' @param CPs candidate change points
-#' @param {XY,Z} XY two-column matrix or complex location vector.  One of these must be specified.    
-#' @param T times of observations
 #' @param modelset set of models to compare (combination of UCVM, ACVM, RCVM, RACVM, or \code{all}, which includes all of them)
 #' @param tidy criteria by which change points are retained or rejected.  By default, filters by \code{differences}, meaning that if estimates on either side of a change point are outside of the 95\% confidence interval bounds, the change point is considered significant. Other options are \code{AIC} and \code{BIC}, meaning that if the dAIC or dBIC of the change point model is negative, the change point is thrown out. 
 #' @param iterate whether or not to continue removing candidate change points until the most parsimonious set is selected.  Should, generally, be true. 
+#' @param ... arguments to apss the \code{\link{textCP}} function, notably:
 #' @param spline whether or not to use the spline approximation for the final estimate. 
 #' @param criterion model selection criterion (choosing between UCVM, ACVM, etc.)- can be either BIC, AIC.  Note, this is different from Change Point retention criterion (in \code{tidy})
+
 #' @return a data frame with: \describe{
 #' \item{\code{CP}}{index of change point}
 #' \item{\code{start,end}}{index of beginning and end of change point window}
@@ -17,9 +17,19 @@
 #' \item{\code{differences}}{which - if any - of the estimated parameters are outside of the 95\% range across the change point}
 #' \item{\code{models}}{which models are selected on either side of change point.}}
 
-getCPtable <- function(CPs, XY = NULL, Z = NULL, T, modelset, tidy = "strict", iterate = TRUE, ...)
+getCPtable <- function(CPs, modelset, tidy = "strict", iterate = TRUE, ...)
 {
-  if(is.null(Z)) Z <- XY[,1] + 1i*XY[,2]
+  Z <- attributes(CPs)$Z
+  T <- attributes(CPs)$time
+  time.unit <- attributes(CPs)$time.unit
+  T.raw <- T
+  
+  if(inherits(T, "POSIXt")){
+    CPs.raw <- CPs
+    T <- as.numeric(T)
+    CPs <- as.numeric(CPs)
+    T.min <- min(T)
+  } 
   
   stop <- FALSE
   while(!stop){
@@ -29,10 +39,8 @@ getCPtable <- function(CPs, XY = NULL, Z = NULL, T, modelset, tidy = "strict", i
     
     for(i in 1:length(CPs)){
       CPanalysis <- testCP(Z, T, CPs[i], starts[i], ends[i], modelset = modelset, ...)
-      
       models <- CPanalysis$models
       testtable <- CPanalysis$testtable
-      
       SelectTable <- rbind(SelectTable, 
                            cbind(data.frame(CP = CPs[i],
                                             start = starts[i],
@@ -52,6 +60,16 @@ getCPtable <- function(CPs, XY = NULL, Z = NULL, T, modelset, tidy = "strict", i
       if(!iterate | identical(CPs.new, CPs)) stop <- TRUE else CPs <- CPs.new
     } else stop <- TRUE
   }
+  
+  if(inherits(T.raw, "POSIXt")){
+    SelectTable$CP <- T.raw[1] + SelectTable$CP - T.min
+    SelectTable$start <- T.raw[1] + SelectTable$start - T.min
+    SelectTable$end <- T.raw[1] + SelectTable$end - T.min
+  } 
+  
+  attr(SelectTable, "Z") <- Z
+  attr(SelectTable, "time.unit") <- time.unit
+  attr(SelectTable, "time") <- T.raw
   
   return(SelectTable)
 }

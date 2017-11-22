@@ -5,25 +5,25 @@
 \alias{plotPhaseParameter}
 \title{Obtain and Plot Estimates From RACVM Partition}
 \usage{
-getPhaseParameter(variable, partitionlist)
+getPhaseParameter(variable, phaselist)
 }
 \arguments{
 \item{variable}{one of: \code{omega}, \code{mu.x}, \code{mu.y}, \code{eta}, \code{tau}}
 
-\item{partitionlist}{output of \code{\link{getPhases}}, i.e. a list of information on each of the selected phases}
+\item{phaselist}{output of \code{\link{estimatePhases}}, i.e. a list of information on each of the selected phases}
 
 \item{label}{whether to label the plotted parameter}
 
 \item{...}{additional arguments to pass to plotting function.}
 }
 \value{
-\code{getVariable} returns a data.frame with start time, end time, estimate, low and high 95\% C.I. and selected model for a given parameter, with each row corresponding to an enumerated partition phase.
+\code{getPhaseParameter} returns a data.frame with start time, end time, estimate, low and high 95\% C.I. and selected model for a given parameter, with each row corresponding to an enumerated partition phase.
 }
 \description{
 Obtain and Plot Estimates From RACVM Partition
 }
 \details{
-\code{getVariable} takes a partitionlist and generates a table indicating the start time, end time, estimate, low and high 95\% C.I. and selected model for a given parameter.
+\code{getVariable} takes a phase list  and generates a table indicating the start time, end time, estimate, low and high 95\% C.I. and selected model for a given parameter.
 
 \code{plotVariable}
 }

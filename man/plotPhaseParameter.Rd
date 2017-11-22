@@ -5,19 +5,19 @@
 \alias{getPhaseParameter}
 \title{Plot Estimates From RACVM Partition}
 \usage{
-plotPhaseParameter(variable, partitionlist, cols = 1:length(partitionlist),
-  extra = TRUE, label = TRUE, log = NULL, ...)
+plotPhaseParameter(variable, phaselist, cols = 1:length(phaselist),
+  label = TRUE, ymax = 1000, ...)
 }
 \arguments{
 \item{variable}{one of: \code{omega}, \code{mu.x}, \code{mu.y}, \code{eta}, \code{tau}}
 
-\item{partitionlist}{output of \code{\link{getPhases}}, i.e. a list of information on each of the selected phases}
+\item{phaselist}{output of \code{\link{estimatePhases}}, i.e. a list of information on each of the selected phases}
 
-\item{label}{whether to label the plotted parameter}
+\item{cols}{colors of bars (by default - a rich color palette)}
 
-\item{log}{default behavior is to plot the log of tau, but not of other parameters. ANy other value of log}
+\item{label}{whether to label the plotted parameter (with the word "tau", "eta", etc.)}
 
-\item{...}{additional arguments to pass to plotting function.}
+\item{...}{additional arguments to pass to plotting function.  A useful one is \code{log = "y"} for highly skewed data.}
 }
 \value{
 \code{getVariable} returns a data.frame with start time, end time, estimate, low and high 95\% C.I. and selected model for a given parameter, with each row corresponding to an enumerated partition phase.

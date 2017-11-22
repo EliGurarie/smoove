@@ -4,13 +4,10 @@
 \alias{getCPtable}
 \title{CVM change point model selection table}
 \usage{
-getCPtable(CPs, XY = NULL, Z = NULL, T, modelset, tidy = "strict",
-  iterate = TRUE, ...)
+getCPtable(CPs, modelset, tidy = "strict", iterate = TRUE, ...)
 }
 \arguments{
 \item{CPs}{candidate change points}
-
-\item{T}{times of observations}
 
 \item{modelset}{set of models to compare (combination of UCVM, ACVM, RCVM, RACVM, or \code{all}, which includes all of them)}
 
@@ -18,7 +15,7 @@ getCPtable(CPs, XY = NULL, Z = NULL, T, modelset, tidy = "strict",
 
 \item{iterate}{whether or not to continue removing candidate change points until the most parsimonious set is selected.  Should, generally, be true.}
 
-\item{{XY, Z}}{XY two-column matrix or complex location vector.  One of these must be specified.}
+\item{...}{arguments to apss the \code{\link{textCP}} function, notably:}
 
 \item{spline}{whether or not to use the spline approximation for the final estimate.}
 
