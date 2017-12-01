@@ -16,7 +16,7 @@ findCandidateChangePoints <- function(windowsweep, clusterwidth=0, verbose = TRU
     T <- difftime(T.raw, T.raw[1], units = time.unit) %>% as.numeric else 
       T <- T.raw
     
-  candidate.CPs <- apply(windowsweep, 2, function(ll) T[which.max(ll)]) %>% unique
+  candidate.CPs <- apply(windowsweep, 2, function(ll) T[which.max(ll)]) %>% unique %>% unlist %>% sort
   n.raw <- length(candidate.CPs)
   
   if(clusterwidth > 0)  candidate.CPs <- clusters(rep(candidate.CPs,2), clusterwidth) %>% 
