@@ -5,10 +5,20 @@
 #' @param windowsweep A windowsweep opject (matrix), output of \code{\link{sweepRACVM}} function
 #' @param clusterwidth A time span within which very close change points are considered a single chagne point.  
 #' @param verbose Whether or not to report the number of change points that are clustered away. 
-
+#' @export
 findCandidateChangePoints <- function(windowsweep, clusterwidth=0, verbose = TRUE){
   
+<<<<<<< HEAD
+  T <- attr(windowsweep, "time")
+  
+  if(inherits(T, "POSIXt")){
+    time.unit <- attr(windowsweep, "time.unit")
+    T <- difftime(T, T[1], units = time.unit) %>% as.numeric 
+  }
+  
+=======
   T.raw <- attr(windowsweep, "time")
+>>>>>>> 2014b244bc7a26fa73ffa5649bed8131364fbadc
   starts <- colnames(windowsweep) %>% as.numeric
   time.unit <- attr(windowsweep, "time.unit")
   
