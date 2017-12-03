@@ -5,7 +5,7 @@
 \title{Sweep RACVM}
 \usage{
 sweepRACVM(XY = NULL, Z = NULL, T, windowsize, windowstep,
-  time.unit = "auto", model = "UCVM", progress = TRUE, ...,
+  time.unit = "days", model = "UCVM", progress = TRUE, ...,
   .parallel = FALSE)
 }
 \arguments{
@@ -19,16 +19,15 @@ sweepRACVM(XY = NULL, Z = NULL, T, windowsize, windowstep,
 
 \item{windowstep}{step (in time) by which the window advances.  The smaller the step, the slower but more thorough the estimation.}
 
-\item{time.unit}{of the windowsize and windowstep.  Only needed if time is a POSIX. Must be one of "auto", "secs", "mins", "hours", "days", "weeks" (See \code{\link{difftime}}).}
+\item{time.unit}{of the windowsize and windowstep.  Must be one of "secs", "mins", "hours", "days", "weeks" (See \code{\link{difftime}}). Ignored if time is not POSIX.}
 
 \item{model}{model to fit for the change point sweep - typically the most complex model in the candidate model set.}
 
 \item{progress}{whether or not to show a progress bar}
 
-\item{...}{additional parameters to pass to the \code{\link{estimateRACVM}} function, 
-notably the option "criterion" allows you to select models based on AIC or BIC (the former is more liberal with more complex models).}
+\item{...}{additional parameters to pass to the \code{\link{estimateRACVM}} function, notably the option "criterion" allows you to select models based on AIC or BIC (the former is more liberal with more complex models).}
 
-\item{.parallel}{if set TRUE, will use \code{\link[foreach]{foreach}} to parallelize the optimization.  Requires establishing the}
+\item{.parallel}{if set TRUE, will use \code{\link{foreach}} to parallelize the optimization.  Requires establishing the}
 }
 \description{
 Sets a window (a subset of movement data within specific time window), computes likelihoods for a set of candidate change points within the window, and steps the window forward, filling out a likelihood matrix.

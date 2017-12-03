@@ -15,4 +15,5 @@
 #' @importFrom foreach %dopar%
 #' @importFrom foreach foreach
 #' @importFrom magrittr %>%
+#' @importFrom lubridate tz with_tz
 NULL

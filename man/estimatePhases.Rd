@@ -7,9 +7,11 @@
 estimatePhases(CP.table, criterion = "BIC", verbose = TRUE)
 }
 \arguments{
-\item{verbose}{whether to print a summary of the results}
+\item{CP.table}{change point table, i.e. output of \code{\link{getCPtable}} which contains a column of change points and a column of selected models.}
 
-\item{{CP.table}}{change point table, i.e. output of \code{\link{getCPtable}} which contains a column of change points and a column of selected models.}
+\item{criterion}{an information criterion such as BIC, AIC etc.}
+
+\item{verbose}{whether to print a summary of the results}
 }
 \value{
 a named list of phases (numbered by roman numerals) containing the selected model, estimates, and confidence intervals for each parameter.

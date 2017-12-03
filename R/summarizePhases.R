@@ -4,8 +4,7 @@
 #' 
 #' @param phaselist a phase list (output of \code{\link{estimatePhases}}) 
 #' @return table of start and end times and point estimates of relevant parameters for each phase
-
-
+#' @export
 summarizePhases <- function(phaselist){
   estimates <- plyr::llply(phaselist, function(a){
     if(!("omega" %in% names(a$estimates))) a$estimates$omega = NA

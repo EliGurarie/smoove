@@ -4,7 +4,8 @@
 \alias{getCPtable}
 \title{CVM change point model selection table}
 \usage{
-getCPtable(CPs, modelset, tidy = "strict", iterate = TRUE, ...)
+getCPtable(CPs, modelset, tidy = "strict", iterate = TRUE, spline = FALSE,
+  criterion = "BIC", ...)
 }
 \arguments{
 \item{CPs}{candidate change points}
@@ -15,11 +16,11 @@ getCPtable(CPs, modelset, tidy = "strict", iterate = TRUE, ...)
 
 \item{iterate}{whether or not to continue removing candidate change points until the most parsimonious set is selected.  Should, generally, be true.}
 
-\item{...}{arguments to apss the \code{\link{textCP}} function, notably:}
-
 \item{spline}{whether or not to use the spline approximation for the final estimate.}
 
 \item{criterion}{model selection criterion (choosing between UCVM, ACVM, etc.)- can be either BIC, AIC.  Note, this is different from Change Point retention criterion (in \code{tidy})}
+
+\item{...}{arguments to pass the \code{\link{testCP}} function, notably:}
 }
 \value{
 a data frame with: \describe{

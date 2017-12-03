@@ -25,9 +25,10 @@ Imports:
     methods,
     gridExtra,
     foreach, 
-    doParallel
+    doParallel,
+    lubridate
 LinkingTo: Rcpp, RcppArmadillo
 VignetteBuilder: knitr
 BugReports: https://github.com/EliGurarie/smoove/issues
 RoxygenNote: 6.0.1.9000
-Suggests: knitr, rmarkdown, lubridate
+Suggests: knitr, rmarkdown

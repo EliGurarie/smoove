@@ -30,7 +30,7 @@
 \usepackage{setspace}
 
 \title{Smooth swimming and fanciful flights:  Using the {\tt smoove} package}
-\author{Eliezer Gurarie, Faridedin Cheraghi}
+\author{Eliezer Gurarie}
 \date{\today}
 
 \begin{document}
@@ -520,14 +520,14 @@ We obtain candidate change points by taking all of the most likely change points
 
 <<simCP>>=
 CP.all <- findCandidateChangePoints(windowsweep = simSweep, clusterwidth = 0)
-CP.all
+str(CP.all)
 @
 
 \noindent The warning lets us know that some of the candidate change points are rather too close (in time) to each other, and it might be a good idea to cluster them, i.e.~assign multiple points within a given time interval to a single cluster. If we take a rather generous cluster width below: 
 
 <<simCP.clustered>>=
 CP.clustered <- findCandidateChangePoints(windowsweep = simSweep, clusterwidth = 4)
-CP.clustered
+str(CP.clustered)
 @
 
 \noindent We now have a somewhat smaller set of change points to assess.  

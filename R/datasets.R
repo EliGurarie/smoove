@@ -40,3 +40,18 @@
 #' website
 #'
 "Kestrel"
+
+#' simSweep
+#' 
+#' a....
+#' 
+#' @format A matrix with 400 rows and 24 columns
+#'  \describe{
+#'  \item{event.id}{event.id}
+#'  
+#'  }
+#'
+#' @source
+#' website
+#' 
+"simSweep"

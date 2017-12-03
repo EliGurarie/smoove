@@ -2,7 +2,6 @@
 % Please edit documentation in R/plotPhaseParameter.R
 \name{plotPhaseParameter}
 \alias{plotPhaseParameter}
-\alias{getPhaseParameter}
 \title{Plot Estimates From RACVM Partition}
 \usage{
 plotPhaseParameter(variable, phaselist, cols = 1:length(phaselist),
@@ -16,6 +15,8 @@ plotPhaseParameter(variable, phaselist, cols = 1:length(phaselist),
 \item{cols}{colors of bars (by default - a rich color palette)}
 
 \item{label}{whether to label the plotted parameter (with the word "tau", "eta", etc.)}
+
+\item{ymax}{maximum y}
 
 \item{...}{additional arguments to pass to plotting function.  A useful one is \code{log = "y"} for highly skewed data.}
 }

@@ -2,7 +2,6 @@
 % Please edit documentation in R/getPhaseParameter.R
 \name{getPhaseParameter}
 \alias{getPhaseParameter}
-\alias{plotPhaseParameter}
 \title{Obtain and Plot Estimates From RACVM Partition}
 \usage{
 getPhaseParameter(variable, phaselist)
@@ -11,8 +10,6 @@ getPhaseParameter(variable, phaselist)
 \item{variable}{one of: \code{omega}, \code{mu.x}, \code{mu.y}, \code{eta}, \code{tau}}
 
 \item{phaselist}{output of \code{\link{estimatePhases}}, i.e. a list of information on each of the selected phases}
-
-\item{label}{whether to label the plotted parameter}
 
 \item{...}{additional arguments to pass to plotting function.}
 }
