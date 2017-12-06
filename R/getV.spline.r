@@ -4,11 +4,11 @@
 ##'
 #' @param Z location data in complex form (X + iY)
 #' @param T.raw time of observations to feed the spline.
-#' @param T.spline times for which the spline is requested.  If NULL (the default) the function returns the velocity at midpoints between consecutive T.raw.
+#' @param T.new new time vector
 #' @param resolution of spline, i.e. the fraction of the smallest interval in T.raw.
 #' @param ... further arguments to \code{\link{splinefun}}.  Importantly, the method. 
 #' @return a list with the estimated velocity (V), as well as the position (Z) and time (T).  
-
+#' @export
 getV.spline <- function(Z, T.raw, T.new = NULL, resolution = 1e-2, ... ){
   
   fX.spline <- splinefun(T.raw, Re(Z), ...)
@@ -18,6 +18,7 @@ getV.spline <- function(Z, T.raw, T.new = NULL, resolution = 1e-2, ... ){
   if(is.null(T.new)) T.new <- T.raw[-length(T.raw)] + diff(T.raw)/2
   
   dT.min <- min(c(diff(T.new), diff(T.raw)))
+  #T.spline: times for which the spline is requested.  If NULL (the default) the function returns the velocity at midpoints between consecutive T.raw.
   T.spline <- seq(min(T.raw), max(T.raw), dT.min*resolution)
   
   X.spline <- fX.spline(T.spline)

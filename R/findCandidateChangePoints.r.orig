@@ -8,7 +8,17 @@
 #' @export
 findCandidateChangePoints <- function(windowsweep, clusterwidth=0, verbose = TRUE){
   
+<<<<<<< HEAD
+  T <- attr(windowsweep, "time")
+  
+  if(inherits(T, "POSIXt")){
+    time.unit <- attr(windowsweep, "time.unit")
+    T <- difftime(T, T[1], units = time.unit) %>% as.numeric 
+  }
+  
+=======
   T.raw <- attr(windowsweep, "time")
+>>>>>>> 2014b244bc7a26fa73ffa5649bed8131364fbadc
   starts <- colnames(windowsweep) %>% as.numeric
   time.unit <- attr(windowsweep, "time.unit")
   
@@ -16,7 +26,7 @@ findCandidateChangePoints <- function(windowsweep, clusterwidth=0, verbose = TRU
     T <- difftime(T.raw, T.raw[1], units = time.unit) %>% as.numeric else 
       T <- T.raw
     
-  candidate.CPs <- apply(windowsweep, 2, function(ll) T[which.max(ll)]) %>% unique %>% unlist %>% sort
+  candidate.CPs <- apply(windowsweep, 2, function(ll) T[which.max(ll)]) %>% unique
   n.raw <- length(candidate.CPs)
   
   if(clusterwidth > 0)  candidate.CPs <- clusters(rep(candidate.CPs,2), clusterwidth) %>% 

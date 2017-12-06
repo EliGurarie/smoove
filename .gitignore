@@ -1,11 +1,27 @@
+# Example code in package build process
+*-Ex.R
+# Output files from R CMD build
+/*.tar.gz
+# Output files from R CMD check
+/*.Rcheck/
+*.Rproj
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
-hidden
-old
 src/*.o
 src/*.so
 src/*.dll
-vignettes/cache
-vignettes/figure
+cran-comments.md
+man/
+vignettes/*.html
+vignettes/*.pdf
+vignettes/*.log
+*.synctex.gz
+vignettes/*.tex
+vignettes/*.toc
+vignettes/*.db
+vignettes/cache/
+vignettes/figure/
+#meld
+*.orig

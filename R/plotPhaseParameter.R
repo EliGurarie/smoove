@@ -7,10 +7,10 @@
 #' @param phaselist output of \code{\link{estimatePhases}}, i.e. a list of information on each of the selected phases
 #' @param cols colors of bars (by default - a rich color palette)
 #' @param label whether to label the plotted parameter (with the word "tau", "eta", etc.)
+#' @param ymax maximum y
 #' @param ... additional arguments to pass to plotting function.  A useful one is \code{log = "y"} for highly skewed data.
 #' @return \code{getVariable} returns a data.frame with start time, end time, estimate, low and high 95\% C.I. and selected model for a given parameter, with each row corresponding to an enumerated partition phase.  
-#' @aliases getPhaseParameter
-
+#' @export
 plotPhaseParameter <- function(variable, phaselist, cols = 1:length(phaselist), 
                                label = TRUE, ymax = 1e3, ...){
   variabletable <- getPhaseParameter(variable, phaselist)

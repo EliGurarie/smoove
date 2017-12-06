@@ -2,16 +2,18 @@
 #' 
 #' Takes two times (ti, tj) and the CVM parameters, and returns either the 2x2 matrix of the (vi,zi)x(vj,zj) covariances - if \code{getCov.vz}, or only the zi-zj component, i.e. cov(z_i, z_j) - if \code{getCov.zz}.  This covariance does not depend at all on the v0 parameter.
 #' 
-#' @usage getCov.vz(t1, t2, nu, tau)
-#' @usage getCov.zz(t1, t2, nu, tau)
-#' @param {t1,t2} two times
-#' @param {nu,tau,v0} cvm parameters
+#' @param t1 first time
+#' @param t2 second time
+#' @param nu cvm paramter
+#' @param t0 initial t value
+#' @param tau cmv parameter
+#'
 #' @aliases getCov.zz
 #' @examples
 #' getCov.vz(t1=5,t2=5, nu=2, tau=10)
 #' getCov.vz(t1=5,t2=10, nu=2, tau=10)
 #' getCov.vz(t1=95,t2=100, 2,10)
-
+#' @export
 getCov.vz <-
   function(t1, t2, nu, tau, t0=0)
   {
@@ -29,7 +31,6 @@ getCov.vz <-
     Cov[2, 2] <- VarZ + tau * (1 - kappa) * CovVZ
     return(Cov)
   }
-
 
 
 getCov.zz <-
