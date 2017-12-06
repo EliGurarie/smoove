@@ -30,7 +30,7 @@
 \usepackage{setspace}
 
 \title{Smooth swimming and fanciful flights:  Using the {\tt smoove} package}
-\author{Eliezer Gurarie}
+\author{Eliezer Gurarie, Faridedin Cheraghi}
 \date{\today}
 
 \begin{document}

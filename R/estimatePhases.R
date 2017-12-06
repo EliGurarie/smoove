@@ -9,7 +9,7 @@
 #' @param verbose whether to print a summary of the results
 #' @return a named list of phases (numbered by roman numerals) containing the selected model, estimates, and confidence intervals for each parameter.
 #' @seealso \code{\link{summarizePhases}}
-
+#' @export
 estimatePhases <- function(CP.table, criterion = "BIC", verbose = TRUE){
   CPs <- CP.table$CP
   

@@ -21,3 +21,7 @@ vignettes/*.log
 vignettes/*.tex
 vignettes/*.toc
 vignettes/*.db
+vignettes/cache/
+vignettes/figure/
+#meld
+*.orig
