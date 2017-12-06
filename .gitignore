@@ -13,4 +13,11 @@ src/*.o
 src/*.so
 src/*.dll
 cran-comments.md
- 
+man/
+vignettes/*.html
+vignettes/*.pdf
+vignettes/*.log
+*.synctex.gz
+vignettes/*.tex
+vignettes/*.toc
+vignettes/*.db
