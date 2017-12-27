@@ -31,8 +31,8 @@
 #'  \item{tag.local.identifier}{tag.local.identifier}
 #'  \item{ID}{ID}
 #'  \item{study.name}{study.name}
-#'  \item{X}{X}
-#'  \item{Y}{Y}
+#'  \item{X}{X in UTM coordinate system}
+#'  \item{Y}{Y in UTM coordinate system}
 #'  
 #'  }
 #'
@@ -45,9 +45,10 @@
 #' 
 #' a....
 #' 
-#' @format A matrix with 400 rows and 24 columns
+#' @format A matrix with 400 rows and 24 columns with the following attributes:
 #'  \describe{
-#'  \item{event.id}{event.id}
+#'  \item{time}{a vector of times}
+#'  \item{Z}{a complex vector of locations}
 #'  
 #'  }
 #'

@@ -25,7 +25,7 @@
 #' @seealso \code{\link{simulateRACVM}}
 #' @example ./demo/estimateRACVM_examples.r
 #' @export
-estimateRACVM <- function(XY, Z=NULL, T, track = NULL, 
+estimateRACVM <- function(XY, Z = NULL, T, track = NULL, 
                           model = "RACVM", 
                           compare.models = TRUE, 
                           modelset = c("UCVM", "ACVM", "RCVM", "RACVM"),
