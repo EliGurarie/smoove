@@ -2,7 +2,6 @@
 #' 
 #' Sets a window (a subset of movement data within specific time window), computes likelihoods for a set of candidate change points within the window, and steps the window forward, filling out a likelihood matrix. 
 #' 
-#' @param XY two column location data (if Z is not provided)
 #' @param Z complex location data (if XY is not provided)
 #' @param T time vector
 #' @param model model to fit for the change point sweep - typically the most complex model in the candidate model set. 
@@ -15,14 +14,14 @@
 #' @seealso \code{\link{plotWindowSweep}}, \code{\link{estimateRACVM}}, \code{\link{testCP}}
 #' @example ./demo/sweepRACVM_examples.R
 
-sweepRACVM <- function(XY = NULL, Z = NULL, T,
-                       windowsize, windowstep, time.unit = "days",
+sweepRACVM.default <- function(Z, T,
+                       windowsize, 
+                       windowstep, 
                        model = "UCVM", 
                        progress = TRUE,  
+                       time.unit = "days",
                        ..., 
                        .parallel = FALSE){
-  
-  if(is.null(Z)) Z <- XY[,1] + 1i*XY[,2]
   
   T.raw <- T
   if(inherits(T.raw, "POSIXt"))
@@ -83,4 +82,24 @@ sweepRACVM <- function(XY = NULL, Z = NULL, T,
   return(LLs)
 }
 
+#' @export
+sweepRACVM <- function(Z, ...) UseMethod("sweepRACVM")
 
+#' @export
+sweepRACVM.data.frame <- function(Z, ...){
+  xy <- Z[,1] + 1i*Z[,2]
+  do.call(sweepRACVM.default, c(list(Z=xy), list(...)))
+}
+
+#' @export
+sweepRACVM.ltraj <- function(Z, ...){
+  sweepRACVM(Z=adehabitatLT::ld(Z) ,
+             T=xy$date, ...)
+}
+
+#' @export
+sweepRACVM.Move <- function(Z, ...){
+  xy <- Z@coords  
+  tt <- Z@timestamps
+  sweepRACVM(Z=xy, T = tt, ...)
+}

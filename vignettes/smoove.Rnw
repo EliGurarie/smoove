@@ -68,13 +68,13 @@ Briefly, CVM models are movement models in which the velocity is assumed to be a
 		d{\bf v} &=& \alpha ({\bmu} - {\bf v}) \, dt + {\eta \over \sqrt{\tau}} \,d{\bf w}_t,\\
 		{\bf v}(0) &=& {\bf v}_0, \nonumber
 \end{eqnarray}
-\noindent where the key parameters are $\tau$  - the characteristic time scale of autocorrelation, $\eta$ - the root mean squared speed of the movement process.  Different valeus of the additional parameters $\alpha$ and $\bmu$ are related to variations of a CVM process, as per table \ref{table.Summary}.  We present the models together with functions that estimate them sequentially below.  
+\noindent where the key parameters are $\tau$  - the characteristic time scale of autocorrelation, $\eta$ - the root mean squared speed of the movement process.  Different values of the additional parameters $\alpha$ and $\bmu$ are related to variations of a CVM process, as per table \ref{table.Summary}.  We present the models together with functions that estimate them sequentially below.  
 
 
 \section{Simulation}
 
 \subsection{Unbiased CVM}
-The unbiased CVM is the continuous time equivalent of an unbiased correlated random walk, i.e.~a movement that has local persistence in direction.  This is the most ``fundamental" CVM model and its mean speed is given by a simple expression $\nu = \eta \, \sqrt{\pi}/2$, the a convenient parmeterization is as: UCVM($\tau$, $\nu$).  Also, it is for this model that the complete set of estimation methods discussed in the paper is available.  For these reasons, it is treated slightly differently than the (R/A)CVM models in the {\tt smoove} package. 
+The unbiased CVM is the continuous time equivalent of an unbiased correlated random walk, i.e.~a movement that has local persistence in direction.  This is the most ``fundamental" CVM model and its mean speed is given by a simple expression $\nu = \eta \, \sqrt{\pi}/2$, a convenient parmeterization is as: UCVM($\tau$, $\nu$).  Also, it is for this model that the complete set of estimation methods discussed in the paper is available.  For these reasons, it is treated slightly differently than the (R/A)CVM models in the {\tt smoove} package. 
 
 The function for simulating the UCVM is {\tt simulateUCVM}.  There are two methods of simulation, \emph{direct} and \emph{exact}. 
 
@@ -464,14 +464,14 @@ with(multicvm, scan_track(z = Z, time = T))
 
 \subsubsection{Step I - the Window Sweep} 
 
-To perform a window sweep, we need to set two variables: the \emph{windowsize} of analysis and the \emph{windowstep}.  Both are set in units of time.  The window size is the temporal interval of analysis, the step is the increment by which the analysis windows are moved forward.
+To perform a window sweep, we need to set two variables: the \emph{windowsize} of analysis and the \emph{windowstep}.  Both are set in units of time. The window size is the temporal interval of analysis, the step is the increment by which the analysis windows are moved forward.
 
 Setting the analysis window size is totally the user's choice. The size should be driven by biological considerations. Ideally, it will be large enough to encompass one, but not two or more change points.  The smaller the window step, the more ``thorough'' the analysis, but ultimately its size is not very important as long as it is much smaller than the analysis window.  Ultimately, for strong changes, the analysis will not be very sensitive to reasonable values of either of these parameters.  
 
 Note that if there are gaps in the data or they are irregular, the data extent of the window will be smaller, and if there are fewer than 30 data points in the window, the window will be skipped.  Note also, that the window sweep is only working with a single model which should be specified. It should be the most complex model you are interested in (in our case, the ACVM).   
 
 <<simSweep1, eval=FALSE>>=
-simSweep <- with(mutlicvm, sweepRACVM(Z = Z, T = T, 
+simSweep <- with(multicvm, sweepRACVM(Z = Z, T = T, 
                                       windowsize = 80, windowstep = 5, 
                                       model = "ACVM", progress=FALSE))
 @
