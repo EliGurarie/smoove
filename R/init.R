@@ -16,4 +16,5 @@
 #' @importFrom foreach foreach
 #' @importFrom magrittr %>%
 #' @importFrom lubridate tz with_tz
+#' @importFrom scales alpha
 NULL

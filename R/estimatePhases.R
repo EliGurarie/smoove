@@ -9,6 +9,13 @@
 #' @param verbose whether to print a summary of the results
 #' @return a named list of phases (numbered by roman numerals) containing the selected model, estimates, and confidence intervals for each parameter.
 #' @seealso \code{\link{summarizePhases}}
+#' @examples
+#' library(smoove)
+#' data(simSweep)
+#' simCP.table <- simSweep %>%
+#' findCandidateChangePoints(clusterwidth = 4, verbose = FALSE) %>%
+#'  getCPtable(modelset = c("UCVM", "ACVM"), criterion = "AIC")
+#' (simPhaselist <- estimatePhases(simCP.table))
 #' @export
 estimatePhases <- function(CP.table, criterion = "BIC", verbose = TRUE){
   CPs <- CP.table$CP

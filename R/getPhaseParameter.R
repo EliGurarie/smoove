@@ -7,7 +7,18 @@
 #' @param phaselist output of \code{\link{estimatePhases}}, i.e. a list of information on each of the selected phases
 #' @param ... additional arguments to pass to plotting function. 
 #' @return \code{getPhaseParameter} returns a data.frame with start time, end time, estimate, low and high 95\% C.I. and selected model for a given parameter, with each row corresponding to an enumerated partition phase.  
-
+#' @examples 
+#' library(smoove)
+#' library(magrittr)
+#' data(simSweep)
+#' 
+#' simCP.table <- simSweep %>%
+#'   findCandidateChangePoints(clusterwidth = 4, verbose = FALSE) %>%
+#'   getCPtable(modelset = c("UCVM", "ACVM"), criterion = "AIC")
+#' simPhaselist <- estimatePhases(simCP.table)
+#' 
+#' getPhaseParameter("omega",simPhaselist)
+#' @export
 getPhaseParameter <- function(variable, phaselist)
 {
   ldply(phaselist, 

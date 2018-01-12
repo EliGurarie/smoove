@@ -16,6 +16,14 @@
 #' \item{\code{dAIC,dBIC}}{delta AIC and BIC values}
 #' \item{\code{differences}}{which - if any - of the estimated parameters are outside of the 95\% range across the change point}
 #' \item{\code{models}}{which models are selected on either side of change point.}}
+#' 
+#' @examples
+#' library(smoove)
+#' library(magrittr)
+#' data(simSweep, package="smoove")
+#' simSweep %>% findCandidateChangePoints(clusterwidth = 2) %>%
+#' getCPtable(modelset = c("UCVM", "ACVM"))
+
 getCPtable <- function(CPs, modelset, tidy = "strict", iterate = TRUE, spline = FALSE, criterion = "BIC", ...)
 {
   Z <- attributes(CPs)$Z

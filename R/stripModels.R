@@ -3,7 +3,6 @@
 #' This function was taken from muschellij2/ms_seg, it strips fit objects from R of all but coefficient estimates
 #' @param model A fit object to be stripped
 #' @keywords fit
-#' @export
 strip.model = function(model){
   model$y = c()
   model$model = c()

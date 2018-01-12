@@ -55,8 +55,7 @@ simulateUCVM.exact <-  function(T, nu = 1, tau = 1, v0 = nu * exp((0+1i) * runif
   }
 
 
-getX <-
-  function(x, dt, nu, tau)
+getX <- function(x, dt, nu, tau)
   {
     kappa <- exp(-dt/tau)
     Sigma <- matrix(0,nrow=4,ncol=4)

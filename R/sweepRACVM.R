@@ -13,7 +13,11 @@
 #' @param .parallel if set TRUE, will use \code{\link{foreach}} to parallelize the optimization.  Requires establishing the 
 #' @seealso \code{\link{plotWindowSweep}}, \code{\link{estimateRACVM}}, \code{\link{testCP}}
 #' @example ./demo/sweepRACVM_examples.R
+#' @export
+sweepRACVM <- function(Z, ...) UseMethod("sweepRACVM")
 
+#' @export
+#' @rdname sweepRACVM
 sweepRACVM.default <- function(Z, T,
                        windowsize, 
                        windowstep, 
@@ -83,21 +87,21 @@ sweepRACVM.default <- function(Z, T,
 }
 
 #' @export
-sweepRACVM <- function(Z, ...) UseMethod("sweepRACVM")
-
-#' @export
+#' @rdname sweepRACVM
 sweepRACVM.data.frame <- function(Z, ...){
   xy <- Z[,1] + 1i*Z[,2]
   do.call(sweepRACVM.default, c(list(Z=xy), list(...)))
 }
 
 #' @export
+#' @rdname sweepRACVM
 sweepRACVM.ltraj <- function(Z, ...){
   sweepRACVM(Z=adehabitatLT::ld(Z) ,
              T=xy$date, ...)
 }
 
 #' @export
+#' @rdname sweepRACVM
 sweepRACVM.Move <- function(Z, ...){
   xy <- Z@coords  
   tt <- Z@timestamps
