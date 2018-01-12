@@ -10,6 +10,7 @@
 #' @param ... other arguments to pass to \code{plot}
 #'
 #' @examples
+#' library(smoove)
 #' data(Kestrel)
 #' plot_track(Kestrel[,c('X','Y')])
 #' @export

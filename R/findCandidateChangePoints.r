@@ -6,6 +6,15 @@
 #' @param clusterwidth A time span within which very close change points are considered a single chagne point.  
 #' @param verbose Whether or not to report the number of change points that are clustered away. 
 #' @export
+#' @examples
+#' library(smoove)
+#' library(magrittr)
+#' data(simSweep,package = "smoove")
+#' #The warning lets us know that some of the candidate change points are rather too close (in time) to each other
+#' CP.all <- findCandidateChangePoints(windowsweep = simSweep, clusterwidth = 0)
+#' CP.all %>% as.vector
+#' CP.clustered <- findCandidateChangePoints(windowsweep = simSweep, clusterwidth = 4)
+#' CP.clustered %>% as.vector
 findCandidateChangePoints <- function(windowsweep, clusterwidth=0, verbose = TRUE){
   
   T.raw <- attr(windowsweep, "time")

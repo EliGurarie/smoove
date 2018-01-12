@@ -1,8 +1,8 @@
-#'Lamprey
+#' Lamprey
 #'
-#'Description of the Lamrey
+#' Description of the Lamrey
 #'
-#'@format A data frame with xx rows and n columns
+#' @format A data frame with xx rows and n columns
 #' \describe{
 #' \item{X}{x coordiante}
 #' \item{Y}{y coordinate}
@@ -43,7 +43,7 @@
 
 #' simSweep
 #' 
-#' a....
+#' Description
 #' 
 #' @format A matrix with 400 rows and 24 columns with the following attributes:
 #'  \describe{
