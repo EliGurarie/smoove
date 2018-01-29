@@ -7,7 +7,7 @@
 #' @param model model to fit for the change point sweep - typically the most complex model in the candidate model set. 
 #' @param windowsize time window of analysis to scan, IMPORTANTLY: in units of time (T).
 #' @param windowstep step (in time) by which the window advances.  The smaller the step, the slower but more thorough the estimation. 
-#' @param time.unit of the windowsize and windowstep.  Must be one of "secs", "mins", "hours", "days", "weeks" (See \code{\link{difftime}}). Ignored if time is not POSIX. 
+#' @param time.unit of the windowsize AND the windowstep. The default is "hours" - can be any of "secs", "mins", "hours", "days", "weeks" (See \code{\link{difftime}}). Ignored if time is not POSIX. 
 #' @param progress whether or not to show a progress bar
 #' @param ... additional parameters to pass to the \code{\link{estimateRACVM}} function, notably the option "criterion" allows you to select models based on AIC or BIC (the former is more liberal with more complex models).
 #' @param .parallel if set TRUE, will use \code{\link{foreach}} to parallelize the optimization.  Requires establishing the 
@@ -23,24 +23,25 @@ sweepRACVM.default <- function(Z, T,
                        windowstep, 
                        model = "UCVM", 
                        progress = TRUE,  
-                       time.unit = "days",
+                       time.unit = "hours",
                        ..., 
                        .parallel = FALSE){
-  
   T.raw <- T
   if(inherits(T.raw, "POSIXt"))
     T <- difftime(T.raw, T.raw[1], units = time.unit) %>% as.numeric
   
+  if(any(diff(T) < 0)) stop("Times must be unique and strictly increasing. Check to see if there are some issues with your data (e.g. via plot(T)).")
+  
   cut.wstep <- cut(T, c(seq(min(T), max(T) - windowsize, windowstep), max(T)+1), include.lowest = TRUE, labels = FALSE)
-  starts <- c(1, which(diff(cut.wstep) == 1))
+  starts <- c(0, which(diff(cut.wstep) == 1))
   ends <- c(sapply(starts[-1], function(s) which.max(T[T < (T[s] + windowsize)])), length(T))
 
   getLLbreaks <- function(start, end, breaks, Z, T, ...){
     require(smoove)
     lls <- breaks*NA
     ll.row <- T*NA
-    if((end - start) < 30){
-      warning("Too few (less than 30) data points in this analysis window. I'll skip it and move on.")
+    if((end - start) < 15){
+      warning("Too few (less than 15) data points in this analysis window. I'll skip it and move on.")
       return(ll.row)
     }
     
@@ -65,14 +66,16 @@ sweepRACVM.default <- function(Z, T,
   if(!.parallel){
     LLs <- matrix(NA, ncol = length(starts), nrow = length(T))
     for(i in 1:length(starts)){
+      
       start <- starts[i]
       end <- ends[i]
       mywindow <- end - start
       breaks <- round(mywindow*.2):round(mywindow*.8)
+      
       if(progress)
       cat(paste("sweep", i, "of", length(starts), "- data points", start, "to", end, "\n"))
-      if(mywindow < 30)
-          warning("Too few (less than 30) data points in this analysis window. I'll skip it and move on.") else
+      if(mywindow < 15)
+          warning("Too few (less than 15) data points in this analysis window. I'll skip it and move on.") else
       LLs[,i] <- getLLbreaks(start, end, breaks, Z, T, ...)
     }
   }
