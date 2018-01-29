@@ -40,8 +40,8 @@ sweepRACVM.default <- function(Z, T,
     require(smoove)
     lls <- breaks*NA
     ll.row <- T*NA
-    if((end - start) < 15){
-      warning("Too few (less than 15) data points in this analysis window. I'll skip it and move on.")
+    if((end - start) < 10){
+      warning("Too few (less than 10) data points in this analysis window. I'll skip it and move on.")
       return(ll.row)
     }
     
@@ -74,8 +74,8 @@ sweepRACVM.default <- function(Z, T,
       
       if(progress)
       cat(paste("sweep", i, "of", length(starts), "- data points", start, "to", end, "\n"))
-      if(mywindow < 15)
-          warning("Too few (less than 15) data points in this analysis window. I'll skip it and move on.") else
+      if(mywindow < 10)
+          warning("Too few (less than 10) data points in this analysis window. I'll skip it and move on.") else
       LLs[,i] <- getLLbreaks(start, end, breaks, Z, T, ...)
     }
   }
