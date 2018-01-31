@@ -45,7 +45,18 @@ getCPtable <- function(CPs, modelset, tidy = "strict", iterate = TRUE, spline = 
     SelectTable <- data.frame(NULL)
     
     for(i in 1:length(CPs)){
-      CPanalysis <- testCP(Z, T, CPs[i], starts[i], ends[i], modelset = modelset, spline = spline, criterion = criterion, ...)
+      CPanalysis <-
+        testCP(
+          Z = Z,
+          T = T,
+          cp = CPs[i],
+          start = starts[i],
+          end = ends[i],
+          modelset = modelset,
+          spline = spline,
+          criterion = criterion,
+          ...
+        )
       models <- CPanalysis$models
       testtable <- CPanalysis$testtable
       SelectTable <- rbind(SelectTable, 

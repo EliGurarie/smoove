@@ -13,6 +13,8 @@
 #' simCP.table <- simSweep %>%
 #'   findCandidateChangePoints(clusterwidth = 4, verbose = FALSE) %>%
 #'   getCPtable(modelset = c("UCVM", "ACVM"), criterion = "AIC")
+#'   
+#' simPhaselist <- estimatePhases(simCP.table)
 #' 
 #' Z <- multicvm$Z
 #' T <- multicvm$T
