@@ -61,13 +61,12 @@ Rotational-Advective CVM & ${1 / \tau} + i\omega$ & non-zero & RACVM($\tau, \eta
 \end{center}
 \end{table}
 
-
-
 Briefly, CVM models are movement models in which the velocity is assumed to be an autocorrelated stochastic process taking the form of an Ornstein-Uhlenbeck equation:
-	\begin{eqnarray}\label{eq.CVM}
+\begin{eqnarray}\label{eq.CVM}
 		d{\bf v} &=& \alpha ({\bmu} - {\bf v}) \, dt + {\eta \over \sqrt{\tau}} \,d{\bf w}_t,\\
 		{\bf v}(0) &=& {\bf v}_0, \nonumber
 \end{eqnarray}
+
 \noindent where the key parameters are $\tau$  - the characteristic time scale of autocorrelation, $\eta$ - the root mean squared speed of the movement process.  Different values of the additional parameters $\alpha$ and $\bmu$ are related to variations of a CVM process, as per table \ref{table.Summary}.  We present the models together with functions that estimate them sequentially below.  
 
 
