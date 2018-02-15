@@ -2,11 +2,15 @@
 title: "smoove"
 author: "Eliezer Gurarie and Faridedin Cheraghi"
 date: "`r Sys.Date()`"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, cache=FALSE)
+knitr::opts_chunk$set(echo = TRUE, cache=TRUE)
 
 ```
 
@@ -51,7 +55,7 @@ $$V_{i+1} =  V_i - V_i (dt/\tau) + \frac{2 \nu}{\sqrt{\pi \tau}} dW_i$$
 where $V$ is a vector of complex numbers and $dW_i$ is drawn from a bivariate normal distribution with variance $\sqrt{dt}$.  The direct method provides good simulations relatively quickly at high resolution ($\Delta t \ll \tau$). 
 
 Loading the package:
-```{r loading_cvm,warning=FALSE,message=FALSE}
+```{r loading_cvm,warning=FALSE,message=FALSE,cache=FALSE}
 require(smoove)
 require(magrittr)
 require(plyr)
@@ -76,7 +80,7 @@ str(ucvm1)
 
 The curve can be plotted in several ways:
 
-```{r FirstPlot, echo=-1, fig.height=3, cache=TRUE}
+```{r FirstPlot, echo=-1, fig.height=3, cache=TRUE, fig.width = 6}
 par(mfrow=c(1,3), bty="l", mar = c(4,4,1,1))
 plot(ucvm1$Z, asp=1, type="l", main = "plotting Z")
 plot(ucvm1$XY, asp=1, type="l", main = "plotting XY")
@@ -99,7 +103,7 @@ sqrt(mean(Mod(ucvm1$V)^2))
 
 The *exact* method is more flexible, as it samples the position and velocity process simultaneously from the complete mean and variance-covariance structure of the integreated OU process.  The main advantage is that the process can be simulated for irregular (and totally arbitrary) times of observation:
 
-```{r ucvm.exact, echo=-1, fig.height=4, cache=TRUE}
+```{r ucvm.exact, echo=-1, fig.height=4, cache=TRUE, fig.width = 6}
 par(mar = c(0,3,0,0), oma = c(4,2,2,2), mgp = c(2,0.5,0), tck=-0.01, xpd=NA, bty="l", las=1)
 T <- cumsum(rexp(100))
 ucvm2 <- simulateUCVM.exact(T = T, nu = 2, tau = 2)
@@ -128,7 +132,7 @@ acvm <- simulateRACVM(tau = 6, eta = 2, omega = 0, mu = 2, Tmax = 1000, dt = .1)
 racvm <- simulateRACVM(tau = 6, eta = 2, omega = 1, mu = 1, Tmax = 1000, dt = .1)
 ```
 
-```{r plotRACVM, cache=TRUE, echo=-1, fig.height=4, bty="l"}
+```{r plotRACVM, cache=TRUE, echo=-1, fig.height=4, bty="l", fig.width = 6}
 layout(rbind(c(1,2,2),c(1,3,3))); par(bty="l", mar = c(3,3,3,1), mgp = c(2,0.5,0), tck=0.01)
 plot_track(rcvm$Z[rcvm$T < 100],  main = "RCVM")
 plot_track(acvm$Z[acvm$T < 100], main = "ACVM")
@@ -162,7 +166,7 @@ head(ucvm.vaf)
 
 A plot of the four curves and their respective empirical autocovariance functions:
 
-```{r EVAFplots, echo = -1, cache=TRUE, fig.width=10}
+```{r EVAFplots, echo = -1, cache=TRUE, fig.width=8, fig.width = 6}
 layout(cbind(1:4*2-1, 1:4*2, 1:4*2)); par(mar=c(3,2,2,0), oma = c(4,2,2,2), bty="l", mgp=c(1.5,0,0), tck=0.01, xpd=NA, las=1)
 plot_track(ucvm1$Z[1:1e3], main = "UCVM"); plot(ucvm.vaf, type="l", lwd=1.5)
 plot_track(acvm$Z[1:1e3], main = "ACVM"); plot(acvm.vaf, type="l", lwd=1.5)
@@ -185,7 +189,7 @@ Following the structure of the Gurarie at al 2017, the UCVM, which focuses on es
 This method relies on fitting the *empirical* velocity autocorrelation function (above) to the *theoretical* velocity autocorrelation function:
 $$C_v(\Delta t) = {4 \over \pi} \nu^2 \exp(\Delta t / \tau)$$
 
-```{r VAF1, fig.height=4, echo=-1, cache=TRUE}
+```{r VAF1, fig.height=4, echo=-1, cache=TRUE, fig.width = 6}
 par(bty="l", mgp = c(1.5,0.25,0), tck=0.01, las=2)
 estimateUCVM(Z = ucvm1$Z, T = ucvm1$T, method = "vaf", diagnose = TRUE, CI=TRUE)
 ```
@@ -297,7 +301,7 @@ Every time this document is compiled, the results change somewhat.  But in most 
 
 ### Advective CVM
 
-```{r acvm, cache=TRUE, echo=FALSE, fig.height = 3}
+```{r acvm, cache=TRUE, echo=FALSE, fig.height = 3, fig.width = 6}
 par(bty="l", mgp = c(1.5,0.25,0), tck=0.01, las=1); plot_track(acvm$Z)
 ```
 ```{r acvm.fit, cache=TRUE, size = "small"}
@@ -315,7 +319,7 @@ with(rcvm, estimateRACVM(Z=Z, T=T, model = "RCVM", compare.models=TRUE))
 
 ### Rotational-Advective CVM
      
-```{r racvm, cache=TRUE, echo=-1, fig.height = 3}
+```{r racvm, cache=TRUE, echo=-1, fig.height = 3, fig.width = 6}
 par(bty="l", mgp = c(1.5,0.25,0), tck=0.01, las=1); plot_track(racvm$Z)
 ```
 ```{r racvm.fit, cache=TRUE, size = "footnotesize"}
@@ -338,7 +342,7 @@ data(Kestrel); plot_track(Kestrel[,c("X","Y")], cex=0.3)
 
 We can analyze one portions of the kestrel's flight, mirroring the analysis in Gurarie (in review).  The following 90 second snippet is clearly advective and rotational:
 
-```{r K1, echo=-1, fig.height=4, cache=TRUE}
+```{r K1, echo=-1, fig.height=4, cache=TRUE, fig.width = 8}
   par(mar = c(0,2,0,0), oma = c(4,4,2,2), bty="l")
   K1 <- Kestrel[3360:3450,]
   with(K1, scan_track(x=X, y=Y))
@@ -353,7 +357,7 @@ The model selection confirms this (note that we specify the time unit of analysi
 
  The track is very regularly but very slightly coarsely sampled.  We therefore use the spline correction (though its impact is probably minimal).  The model selection strongly prefers an RACVM model.  The rotational speed is about 0.5 radians per second, the advective speed is around 4 m/sec. We feed these estimates back into the simulation algorithm to simulate a trajectory:  
 
-```{r K1.sim, echo=-1, fig.height=4, cache=TRUE}
+```{r K1.sim, echo=-1, fig.height=4, cache=TRUE, fig.width = 8}
 par(mar = c(0,2,0,0), oma = c(4,4,2,2), bty="l")
 p.fit1 <- with(fit1$results, list(eta=eta[1], tau = tau[1], 
                                   mu = mu.x[1] + 1i*mu.y[1], 
@@ -374,7 +378,7 @@ Change point analysis (like most of ecological analysis) is not an exact science
 
 Simulate a two-phase UCVM:
 
-```{r TwoPhaseCVM, fig.height = 4, echo=-1, out.width = "6in", cache=TRUE, fig.align="center"}
+```{r TwoPhaseCVM, fig.height = 4, echo=-1, fig.width = 6, cache=TRUE, fig.align="center"}
 par(bty="l")
 ucvm1 <- simulateUCVM(T=cumsum(rexp(100)), nu=2, tau=1, method="exact")
 ucvm2 <- simulateUCVM(T=cumsum(rexp(100)), nu=2, tau=10, v0 = ucvm1$V[100], method="exact")
@@ -385,7 +389,7 @@ plot_track(Z)
 
 The only parameter that changed in this simulation is the time scale - it is not necessarily easy to identify by eye where the model switched. The likelihood of all candidate change points within this track is found using the `findSingleBreakPoint` as follows:
 
-```{r fig.height = 4, echo=-1, cache=FALSE}
+```{r fig.height = 4, echo=-1, cache=FALSE, fig.width = 6}
 par(bty="l")
 findSingleBreakPoint(Z,T, method = "sweep")
 ```
@@ -428,7 +432,7 @@ for(i in 1:length(taus)){
 
 For the analysis, we will randomly sample (and order) 400 observations from the complete data:
 
-```{r plotMulticvm, echo =-1, fig.height = 4, fig.width = 8, cache=TRUE, fig.align="center"}
+```{r plotMulticvm, echo =-1, fig.height = 4, fig.width = 6, cache=TRUE, fig.align="center"}
 par(bty = "l", mar = c(0,4,0,0), oma = c(4,0,2,2), xpd = NA)
 multicvm <- data.frame(Z = Z.raw, T = T.raw)[sample(1:length(Z.raw), 400),] %>% arrange(T)
 with(multicvm, scan_track(z = Z, time = T))
@@ -466,7 +470,7 @@ simSweep <- with(multicvm, sweepRACVM(Z = Z, T = T, windowsize = 80, windowstep 
 
 This function outputs a jagged matrix of likelihood estimates, which can be visualized: 
 
-```{r loadsimSweep, echo=-1, fig.height=3}
+```{r loadsimSweep, echo=-1, fig.height=3, fig.width = 5}
 par(bty="l"); data(simSweep)
 plotWindowSweep(simSweep)
 ```
@@ -560,7 +564,7 @@ You can see that the estimates for the three parameters we set ($\tau$, $\eta$ a
 
  The `summarizePhases`, `getPhaseParameter` and `plotPhaseParameter` functions are useful for obtaining the estimates (with confidence intervals) and plotting their values.  In the code below, we plot the track, color it by  partition, and illustrate the values of the parameters.
 
-```{r SimPhasePlot, message=FALSE, echo = -1}
+```{r SimPhasePlot, message=FALSE, echo = -1, fig.width = 6, fig.height = 6}
   par(mar=c(4,0,1,0), oma = c(5,5,1,2), xpd=NA, las = 1, cex.lab = 1.5, tck = 0.01, mgp = c(1.5,0.25,0), bty="n")
   layout(c(1,1,1,2:6))
   # extract locations and times
@@ -602,7 +606,7 @@ data.frame(durations, taus, etas, mus)
 
 We perform this analysis now on a portion of the kestrel data analyzed in the Gurarie et al. (2017).  The basic steps are the same as above, but the selection occurs across all four models.  Note that the data arae formatted, more or less, the in the raw (and increasingly standard) Movebank format, and we perform the analysis using POSIX time variables. The portion of data we analyze is:
 
-```{r subsetKestrel, echo=-1, fig.height=4}
+```{r subsetKestrel, echo=-1, fig.height=4, fig.width = 6}
 par(bty="l", mar = c(0,5,0,0), xpd=NA, oma= c(4,0,4,2))
 data(Kestrel)
 k <- Kestrel[3730:4150,]
@@ -630,7 +634,7 @@ save(k.sweep, file = "./vignettes/k.sweep.robj")
 
 Note that the time data are POSIX objects, and it is important to specify the time units of the analysis (in this case, seconds).  We plot the relative likelihoods: 
 
-```{r plotKestrelSweep, echo=-1, fig.height=3}
+```{r plotKestrelSweep, echo=-1, fig.height=3, fig.width = 6}
 par(bty="l"); load("k.sweep.robj")
 plotWindowSweep(k.sweep)
 ```
@@ -657,7 +661,7 @@ k.phases <- estimatePhases(k.CPtable, verbose=FALSE)
 summarizePhases(k.phases)
 ```
 
-```{r kestrelMegaPlot, echo=-1, eval=TRUE, warning = FALSE}
+```{r kestrelMegaPlot, echo=-1, eval=TRUE, warning = FALSE, fig.width = 6, fig.height = 6}
 par(mar=c(4,0,1,0), oma = c(5,5,1,2), xpd=NA, las = 1, cex.lab = 1.25, tck = 0.01, mgp = c(1.5,0.25,0), bty="n")
 
 
@@ -682,7 +686,7 @@ plotPhaseParameter("tau", k.phases, ylab="sec", xaxt="n", xlab="", col=cols, log
 plotPhaseParameter("eta", k.phases,  ylab="m / sec", xaxt="n", xlab="",  col=cols)
 plotPhaseParameter("omega", k.phases,  ylab="rad / sec", xaxt="n", xlab="", col=cols)
 plotPhaseParameter("mu.x", k.phases,  ylab="m / sec", xaxt="n", xlab="", col=cols)
-plotPhaseParameter("mu.y", k.phases,  ylab="m / sec", xlab="", col=cols, xaxis = TRUE)
+plotPhaseParameter("mu.y", k.phases,  ylab="m / sec", xlab="", col=cols)
 ```
 
 A subtle nuance: Leaving the `xaxt= "n"` out provided a nicely formatted time axis.  Because R is R, if you try doing this post-facto (e.g., via `axis(1)`), it won't quite work. 

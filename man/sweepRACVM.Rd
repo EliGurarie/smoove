@@ -80,6 +80,7 @@ if(interactive()){
                    ))
   
   # Perform sweep in parallel (can greatly improve speed)
+  require(doParallel)
   cl <- makeCluster(detectCores())
   registerDoParallel(cl)
   simSweep <- with(

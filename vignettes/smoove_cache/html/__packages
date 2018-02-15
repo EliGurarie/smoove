@@ -1,0 +1,9 @@
+base
+smoove
+magrittr
+plyr
+scales
+gplots
+foreach
+iterators
+doParallel
