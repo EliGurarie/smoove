@@ -2,7 +2,7 @@
 #' 
 #' Sets a window (a subset of movement data within specific time window), computes likelihoods for a set of candidate change points within the window, and steps the window forward, filling out a likelihood matrix. 
 #' 
-#' @param Z complex location data (if XY is not provided)
+#' @param Z location data 
 #' @param T time vector
 #' @param model model to fit for the change point sweep - typically the most complex model in the candidate model set. 
 #' @param windowsize time window of analysis to scan, IMPORTANTLY: in units of time (T).

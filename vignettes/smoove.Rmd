@@ -622,13 +622,14 @@ with(k, scan_track(x=X, y=Y))
 The window sweep can take some time. Note that we convert the time to seconds from start (in this case, exactly 420 seconds), which is somewhat more convenient for the analysis (though feeding POSIX objects will also work). 
 
 ```{r echo = FALSE, eval= FALSE}
+require(doParallel)
 cl <- makeCluster(detectCores())
 registerDoParallel(cl)
 ```
 
 
 ```{r sweepKestrel, cache=TRUE, message=FALSE, eval = FALSE}
-k.sweep <- with(k, sweepRACVM(XY=cbind(X,Y), T=timestamp, windowsize = 50, windowstep = 5, 
+k.sweep <- with(k, sweepRACVM(Z=cbind(X,Y), T=timestamp, windowsize = 50, windowstep = 5, 
                             model = "RACVM", time.unit = "secs", progress=FALSE,
                             .parallel = TRUE))
 ```

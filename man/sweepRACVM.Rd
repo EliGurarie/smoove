@@ -20,7 +20,7 @@ sweepRACVM(Z, ...)
 \method{sweepRACVM}{Move}(Z, ...)
 }
 \arguments{
-\item{Z}{complex location data (if XY is not provided)}
+\item{Z}{location data}
 
 \item{...}{additional parameters to pass to the \code{\link{estimateRACVM}} function, notably the option "criterion" allows you to select models based on AIC or BIC (the former is more liberal with more complex models).}
 
