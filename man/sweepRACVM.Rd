@@ -20,11 +20,11 @@ sweepRACVM(Z, ...)
 \method{sweepRACVM}{Move}(Z, ...)
 }
 \arguments{
-\item{Z}{location data}
+\item{Z}{location data.  Can be: a complex vector, a two-column matrix or data frame, an \code{\link{ltraj}} object from \code{adehabitatLT} or a \code{\link{move}} object from the \code{move} package.}
 
 \item{...}{additional parameters to pass to the \code{\link{estimateRACVM}} function, notably the option "criterion" allows you to select models based on AIC or BIC (the former is more liberal with more complex models).}
 
-\item{T}{time vector}
+\item{T}{time vector, ignored if \code{Z} is an ltraj or move}
 
 \item{windowsize}{time window of analysis to scan, IMPORTANTLY: in units of time (T).}
 

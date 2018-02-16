@@ -509,7 +509,7 @@ We use the set of candidate change points to separate the track into phases and 
 getCPtable(CPs = CP.clustered, modelset = c("UCVM", "ACVM"), tidy = NULL)
 ```
 
-In the output of `selectRACVM`, the `extremes` column indicates which parameter showed significant changes in parameter values defined by no overlap in the 95\% confidence interval, and the `dAIC` and `dBIC` compare the change point model to the no change point model.  We can ask this function to tidy the selection table according to any combination of several criteria: - by the differences, or by negative dAIC or dBIC, or by a mismatch in the models selected (see the help file for details). 
+In the output of `selectRACVM`, the `extremes` column indicates which parameter showed significant changes in parameter values defined by no overlap in the 95\% confidence interval, and the `dAIC` and `dBIC` compare the change point model to the no change point model.  We can ask this function to tidy the selec1tion table according to any combination of several criteria: - by the differences, or by negative dAIC or dBIC, or by a mismatch in the models selected (see the help file for details). 
 
 ```{r simGetCPtable2, cache=TRUE}
 getCPtable(CPs = CP.clustered, modelset = c("UCVM", "ACVM"),  iterate = TRUE)
@@ -615,25 +615,25 @@ par(bty="l", mar = c(0,5,0,0), xpd=NA, oma= c(4,0,4,2))
 data(Kestrel)
 k <- Kestrel[3730:4150,]
 head(k)
-with(k, scan_track(x=X, y=Y))
-#k$T <- as.numeric(k$timestamp - min(k$timestamp))
+with(k, scan_track(x=X, y=Y, time = timestamp))
 ```
 
-The window sweep can take some time. Note that we convert the time to seconds from start (in this case, exactly 420 seconds), which is somewhat more convenient for the analysis (though feeding POSIX objects will also work). 
+The window sweep can take a little time (approx. 40 s on my 4 core laptop, with the substantial speed-up of  `.parallel = TRUE`).  Helpfully, also, the function `sweepRACVM` can take `move` objects from the `move` package - which processed data stored on [Movebank](https://www.movebank.org/) and `ltraj` objects from the classic `adehabitatLT` movement analysis package. 
 
 ```{r echo = FALSE, eval= FALSE}
+require(doParallel)
 cl <- makeCluster(detectCores())
 registerDoParallel(cl)
 ```
 
 
 ```{r sweepKestrel, cache=TRUE, message=FALSE, eval = FALSE}
-k.sweep <- with(k, sweepRACVM(XY=cbind(X,Y), T=timestamp, windowsize = 50, windowstep = 5, 
+k.sweep <- with(k, sweepRACVM(Z = cbind(X,Y), T=timestamp, windowsize = 50, windowstep = 5, 
                             model = "RACVM", time.unit = "secs", progress=FALSE,
                             .parallel = TRUE))
 ```
 ```{r eval=FALSE, include=FALSE}
-save(k.sweep, file = "./vignettes/k.sweep.robj")
+#save(k.sweep, file = "./vignettes/k.sweep.robj")
 ```
 
 Note that the time data are POSIX objects, and it is important to specify the time units of the analysis (in this case, seconds).  We plot the relative likelihoods: 
@@ -654,7 +654,7 @@ The selected cluster width (4) was the minimum one that did not produce a warnin
 ```{r filterKestrelCPs}
 k.CPtable <- getCPtable(CPs = k.CPs, modelset = "all", spline=TRUE)
 ```
-Note that in this implementation, we chose the option `spline=TRUE`, as the regularity and apparent precision of these data and the curvature of the track suggest that the spline approximation will give improved estimates of the parameters. 
+Note that in this implementation, we chose the option `spline=TRUE`.  The regularity and apparent precision of these data and the curvature of the track suggest that the spline approximation will give improved estimates of the parameters. 
 
 ```{r set-options, echo=FALSE, cache=FALSE}
 options(width=90)
