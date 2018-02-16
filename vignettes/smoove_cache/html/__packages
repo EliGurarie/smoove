@@ -7,3 +7,4 @@ gplots
 foreach
 iterators
 doParallel
+devtools
