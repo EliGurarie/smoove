@@ -509,7 +509,7 @@ We use the set of candidate change points to separate the track into phases and 
 getCPtable(CPs = CP.clustered, modelset = c("UCVM", "ACVM"), tidy = NULL)
 ```
 
-In the output of `selectRACVM`, the `extremes` column indicates which parameter showed significant changes in parameter values defined by no overlap in the 95\% confidence interval, and the `dAIC` and `dBIC` compare the change point model to the no change point model.  We can ask this function to tidy the selection table according to any combination of several criteria: - by the differences, or by negative dAIC or dBIC, or by a mismatch in the models selected (see the help file for details). 
+In the output of `selectRACVM`, the `extremes` column indicates which parameter showed significant changes in parameter values defined by no overlap in the 95\% confidence interval, and the `dAIC` and `dBIC` compare the change point model to the no change point model.  We can ask this function to tidy the selec1tion table according to any combination of several criteria: - by the differences, or by negative dAIC or dBIC, or by a mismatch in the models selected (see the help file for details). 
 
 ```{r simGetCPtable2, cache=TRUE}
 getCPtable(CPs = CP.clustered, modelset = c("UCVM", "ACVM"),  iterate = TRUE)
