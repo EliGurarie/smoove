@@ -1,19 +1,3 @@
-#' Lamprey
-#'
-#' Description of the Lamrey
-#'
-#' @format A data frame with xx rows and n columns
-#' \describe{
-#' \item{X}{x coordiante}
-#' \item{Y}{y coordinate}
-#' \item{Time}{time in POSIXct format}
-#' }
-#'
-#' @source
-#' website
-#'
-"Lamprey"
-
 #' Kestrel
 #' 
 #' Description of the Kestrel
