@@ -20,8 +20,10 @@ vignettes/*.log
 vignettes/*.tex
 vignettes/*.toc
 vignettes/*.db
-vignettes/cache/
-vignettes/figure/
+vignettes/cache
+vignettes/figure
+vignettes/smoove_cache
+vignettes/smoove_files
 #meld
 *.orig
 troubleshoot/

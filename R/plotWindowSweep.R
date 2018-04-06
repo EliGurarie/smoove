@@ -13,7 +13,9 @@
 plotWindowSweep <- function(windowsweep, ...){
   windowsweep.zeroed <- plyr::aaply(windowsweep, 2, function(x) x - min(x, na.rm=TRUE)) %>% t
   starts <- colnames(windowsweep) %>% as.numeric
-  T <- row.names(windowsweep) %>% as.numeric
+  T <- attributes(windowsweep)$time #%>% as.numeric
   mean.rel.ll <- apply(windowsweep.zeroed, 1, mean, na.rm=TRUE)
-  matplot(T, windowsweep.zeroed, type="l", lty = 1, col=rainbow(length(starts)), ylab = "relative log likelihood", ...)
+  matplot(T, windowsweep.zeroed, type="l", lty = 1, col=rainbow(length(starts)), ylab = "relative log likelihood", ..., xaxt = "n")
+  
+  if(inherits(T, "POSIXt"))  axis.POSIXct(side = 1, x = T) else axis(1)
 }

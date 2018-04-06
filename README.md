@@ -1,6 +1,6 @@
 ### Overview
 
-The `smoove` package is a collection of functions to work with continuous time correlated velocity movement (CVM) models as described in Gurarie et al. (nearly in press is *Movement Ecology*).   There are functions that simulate, diagnose and estimate these movement models, as well as functions for facilitating a change point analysis.
+The `smoove` package is a collection of functions to work with continuous time correlated velocity movement (CVM) models as described in Gurarie et al. (*Movement Ecology* - 2017, 5:13).   There are functions that simulate, diagnose and estimate these models, as well as functions for facilitating a change point analysis.
 
 To install in R:
 ```
@@ -13,7 +13,7 @@ To see a detailed vignette:
 vignette("smoove")
 ```
 
-Or simply: https://github.com/EliGurarie/smoove/blob/master/vignettes/smoove.pdf.
+Or simply: http://htmlpreview.github.io/?https://github.com/EliGurarie/smoove/blob/master/inst/doc/smoove.html.
 
 ### MacOS
 If you get the following error while installing on the MacOS:
@@ -33,6 +33,6 @@ curl -O http://r.research.att.com/libs/gfortran-4.8.2-darwin13.tar.bz2
 sudo tar fvxz gfortran-4.8.2-darwin13.tar.bz2 -C /
 ```
 
-### References
+### References 
 
 E. Gurarie, C. Fleming, W.F. Fagan, K. Laidre, J. Hernández-Pliego, O. Ovaskainen. Correlated velocity models as a fundamental unit of animal movement: synthesis and applications. [*Movement Ecology*](https://movementecologyjournal.biomedcentral.com/articles/10.1186/s40462-017-0103-3). 

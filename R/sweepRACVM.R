@@ -2,8 +2,8 @@
 #' 
 #' Sets a window (a subset of movement data within specific time window), computes likelihoods for a set of candidate change points within the window, and steps the window forward, filling out a likelihood matrix. 
 #' 
-#' @param Z complex location data (if XY is not provided)
-#' @param T time vector
+#' @param Z location data.  Can be: a complex vector, a two-column matrix or data frame, an \code{\link{ltraj}} object from \code{adehabitatLT} or a \code{\link{move}} object from the \code{move} package.  
+#' @param T time vector, ignored if \code{Z} is an ltraj or move
 #' @param model model to fit for the change point sweep - typically the most complex model in the candidate model set. 
 #' @param windowsize time window of analysis to scan, IMPORTANTLY: in units of time (T).
 #' @param windowstep step (in time) by which the window advances.  The smaller the step, the slower but more thorough the estimation. 
@@ -26,6 +26,7 @@ sweepRACVM.default <- function(Z, T,
                        time.unit = "hours",
                        ..., 
                        .parallel = FALSE){
+  if(ncol(Z) == 2) Z <- Z[,1] + 1i*Z[,2]
   T.raw <- T
   if(inherits(T.raw, "POSIXt"))
     T <- difftime(T.raw, T.raw[1], units = time.unit) %>% as.numeric
