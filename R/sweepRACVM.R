@@ -26,7 +26,7 @@ sweepRACVM.default <- function(Z, T,
                        time.unit = "hours",
                        ..., 
                        .parallel = FALSE){
-  if(ncol(Z) == 2) Z <- Z[,1] + 1i*Z[,2]
+  if(!is.complex(Z) && (ncol(Z) == 2)) Z <- Z[,1] + 1i*Z[,2]
   T.raw <- T
   if(inherits(T.raw, "POSIXt"))
     T <- difftime(T.raw, T.raw[1], units = time.unit) %>% as.numeric
@@ -94,14 +94,15 @@ sweepRACVM.default <- function(Z, T,
 #' @rdname sweepRACVM
 sweepRACVM.data.frame <- function(Z, ...){
   xy <- Z[,1] + 1i*Z[,2]
-  do.call(sweepRACVM.default, c(list(Z=xy), list(...)))
+  do.call(sweepRACVM.default, list(Z=xy, ...))
 }
 
 #' @export
 #' @rdname sweepRACVM
 sweepRACVM.ltraj <- function(Z, ...){
-  sweepRACVM(Z=adehabitatLT::ld(Z) ,
-             T=xy$date, ...)
+  ltraj <- adehabitatLT::ld(Z)
+  sweepRACVM(Z= ltraj[,c('x','y')],
+             T=ltraj$date, ...)
 }
 
 #' @export

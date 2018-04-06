@@ -15,19 +15,23 @@
  \item{sensor.type}{sensor.type}
  \item{individual.taxon.canonical.name}{individual.taxon.canonical.name}
  \item{tag.local.identifier}{tag.local.identifier}
- \item{ID}{ID}
+ \item{ID}{ID of individual}
  \item{study.name}{study.name}
  \item{X}{X in UTM coordinate system}
  \item{Y}{Y in UTM coordinate system}
  
  }}
 \source{
-website
+https://www.datarepository.movebank.org/handle/10255/move.487
 }
 \usage{
 Kestrel
 }
 \description{
-Description of the Kestrel
+For more information about Kestrel movement behavior see the references.
+}
+\references{
+Hernandez-Pliego J, Rodriguez C, Bustamante J (2015) Why do kestrels soar? PLOS ONE. 10(12): e0145402. doi:10.1371/journal.pone.0145402
+Hernandez-Pliego J, Rodriguez C, Bustamante J (2015) Data from: Why do kestrels soar? Movebank Data Repository. doi:10.5441/001/1.sj8t3r11
 }
 \keyword{datasets}
