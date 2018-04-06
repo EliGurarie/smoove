@@ -25,3 +25,4 @@ vignettes/figure/
 #meld
 *.orig
 troubleshoot/
+inst
