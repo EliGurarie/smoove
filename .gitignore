@@ -27,3 +27,4 @@ vignettes/smoove_files
 #meld
 *.orig
 troubleshoot/
+inst
