@@ -67,7 +67,7 @@ estimateRACVM <- function(XY, Z = NULL, T, track = NULL,
         
         logv <- log(Mod(V))
         logv.detrend <- logv - mean(logv[Mod(V) > 0])
-        logv.acf <- acf(logv.detrend, lag.max = round(length(Z)/2), plot=FALSE)$acf
+        logv.acf <- acf(logv.detrend, lag.max = round(length(Z)/2), plot=FALSE, na.action = na.pass)$acf
         logv.localminima <- (which(diff(sign(diff(logv.acf)))==2)+1)
         logv.minima <- which(logv.acf < 0)[which(logv.acf < 0) %in% logv.localminima]
         if(length(logv.minima) > 0) 
