@@ -18,11 +18,15 @@ estimateUCVM <- function(Z,
            T,
            method = c("vaf", "crw", "vLike", "zLike", "crawl")[3],
            parameters = c("tau", "nu"),
+           time.units = "day",
            CI = FALSE,
            spline = FALSE,
            diagnose = FALSE,
            ...)
 {
+  if("POSIXt" %in% is(T))
+    T <- difftime(T, T[1], units = time.units) %>% as.numeric
+  
    if(is.null(Z)) Z <- XY[,1] + 1i*XY[,2]
     
   if(method == "crw")
