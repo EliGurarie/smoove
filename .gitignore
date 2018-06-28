@@ -26,5 +26,7 @@ vignettes/smoove_cache
 vignettes/smoove_files
 #meld
 *.orig
-troubleshoot/
+troubleshoot
 inst
+faridR
+src-*/

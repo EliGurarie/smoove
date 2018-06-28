@@ -21,10 +21,7 @@
 #'   findCandidateChangePoints(clusterwidth = 4, verbose = FALSE) %>%
 #'   getCPtable(modelset = c("UCVM", "ACVM"), criterion = "AIC")
 #' 
-#' Z <- multicvm$Z
-#' T <- multicvm$T
-#' # Note, these are also contained in the attributes of *any* of the
-#' # intermediate objects, e.g.
+#' simPhaselist <- estimatePhases(simCP.table)
 #' Z <- attributes(simPhaselist)$Z
 #' T <- attributes(simPhaselist)$time
 #' 
@@ -34,7 +31,7 @@
 #' 
 #' phaseTable <- summarizePhases(simPhaselist)
 #' plot(Z, asp=1, type="l", xpd=FALSE)
-#' points(Z, col=Z.cols, pch=21, bg = alpha(Z.cols, 0.5), cex=0.8)
+#' points(Z, col=Z.cols, pch=21, bg = scales::alpha(Z.cols, 0.5), cex=0.8)
 #' legend("top", legend = paste0(phaseTable$phase, ": ", phaseTable$model),
 #'        fill=cols, ncol=3, bty="n", title = "Phase: model")
 #' 

@@ -19,7 +19,7 @@
  \item{study.name}{study.name}
  \item{X}{X in UTM coordinate system}
  \item{Y}{Y in UTM coordinate system}
- 
+
  }}
 \source{
 https://www.datarepository.movebank.org/handle/10255/move.487

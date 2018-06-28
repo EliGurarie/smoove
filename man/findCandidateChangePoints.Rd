@@ -23,7 +23,8 @@ The raw output of the window sweep (\code{\link{sweepRACVM}})
 library(smoove)
 library(magrittr)
 data(simSweep,package = "smoove")
-#The warning lets us know that some of the candidate change points are rather too close (in time) to each other
+#The warning lets us know that some of the candidate change points 
+#are rather too close (in time) to each other
 CP.all <- findCandidateChangePoints(windowsweep = simSweep, clusterwidth = 0)
 CP.all \%>\% as.vector
 CP.clustered <- findCandidateChangePoints(windowsweep = simSweep, clusterwidth = 4)

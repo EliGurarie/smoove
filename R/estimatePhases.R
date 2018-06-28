@@ -11,6 +11,7 @@
 #' @seealso \code{\link{summarizePhases}}
 #' @examples
 #' library(smoove)
+#' library(magrittr)
 #' data(simSweep)
 #' simCP.table <- simSweep %>%
 #' findCandidateChangePoints(clusterwidth = 4, verbose = FALSE) %>%

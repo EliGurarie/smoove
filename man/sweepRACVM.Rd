@@ -20,7 +20,7 @@ sweepRACVM(Z, ...)
 \method{sweepRACVM}{Move}(Z, ...)
 }
 \arguments{
-\item{Z}{location data.  Can be: a complex vector, a two-column matrix or data frame, an \code{\link{ltraj}} object from \code{adehabitatLT} or a \code{\link{move}} object from the \code{move} package.}
+\item{Z}{location data.  Can be: a complex vector, a two-column matrix or data frame, an \code{\link[adehabitatLT]{ltraj}} object from \code{adehabitatLT} or a \code{\link[move]{move}} object from the \code{move} package.}
 
 \item{...}{additional parameters to pass to the \code{\link{estimateRACVM}} function, notably the option "criterion" allows you to select models based on AIC or BIC (the former is more liberal with more complex models).}
 
@@ -42,7 +42,7 @@ sweepRACVM(Z, ...)
 Sets a window (a subset of movement data within specific time window), computes likelihoods for a set of candidate change points within the window, and steps the window forward, filling out a likelihood matrix.
 }
 \examples{
-if(interactive()){
+if(interactive() && FALSE){
   # Three stage example (from vignette)
   require(smoove)
   require(plyr)

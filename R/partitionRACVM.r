@@ -31,8 +31,8 @@ partitionRACVM <- function(Z,T,CPs, criterion = "BIC"){
       myresults <- fit$results 
     else
       myresults <- with(model, estimateRACVM(Z = z, T= t, 
-                                             fit.mu = fit.mu, 
-                                             fit.omega = fit.omega, 
+                                             #fit.mu = fit.mu,  #unused argument
+                                             #fit.omega = fit.omega,  #unused argument
                                              compare.models = FALSE, spline=TRUE)$results)
     partition[[i]] <- list(estimates = myresults, start = phase.start[i], end = phase.end[i], model = model$model)
   }

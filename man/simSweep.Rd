@@ -8,7 +8,7 @@
  \describe{
  \item{time}{a vector of times}
  \item{Z}{a complex vector of locations}
- 
+
  }}
 \usage{
 simSweep
@@ -17,6 +17,7 @@ simSweep
 simSweep is a simulated dataset that could be generate by calling \code{\link{simulateRACVM}} iteratively and then calling \code{\link{sweepRACVM}}. See the provided example.
 }
 \examples{
+if(interactive() && FALSE){
 taus <- c(3, 3, 1)
 mus <- c(2, 0, 0)
 etas <- c(2, 1, 1)
@@ -34,12 +35,12 @@ for(i in 1:length(taus)){
   T.raw <- c(T.raw, mycvm$T + T.raw[length(T.raw)])
 }
 
-multicvm <- data.frame(Z = Z.raw, T = T.raw)[sample(1:length(Z.raw), 400),] \%>\% 
-            dplyr::arrange(T)
+multicvm <- data.frame(Z = Z.raw, T = T.raw)[sample(1:length(Z.raw), 400),] \%>\%
+            plyr::arrange(T)
 #a time consuming line of code
-simSweep <- with(multicvm, sweepRACVM(Z = Z, T = T, 
-                 windowsize = 80, windowstep = 5, 
+simSweep <- with(multicvm, sweepRACVM(Z = Z, T = T,
+                 windowsize = 80, windowstep = 5,
                  model = "ACVM", progress=FALSE))
-
+}
 }
 \keyword{datasets}

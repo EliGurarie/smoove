@@ -24,6 +24,7 @@ The output of this function is generally passed to the \code{\link{summarizePhas
 }
 \examples{
 library(smoove)
+library(magrittr)
 data(simSweep)
 simCP.table <- simSweep \%>\%
 findCandidateChangePoints(clusterwidth = 4, verbose = FALSE) \%>\%

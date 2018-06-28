@@ -9,6 +9,7 @@
 #' @param CI whether or not to compute 95\% confidence intervals for parameters. In some cases, this can slow the computation down somewhat.
 #' @param spline whether or not to use the spline correction (only relevant for \code{vaf} and \code{vLike}).
 #' @param diagnose whether to draw a diagnostic plot.  Varies for different methods.
+#' @param time.units unit of time to be passed to \code{\link[base]{difftime}()} to compute a relative numeric time vector.
 #' @param ... additional parameters to pass to estimation functions.  These are particularly involved in the \code{crawl} method (see \code{\link[crawl]{crwMLE}}). 
 #' @return A data frame with point estimates of mean speed `nu' and time-scale `tau' 
 #' @example ./demo/estimateUCVM_examples.r
