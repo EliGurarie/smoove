@@ -1,4 +1,4 @@
-if(interactive()){
+if(interactive() && FALSE){
   # Three stage example (from vignette)
   require(smoove)
   require(plyr)

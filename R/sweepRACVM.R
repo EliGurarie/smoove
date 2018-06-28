@@ -2,7 +2,7 @@
 #' 
 #' Sets a window (a subset of movement data within specific time window), computes likelihoods for a set of candidate change points within the window, and steps the window forward, filling out a likelihood matrix. 
 #' 
-#' @param Z location data.  Can be: a complex vector, a two-column matrix or data frame, an \code{\link{ltraj}} object from \code{adehabitatLT} or a \code{\link{move}} object from the \code{move} package.  
+#' @param Z location data.  Can be: a complex vector, a two-column matrix or data frame, an \code{\link[adehabitatLT]{ltraj}} object from \code{adehabitatLT} or a \code{\link[move]{move}} object from the \code{move} package.  
 #' @param T time vector, ignored if \code{Z} is an ltraj or move
 #' @param model model to fit for the change point sweep - typically the most complex model in the candidate model set. 
 #' @param windowsize time window of analysis to scan, IMPORTANTLY: in units of time (T).
@@ -100,9 +100,13 @@ sweepRACVM.data.frame <- function(Z, ...){
 #' @export
 #' @rdname sweepRACVM
 sweepRACVM.ltraj <- function(Z, ...){
+  if(requireNamespace("adehabitatLT",quietly = TRUE)){
   ltraj <- adehabitatLT::ld(Z)
   sweepRACVM(Z= ltraj[,c('x','y')],
              T=ltraj$date, ...)
+  }
+  else
+    warning("First load adehabitatLT package using library(adehabitatLT) and then call this function on ltraj objects")
 }
 
 #' @export

@@ -41,6 +41,7 @@
 #'  }
 #'
 #' @examples
+#' if(interactive() && FALSE){
 #' taus <- c(3, 3, 1)
 #' mus <- c(2, 0, 0)
 #' etas <- c(2, 1, 1)
@@ -59,10 +60,10 @@
 #' }
 #'
 #' multicvm <- data.frame(Z = Z.raw, T = T.raw)[sample(1:length(Z.raw), 400),] %>%
-#'             dplyr::arrange(T)
+#'             plyr::arrange(T)
 #' #a time consuming line of code
 #' simSweep <- with(multicvm, sweepRACVM(Z = Z, T = T,
 #'                  windowsize = 80, windowstep = 5,
 #'                  model = "ACVM", progress=FALSE))
-#'
+#'}
 "simSweep"

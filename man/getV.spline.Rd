@@ -24,6 +24,7 @@ a list with the estimated velocity (V), as well as the position (Z) and time (T)
 Computes the locations and velocities of a cubic spline of a 2D track over time.
 }
 \examples{
+data("Kestrel",package = "smoove")
 Z <- with(Kestrel, X+1i*Y)[1:500]
 T <- Kestrel$timestamp[1:500]
 vsp <- getV.spline(Z,T, resolution = 1e-2, T.new = NULL)
