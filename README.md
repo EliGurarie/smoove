@@ -22,11 +22,11 @@ If you get the following error while installing on the MacOS:
 ld: library not found for -lgfortran
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 make: *** [smoove.so] Error 1
-ERROR: compilation failed for package ‘smoove’
-* removing ‘/Users/rokays/Library/R/3.3/library/smoove’
+ERROR: compilation failed for package â€˜smooveâ€™
+* removing â€˜/Users/rokays/Library/R/3.3/library/smooveâ€™
 Installation failed: Command failed (1)
 
-Run the following command on your terminal to install `gfortran` first and then install using `devtools`:
+Run the following command on your terminal to install `gfortran` first and then install this package using `devtools`:
 
 ```shell
 curl -O http://r.research.att.com/libs/gfortran-4.8.2-darwin13.tar.bz2
@@ -35,4 +35,4 @@ sudo tar fvxz gfortran-4.8.2-darwin13.tar.bz2 -C /
 
 ### References 
 
-E. Gurarie, C. Fleming, W.F. Fagan, K. Laidre, J. Hernández-Pliego, O. Ovaskainen. Correlated velocity models as a fundamental unit of animal movement: synthesis and applications. [*Movement Ecology*](https://movementecologyjournal.biomedcentral.com/articles/10.1186/s40462-017-0103-3). 
+E. Gurarie, C. Fleming, W.F. Fagan, K. Laidre, J. HernÃ¡ndez-Pliego, O. Ovaskainen. Correlated velocity models as a fundamental unit of animal movement: synthesis and applications. [*Movement Ecology*](https://movementecologyjournal.biomedcentral.com/articles/10.1186/s40462-017-0103-3). 

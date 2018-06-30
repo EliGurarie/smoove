@@ -27,15 +27,16 @@ either a 2n x 2n VV-VZ-ZZ matrix or n x n ZZ matrix.
 Takes vector of times T and parameters nu, tau, v0, and returns the zz portion of the covariance matrix.
 }
 \examples{
-if (requireNamespace('gridExtra',quietly = TRUE)){
+if (requireNamespace('gridExtra',quietly = TRUE))
+ warning("please install \\"gridExtra\\" first to run this example")
 T <- cumsum(rexp(10))
 # separated into Sigma_vv, Sigma_vz (assymetric), and Sigma_zz
 Sigma <- Matrix::Matrix(getSigma.VZ(T, nu=2, tau=5, t0=2))
 #i1 <- image(Sigma[1:10,1:10], main="V-V", colorkey=TRUE, useRaster=TRUE)
 #i2 <- image(Sigma[11:20,1:10], main="V-Z", colorkey=TRUE, useRaster=TRUE)
 #i3 <- image(Sigma[11:20,11:20], main="Z-Z", colorkey=TRUE, useRaster=TRUE)
-#grid.arrange(i1,i2,i3,ncol=3)
+#gridExra::grid.arrange(i1,i2,i3,ncol=3)
 # And the complete matrix (log transformed):
 #image(log(Sigma), colorkey=TRUE, main="log(Sigma)")
-}
+
 }
