@@ -1,12 +1,9 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^cran-comments.md$
-vignettes/*\.
 troubleshoot
 faridR
 .*[.]synctex[.]gz
-vignettes/.*[.]html
-vignettes/cache
-vignettes/figure
 vignettes/smoove_cache
 vignettes/smoove_files
+^CRAN-RELEASE$

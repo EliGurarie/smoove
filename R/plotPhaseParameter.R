@@ -12,7 +12,6 @@
 #' @return \code{getVariable} returns a data.frame with start time, end time, estimate, low and high 95\% C.I. and selected model for a given parameter, with each row corresponding to an enumerated partition phase.  
 #' @examples 
 #' library(smoove)
-#' library(gplots) # for rich colors
 #' library(magrittr)
 #' data(simSweep, package="smoove")
 #' 
@@ -25,7 +24,12 @@
 #' Z <- attributes(simPhaselist)$Z
 #' T <- attributes(simPhaselist)$time
 #' 
-#' cols <- rich.colors(length(simPhaselist))
+#' if (!requireNamespace('gplots', quietly = TRUE))
+#'  warning("package \"gplots\" is needed for this example. 
+#'  Please install it first and then run this example",
+#'         call. = FALSE)
+#' 
+#' cols <- gplots::rich.colors(length(simPhaselist))
 #' T.cuts <- c(T[1], simCP.table$CP, T[length(T)])
 #' Z.cols <- cols[cut(T, T.cuts, include.lowest = TRUE)]
 #' 
@@ -41,6 +45,7 @@
 #' plotPhaseParameter("mu.x", simPhaselist, ylab= "", xaxt="n", xlab="", col=cols)
 #' plotPhaseParameter("mu.y", simPhaselist, ylab= "", xaxt="n", xlab="", col=cols)
 #' plotPhaseParameter("rms", simPhaselist, ylab= "", xlab="time", col=cols)
+#' 
 #' @export
 plotPhaseParameter <- function(variable, phaselist, cols = 1:length(phaselist), 
                                label = TRUE, ymax = 1e3, ...){

@@ -36,20 +36,24 @@ if(interactive() && FALSE){
                    ))
   
   # Perform sweep in parallel (can greatly improve speed)
-  require(doParallel)
-  cl <- makeCluster(detectCores())
-  registerDoParallel(cl)
-  simSweep <- with(
-    multicvm,
-    sweepRACVM(
-      Z = Z,
-      T = T,
-      windowsize = 80,
-      windowstep = 5,
-      model = "UCVM",
-      .parallel = TRUE
+  if(!requireNamespace('doParallel',quietly = TRUE))
+    warning("package \"doParallel\" is needed for this example. 
+         Please install it first and then run this example",
+         call. = FALSE)
+    
+    cl <- parallel::makeCluster(parallel::detectCores())
+    doParallel::registerDoParallel(cl)
+    simSweep <- with(
+      multicvm,
+      sweepRACVM(
+        Z = Z,
+        T = T,
+        windowsize = 80,
+        windowstep = 5,
+        model = "UCVM",
+        .parallel = TRUE
+      )
     )
-  )
-  # plot result of window sweep
-  plotWindowSweep(simSweep)
+    # plot result of window sweep
+    plotWindowSweep(simSweep)
 }

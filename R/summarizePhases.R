@@ -6,7 +6,6 @@
 #' @return table of start and end times and point estimates of relevant parameters for each phase
 #' @examples 
 #' library(smoove)
-#' library(gplots) # for rich colors
 #' library(magrittr)
 #' data(simSweep, package="smoove")
 #' 
@@ -17,8 +16,13 @@
 #' simPhaselist <- estimatePhases(simCP.table)
 #' Z <- attributes(simPhaselist)$Z
 #' T <- attributes(simPhaselist)$time
-#'  
-#' cols <- rich.colors(length(simPhaselist))
+#'
+#' if (requireNamespace('gplots', quietly = TRUE))
+#' warning("package \"gplots\" is needed for this example. 
+#'     Please install it first and then run this example",
+#'     call. = FALSE)
+#' 
+#' cols <- gplots::rich.colors(length(simPhaselist))
 #' T.cuts <- c(T[1], simCP.table$CP, T[length(T)])
 #' Z.cols <- cols[cut(T, T.cuts, include.lowest = TRUE)]
 #' 
@@ -27,6 +31,7 @@
 #' points(Z, col=Z.cols, pch=21, bg = scales::alpha(Z.cols, 0.5), cex=0.8)
 #' legend("top", legend = paste0(phaseTable$phase, ": ", phaseTable$model),
 #'        fill=cols, ncol=3, bty="n", title = "Phase: model")
+#' 
 #' @export
 summarizePhases <- function(phaselist){
   estimates <- plyr::llply(phaselist, function(a){
