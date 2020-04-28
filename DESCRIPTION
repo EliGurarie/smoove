@@ -21,7 +21,8 @@ Imports:
     gtools,
     methods,
     foreach, 
-    lubridate
+    lubridate,
+    move
 LinkingTo: Rcpp, RcppArmadillo
 VignetteBuilder: knitr
 BugReports: https://github.com/EliGurarie/smoove/issues
