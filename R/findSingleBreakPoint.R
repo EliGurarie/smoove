@@ -11,7 +11,7 @@
 #' @param plotme whether to plot the resulting likelihood (only if method is "sweep"). 
 #' @param ... additional parameters to pass to \code{\link{estimateUCVM}} function, in particular the method of estimation.  Under most conditions, fairly reliable and fast results are provided by the default \code{vLike} (velocity likelihood) method. 
 #' 
-#' @example ./demo/findSingleBreakPoint_examples.r
+#' @example demo/findSingleBreakPoint_examples.R
 #' @export
 findSingleBreakPoint <- function(Z, T, method = "sweep", plotme=TRUE,  ...){
   

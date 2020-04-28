@@ -5,7 +5,6 @@
 #' 
 #' @param variable one of: \code{omega}, \code{mu.x}, \code{mu.y}, \code{eta}, \code{tau}
 #' @param phaselist output of \code{\link{estimatePhases}}, i.e. a list of information on each of the selected phases
-#' @param ... additional arguments to pass to plotting function. 
 #' @return \code{getPhaseParameter} returns a data.frame with start time, end time, estimate, low and high 95\% C.I. and selected model for a given parameter, with each row corresponding to an enumerated partition phase.  
 #' @examples 
 #' library(smoove)

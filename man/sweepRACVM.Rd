@@ -10,8 +10,17 @@
 \usage{
 sweepRACVM(Z, ...)
 
-\method{sweepRACVM}{default}(Z, T, windowsize, windowstep, model = "UCVM",
-  progress = TRUE, time.unit = "hours", ..., .parallel = FALSE)
+\method{sweepRACVM}{default}(
+  Z,
+  T,
+  windowsize,
+  windowstep,
+  model = "UCVM",
+  progress = TRUE,
+  time.unit = "hours",
+  ...,
+  .parallel = FALSE
+)
 
 \method{sweepRACVM}{data.frame}(Z, ...)
 
@@ -81,7 +90,7 @@ if(interactive() && FALSE){
   
   # Perform sweep in parallel (can greatly improve speed)
   if(!requireNamespace('doParallel',quietly = TRUE))
-    warning("package \\"doParallel\\" is needed for this example. 
+    warning("package \"doParallel\" is needed for this example. 
          Please install it first and then run this example",
          call. = FALSE)
     

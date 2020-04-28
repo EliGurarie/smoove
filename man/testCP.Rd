@@ -4,8 +4,17 @@
 \alias{testCP}
 \title{Test RACVM change point}
 \usage{
-testCP(Z, T, cp, start, end, modelset = "all", spline = FALSE,
-  criterion = "BIC", ...)
+testCP(
+  Z,
+  T,
+  cp,
+  start,
+  end,
+  modelset = "all",
+  spline = FALSE,
+  criterion = "BIC",
+  ...
+)
 }
 \arguments{
 \item{Z}{location}

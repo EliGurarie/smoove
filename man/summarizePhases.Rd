@@ -29,7 +29,7 @@ Z <- attributes(simPhaselist)$Z
 T <- attributes(simPhaselist)$time
 
 if (requireNamespace('gplots', quietly = TRUE))
-warning("package \\"gplots\\" is needed for this example. 
+warning("package \"gplots\" is needed for this example. 
     Please install it first and then run this example",
     call. = FALSE)
 

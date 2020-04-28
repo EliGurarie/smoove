@@ -23,7 +23,7 @@
 #' @param verbose whether to output verbose message. defaults to FALSE#'
 #' @aliases fitRACVM 
 #' @seealso \code{\link{simulateRACVM}}
-#' @example ./demo/estimateRACVM_examples.r
+#' @example demo/estimateRACVM_examples.R
 #' @export
 estimateRACVM <- function(XY, Z = NULL, T, track = NULL, 
                           model = "RACVM", 

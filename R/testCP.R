@@ -11,7 +11,7 @@
 #' @param spline whether or not to use the spline approximation for the final estimate. 
 #' @param criterion selection criterion - either BIC or AIC (can be upper- or lowercased)
 #' @param ... further params to \code{getFit} internal function
-#' @example ./demo/testCP_example.r
+#' @example ./demo/testCP_example.R
 #' @export
 testCP <- function(Z, T, cp, start, end, modelset = "all", spline = FALSE, criterion = "BIC", ...){
   

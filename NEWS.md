@@ -1,4 +1,5 @@
 # smoove 0.1.0 (first CRAN submision 06/28/2018)
+
 - Bug fixes
 - all estimation functions support POSIX time
 

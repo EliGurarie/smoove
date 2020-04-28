@@ -12,7 +12,7 @@
 #' @param dt time interval of simulation
 #' @return a list with the following elements \describe{\item{T}{the time vector} \item{V}{the (complex) vector of velocities} \item{Z}{the (complex) vector of locations} \item{XY}{a two-column matrix of x-y coordinates of locations} \item{parameters}{a named list of model parameters.}}
 #' @seealso \code{\link{estimateRACVM}}
-#' @example ./demo/simulateRACVM_examples.r
+#' @example demo/simulateRACVM_examples.R
 #' @export
 simulateRACVM <- function(tau=1, eta = 1, omega=0, mu=0, v0=NULL, Tmax=100, dt=.01){
   T <- seq(0,Tmax,dt)

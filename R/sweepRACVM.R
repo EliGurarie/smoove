@@ -12,7 +12,7 @@
 #' @param ... additional parameters to pass to the \code{\link{estimateRACVM}} function, notably the option "criterion" allows you to select models based on AIC or BIC (the former is more liberal with more complex models).
 #' @param .parallel if set TRUE, will use \code{\link{foreach}} to parallelize the optimization.  Requires establishing the 
 #' @seealso \code{\link{plotWindowSweep}}, \code{\link{estimateRACVM}}, \code{\link{testCP}}
-#' @example ./demo/sweepRACVM_examples.R
+#' @example demo/sweepRACVM_examples.R
 #' @export
 sweepRACVM <- function(Z, ...) UseMethod("sweepRACVM")
 

@@ -12,7 +12,7 @@
 #' @param time.units unit of time to be passed to \code{\link[base]{difftime}()} to compute a relative numeric time vector.
 #' @param ... additional parameters to pass to estimation functions.  These are particularly involved in the \code{crawl} method (see \code{\link[crawl]{crwMLE}}). 
 #' @return A data frame with point estimates of mean speed `nu' and time-scale `tau' 
-#' @example ./demo/estimateUCVM_examples.r
+#' @example demo/estimateUCVM_examples.R
 #' @export
 estimateUCVM <- function(Z,
            XY,

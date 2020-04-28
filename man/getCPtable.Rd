@@ -4,8 +4,15 @@
 \alias{getCPtable}
 \title{CVM change point model selection table}
 \usage{
-getCPtable(CPs, modelset, tidy = "strict", iterate = TRUE, spline = FALSE,
-  criterion = "BIC", ...)
+getCPtable(
+  CPs,
+  modelset,
+  tidy = "strict",
+  iterate = TRUE,
+  spline = FALSE,
+  criterion = "BIC",
+  ...
+)
 }
 \arguments{
 \item{CPs}{candidate change points}
