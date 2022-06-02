@@ -7,3 +7,5 @@ faridR
 vignettes/smoove_cache
 vignettes/smoove_files
 ^CRAN-RELEASE$
+^doc$
+^Meta$

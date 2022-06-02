@@ -4,7 +4,8 @@
 \name{Kestrel}
 \alias{Kestrel}
 \title{Kestrel}
-\format{A data frame with 7829 rows and 13 columns.
+\format{
+A data frame with 7829 rows and 5 columns.
  \describe{
  \item{timestamp}{timestamp}
  \item{longitude}{longitude}
@@ -12,12 +13,13 @@
  \item{X}{X in UTM coordinate system}
  \item{Y}{Y in UTM coordinate system}
 
- }}
+ }
+}
 \source{
 https://www.datarepository.movebank.org/handle/10255/move.487
 }
 \usage{
-Kestrel
+data(Kestrel)
 }
 \description{
 Movement data from a single kestrel (\emph{Falco naumanni}) in southern Spain. 
@@ -28,4 +30,4 @@ Hernandez-Pliego J, Rodriguez C, Bustamante J (2015) Why do kestrels soar? PLOS 
 
 Hernandez-Pliego J, Rodriguez C, Bustamante J (2015) Data from: Why do kestrels soar? Movebank Data Repository. doi:10.5441/001/1.sj8t3r11
 }
-\keyword{datasets}
+\keyword{data}

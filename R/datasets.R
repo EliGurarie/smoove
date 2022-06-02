@@ -3,7 +3,7 @@
 #' Movement data from a single kestrel (\emph{Falco naumanni}) in southern Spain. 
 #' See references for data source and vignette for example of analysis.
 #'
-#' @format A data frame with 7829 rows and 13 columns.
+#' @format A data frame with 7829 rows and 5 columns.
 #'  \describe{
 #'  \item{timestamp}{timestamp}
 #'  \item{longitude}{longitude}
@@ -12,7 +12,10 @@
 #'  \item{Y}{Y in UTM coordinate system}
 #'
 #'  }
-#'
+#' @usage 
+#' data(Kestrel)
+#' @keywords data
+#' 
 #' @references
 #' Hernandez-Pliego J, Rodriguez C, Bustamante J (2015) Why do kestrels soar? PLOS ONE. 10(12): e0145402. doi:10.1371/journal.pone.0145402
 #' 
@@ -34,7 +37,10 @@
 #'  \item{Z}{a complex vector of locations}
 #'
 #'  }
-#'
+#' @usage 
+#' data(simSweep)
+#' @keywords data
+#' 
 #' @examples
 #' if(interactive() && FALSE){
 #' taus <- c(3, 3, 1)
