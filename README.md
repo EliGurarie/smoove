@@ -13,7 +13,7 @@ To see a detailed vignette:
 vignette("smoove")
 ```
 
-Or simply: http://htmlpreview.github.io/?https://github.com/EliGurarie/smoove/blob/master/inst/doc/smoove.html.
+Or simply: http://htmlpreview.github.io/?https://github.com/EliGurarie/smoove/blob/master/doc/smoove.html.
 
 ### MacOS
 If you get the following error while installing on the MacOS:
