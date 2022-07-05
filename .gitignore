@@ -32,3 +32,5 @@ faridR
 src-*/
 #doc
 Meta
+/doc/
+/Meta/

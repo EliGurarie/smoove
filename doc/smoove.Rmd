@@ -1,7 +1,7 @@
 ---
 title: "smoove"
 subtitle: "Simulation, Estimation and Change Point Analysis of Correlated Velocity Movement Models" 
-author: "Eliezer Gurarie (with help from Faridedin Cheraghi)"
+author: "Eliezer Gurarie"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
