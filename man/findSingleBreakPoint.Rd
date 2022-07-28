@@ -4,12 +4,15 @@
 \alias{findSingleBreakPoint}
 \title{Find single change point}
 \usage{
-findSingleBreakPoint(Z, T, method = "sweep", plotme = TRUE, ...)
+findSingleBreakPoint(Z, T, k = 1, method = "sweep", plotme = TRUE, ...)
 }
 \arguments{
 \item{Z}{complex vector of locations}
 
 \item{T}{vector of times}
+
+\item{k}{tuning parameter for the smoothing of the likelihood profile spline. 
+The number of knots is "length(T)/4 * k" - the lower the value of k, the smoother the spline.}
 
 \item{method}{one of "sweep" or "optimize". See details.}
 
@@ -18,10 +21,15 @@ findSingleBreakPoint(Z, T, method = "sweep", plotme = TRUE, ...)
 \item{...}{additional parameters to pass to \code{\link{estimateUCVM}} function, in particular the method of estimation.  Under most conditions, fairly reliable and fast results are provided by the default \code{vLike} (velocity likelihood) method.}
 }
 \description{
-Finds a single change point in UCVM parameters (time scale \eqn{tau} and rms speed \eqn{eta}) of a movement.
+Finds a single change point in UCVM parameters (time scale \eqn{tau} and rms 
+speed \eqn{eta}) of a movement.
 }
 \details{
-Two methods are provided: "sweep", which scans a set of possible change points, smooths the likelihoods and selects the maximum, or "optimize" which uses R's single dimension optimization algorithms to find the most likely change point. The latter is faster, but can be unreliable because the likelihood profiles are typically quite rough.
+Two methods are provided: "sweep", which scans a set of possible 
+change points, smooths the likelihoods and selects the maximum, or "optimize" 
+which uses R's single dimension optimization algorithms to find the most 
+likely change point. The latter is faster, but can be unreliable because the 
+likelihood profiles are typically quite rough.
 }
 \examples{
 require(smoove)
