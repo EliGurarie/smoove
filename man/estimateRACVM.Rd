@@ -6,10 +6,8 @@
 \title{Estimate RACVM parameters}
 \usage{
 estimateRACVM(
-  XY,
-  Z = NULL,
+  Z,
   T,
-  track = NULL,
   model = "RACVM",
   compare.models = TRUE,
   modelset = c("UCVM", "ACVM", "RCVM", "RACVM"),
@@ -22,13 +20,9 @@ estimateRACVM(
 )
 }
 \arguments{
-\item{XY}{XY two-column matrix}
-
 \item{Z}{optional complex location matrix}
 
 \item{T}{times of observations}
-
-\item{track}{a possible \code{track} object (i.e. data frame with columns called X, Y and Time) to provide instead of Z and T.}
 
 \item{model}{one of UCVM, RCVM, ACVM or RACVM.}
 
@@ -47,6 +41,10 @@ estimateRACVM(
 \item{time.units}{time units of calculations (e.g. "sec", "min", "hour", "day")}
 
 \item{verbose}{whether to output verbose message. defaults to FALSE#'}
+
+\item{XY}{XY two-column matrix}
+
+\item{track}{a possible \code{track} object (i.e. data frame with columns called X, Y and Time) to provide instead of Z and T.}
 }
 \description{
 Estimate rotational-advectice correlated velocity movement model

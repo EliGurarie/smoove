@@ -6,7 +6,6 @@
 \usage{
 estimateUCVM(
   Z,
-  XY,
   T,
   method = c("vaf", "crw", "vLike", "zLike", "crawl")[3],
   parameters = c("tau", "nu"),
@@ -18,15 +17,19 @@ estimateUCVM(
 )
 }
 \arguments{
-\item{Z}{location data in complex form (X + iY)}
-
-\item{XY}{... or, optionally, as a two column matrix of x and y coordinates.}
+\item{Z}{location data in complex form (X + iY), or as a two column matrix 
+of x and y coordinates, or as a simple feature.}
 
 \item{T}{time of observations (NOTE: must be regularly spaced for methods "vaf" and "crw")}
 
-\item{method}{the method to use for the estimation.  These are (in increasing : velocity auto-correlation fitting (\code{vaf}), correlated random walk matching (\code{crw}), velocity likelihood (\code{vLike}), position likelihood (\code{zLike}) and position likelihood with Kalman filter (\code{crawl}). This last method is generally he best method, since it  fits the position likelihood more efficiently by using a Kalman filter. It is based on Johnson et al (2008) and is a wrapper for the \code{\link{crwMLE}} in the (excellent) \code{\link{crawl}} package.  The default method is \code{vLike}.}
+\item{method}{the method to use for the estimation.  These are (in increasing : velocity auto-correlation fitting (\code{vaf}), correlated 
+random walk matching (\code{crw}), velocity likelihood (\code{vLike}), position likelihood (\code{zLike}) and position likelihood with Kalman 
+filter (\code{crawl}). This last method is generally he best method, since it  fits the position likelihood more efficiently by using a Kalman 
+filter. It is based on Johnson et al (2008) and is a wrapper for the \code{\link{crwMLE}} in the (excellent) \code{\link{crawl}} package.  
+The default method is \code{vLike}.}
 
-\item{parameters}{which parameters to estimate.  For most methods "tau" and "nu" are always both estimated, but some computation can be saved for the velocity likelihood method by providing an estimate for "nu".}
+\item{parameters}{which parameters to estimate.  For most methods "tau" and "nu" are always both estimated, but some computation can be saved
+for the velocity likelihood method by providing an estimate for "nu".}
 
 \item{time.units}{unit of time to be passed to \code{\link[base]{difftime}()} to compute a relative numeric time vector.}
 
@@ -42,7 +45,8 @@ estimateUCVM(
 A data frame with point estimates of mean speed `nu' and time-scale `tau'
 }
 \description{
-This  function  estimates the mean speed \eqn{nu}, the time-scale \eqn{tau} and (occasionally) the initial speed \eqn{v_0}of the unbiased correlated velocity movement (UCVM).  See Gurarie et al. (in review) and the \code{vignette("smoove", package = "smoove")} vignette for more details.
+This  function  estimates the mean speed \eqn{nu}, the time-scale \eqn{tau} and (occasionally) the initial speed \eqn{v_0} of the unbiased 
+correlated velocity movement (UCVM).  See Gurarie et al. (2016) and the \code{vignette("smoove", package = "smoove")} vignette for more details.
 }
 \examples{
 if(interactive() && FALSE){

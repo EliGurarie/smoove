@@ -25,7 +25,7 @@
 #' @seealso \code{\link{simulateRACVM}}
 #' @example demo/estimateRACVM_examples.R
 #' @export
-estimateRACVM <- function(XY, Z = NULL, T, track = NULL, 
+estimateRACVM <- function(Z,T, 
                           model = "RACVM", 
                           compare.models = TRUE, 
                           modelset = c("UCVM", "ACVM", "RCVM", "RACVM"),
@@ -36,16 +36,19 @@ estimateRACVM <- function(XY, Z = NULL, T, track = NULL,
     all <- c("UCVM", "ACVM", "RCVM", "RACVM")
     if(identical(modelset, "all")) modelset <- all
     
-    if(!is.null(track)){
+    if(inherits(Z, "Z")){
       Z <- with(track, X+1i*Y)
       T <- track$Time
     }
     
-    if("POSIXt" %in% is(T))
-      T <- difftime(T, T[1], units = time.units) %>% as.numeric
+    if(inherits(T, "POSIXt"))
+      T <- as.numeric(difftime(T, T[1], units = time.units))
     
-    if(is.null(Z)) Z <- XY[,1] + 1i*XY[,2]
-    
+    if(is.complex(Z)) Z <- Z else 
+      if(inherits(Z, "sf")) Z <- st_coordinates(Z)[,1] + 1i*st_coordinates(Z)[,2] else
+        if(ncol(Z) == 2) Z <- Z[,1] + 1i*Z[,2] else
+          stop("Data should be complex, two column (x,y), or a simple feature.\n")
+        
     if(spline){
       if(is.null(T.spline)) T.spline <- seq(min(T), max(T), length = length(T))
       VZT <- getV.spline(Z,T, resolution = spline.res, T.new = T.spline)

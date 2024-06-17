@@ -47,13 +47,14 @@
 #' plotPhaseParameter("rms", simPhaselist, ylab= "", xlab="time", col=cols)
 #' 
 #' @export
+#' 
 plotPhaseParameter <- function(variable, phaselist, cols = 1:length(phaselist), 
-                               label = TRUE, ymax = 1e3, ...){
+                               label = TRUE, ...){
   variabletable <- getPhaseParameter(variable, phaselist)
   
   low.plot <- variabletable$low
   high.plot <- variabletable$high
-  high.plot[high.plot > ymax] <- ymax
+  #high.plot[high.plot > ymax] <- ymax
   
   with(variabletable,{
     plot(range(start, end), 

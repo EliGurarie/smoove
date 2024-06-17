@@ -34,6 +34,7 @@ getcov.zz <- function(t1, t2, tau, t0 = 0) {
 #' @param T time vector of length n 
 #'
 #' @rdname getcov.zz
+#' @export
 getS.zz <- function(T, tau, t0 = 0) {
   M <- outer(T,T,getcov.zz, tau=tau)
   M[lower.tri(M)] <- t(M)[lower.tri(M)]

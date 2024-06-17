@@ -1,11 +1,18 @@
 #' Estimating parameters of unbiased CVM
 #' 
-#' This  function  estimates the mean speed \eqn{nu}, the time-scale \eqn{tau} and (occasionally) the initial speed \eqn{v_0}of the unbiased correlated velocity movement (UCVM).  See Gurarie et al. (in review) and the \code{vignette("smoove", package = "smoove")} vignette for more details. 
-#' @param Z location data in complex form (X + iY)
-#' @param XY ... or, optionally, as a two column matrix of x and y coordinates. 
+#' This  function  estimates the mean speed \eqn{nu}, the time-scale \eqn{tau} and (occasionally) the initial speed \eqn{v_0} of the unbiased 
+#' correlated velocity movement (UCVM).  See Gurarie et al. (2016) and the \code{vignette("smoove", package = "smoove")} vignette for more details. 
+#' 
+#' @param Z location data in complex form (X + iY), or as a two column matrix 
+#' of x and y coordinates, or as a simple feature.
 #' @param T time of observations (NOTE: must be regularly spaced for methods "vaf" and "crw")
-#' @param method the method to use for the estimation.  These are (in increasing : velocity auto-correlation fitting (\code{vaf}), correlated random walk matching (\code{crw}), velocity likelihood (\code{vLike}), position likelihood (\code{zLike}) and position likelihood with Kalman filter (\code{crawl}). This last method is generally he best method, since it  fits the position likelihood more efficiently by using a Kalman filter. It is based on Johnson et al (2008) and is a wrapper for the \code{\link{crwMLE}} in the (excellent) \code{\link{crawl}} package.  The default method is \code{vLike}.
-#' @param parameters which parameters to estimate.  For most methods "tau" and "nu" are always both estimated, but some computation can be saved for the velocity likelihood method by providing an estimate for "nu".
+#' @param method the method to use for the estimation.  These are (in increasing : velocity auto-correlation fitting (\code{vaf}), correlated 
+#' random walk matching (\code{crw}), velocity likelihood (\code{vLike}), position likelihood (\code{zLike}) and position likelihood with Kalman 
+#' filter (\code{crawl}). This last method is generally he best method, since it  fits the position likelihood more efficiently by using a Kalman 
+#' filter. It is based on Johnson et al (2008) and is a wrapper for the \code{\link{crwMLE}} in the (excellent) \code{\link{crawl}} package.  
+#' The default method is \code{vLike}.
+#' @param parameters which parameters to estimate.  For most methods "tau" and "nu" are always both estimated, but some computation can be saved
+#'  for the velocity likelihood method by providing an estimate for "nu".
 #' @param CI whether or not to compute 95\% confidence intervals for parameters. In some cases, this can slow the computation down somewhat.
 #' @param spline whether or not to use the spline correction (only relevant for \code{vaf} and \code{vLike}).
 #' @param diagnose whether to draw a diagnostic plot.  Varies for different methods.
@@ -14,22 +21,25 @@
 #' @return A data frame with point estimates of mean speed `nu' and time-scale `tau' 
 #' @example demo/estimateUCVM_examples.R
 #' @export
-estimateUCVM <- function(Z,
-           XY,
-           T,
+#' 
+
+estimateUCVM <- function(Z,T,
            method = c("vaf", "crw", "vLike", "zLike", "crawl")[3],
            parameters = c("tau", "nu"),
            time.units = "day",
            CI = FALSE,
            spline = FALSE,
            diagnose = FALSE,
-           ...)
-{
-  if("POSIXt" %in% is(T))
-    T <- difftime(T, T[1], units = time.units) %>% as.numeric
+           ...){
   
-   if(is.null(Z)) Z <- XY[,1] + 1i*XY[,2]
-    
+  if(inherits(T, "POSIXt"))
+    T <- as.numeric(difftime(T, T[1], units = time.units))
+  
+  if(is.complex(Z)) Z <- Z else 
+    if(inherits(Z, "sf")) Z <- st_coordinates(Z)[,1] + 1i*st_coordinates(Z)[,2] else
+      if(ncol(Z) == 2) Z <- Z[,1] + 1i*Z[,2] else
+        stop("Data should be complex, two column (x,y), or a simple feature.")
+      
   if(method == "crw")
     return(estimateCVM.crw(Z,T, CI = CI, diagnose = diagnose, ...))
     
@@ -47,8 +57,8 @@ estimateUCVM <- function(Z,
   }
 
 
-estimateCVM.crawl <- function(Z, T, p0 = NULL, verbose = TRUE, CI = NULL, ...)
-{
+estimateCVM.crawl <- function(Z, T, p0 = NULL, verbose = TRUE, CI = NULL, ...){
+
   X = Re(Z)
   Y = Im(Z)
   data <- data.frame(X, Y, T)
@@ -83,20 +93,17 @@ estimateCVM.crawl <- function(Z, T, p0 = NULL, verbose = TRUE, CI = NULL, ...)
     nu.CI <- sqrt(pi/tau.hat)*sigma.CI/2
     
     results <- data.frame(Estimate = c(tau.hat, nu.hat), rbind(tau.CI, nu.CI))
-    names(results) <- c("Estimate", "L", "U")
+    names(results) <- c("Estimate", "CI.low", "CI.high")
     return(results)
   }
-  
   nutau <- Get.nutau(Fit.crawl)
   row.names(nutau) <- c("tau", "nu")
-  
   if(verbose) print(Fit.crawl)
   
   return(nutau)
 }
 
-estimateCVM.crw <- function(Z, T, CI = FALSE, diagnose = FALSE)
-{
+estimateCVM.crw <- function(Z, T, CI = FALSE, diagnose = FALSE){
   # extract pieces
   V <- diff(Z)/diff(T)
   lambda <- mean(Mod(V)^2) / mean(Mod(V))^2
@@ -121,7 +128,6 @@ estimateCVM.crw <- function(Z, T, CI = FALSE, diagnose = FALSE)
   if(CI) lambda.sd <- (s2 / Sbar2) * sqrt((2*(n+1)/n^2 + 4*s2 / (n*Sbar2)))
   
   # conversion function
-  
   crw2cvm <- function(kappa, lambda)
   {
     tau <- getTau(lambda, kappa, dT.mean)
@@ -156,19 +162,17 @@ estimateCVM.crw <- function(Z, T, CI = FALSE, diagnose = FALSE)
   {
     results <- data.frame(t(results), rbind(tau.CI, nu.CI))
     row.names(results) <- c("tau", "nu")
-    names(results) <- c("Estimate", "C.I.low", "C.I.high")
+    names(results) <- c("Estimate", "CI.low", "CI.high")
   }
   return(results)
 }
 
-getTau <- function(lambda, kappa, mu=1)
-{
+getTau <- function(lambda, kappa, mu=1){
   f <- function(x) exp(-x/mu)*(1+1/lambda*(-1+exp(kappa*x/mu))) - exp(-1)
   uniroot(f, c(0, 100))$root
 }
 
-DiagnoseCRW <- function(Z)
-{
+DiagnoseCRW <- function(Z){
   # Get non-jumpy theta
   
   phi <- Arg(diff(Z))
@@ -191,8 +195,8 @@ DiagnoseCRW <- function(Z)
   title("Autocorrelations should be near 0 at lag>0", outer=TRUE, font=2)
 }
 
-estimateCVM.vaf <- function(Z, T, lagmax = (max(T) - min(T))/2, CI = FALSE, diagnose = FALSE, spline=FALSE)
-{
+estimateCVM.vaf <- function(Z, T, lagmax = (max(T) - min(T))/2, 
+                            CI = FALSE, diagnose = FALSE, spline=FALSE){
   T <- T-min(T)
   dT <- mean(diff(T))
   if(sd(diff(T))/mean(diff(T)) > 1e-10) stop("Sorry - time intervals must be constant to use this method.")
@@ -260,7 +264,7 @@ estimateCVM.vaf <- function(Z, T, lagmax = (max(T) - min(T))/2, CI = FALSE, diag
     # compile results
     results <- data.frame(t(results), rbind(tau.CI, nu.CI))
     row.names(results) <- c("tau", "nu")
-    names(results) <- c("Estimate", "C.I.low", "C.I.high")
+    names(results) <- c("Estimate", "CI.low", "CI.high")
   }
   
   if(diagnose){   
@@ -272,9 +276,9 @@ estimateCVM.vaf <- function(Z, T, lagmax = (max(T) - min(T))/2, CI = FALSE, diag
   return(results)
 }
 
-estimateCVM.vLike <- function(Z, T, CI = FALSE, parameters = c("tau", "nu"), spline = FALSE, like=FALSE)
-{   
-  V <- diff(Z)/diff(T)
+estimateCVM.vLike <- function(Z, T, CI = FALSE, parameters = c("tau", "nu"), 
+                              spline = FALSE, like=FALSE){   
+  V <- diff(Z) / diff(T)
   T.mid <- (T[-1] + T[-length(T)])/2
   
   if(spline){
@@ -319,10 +323,9 @@ estimateCVM.vLike <- function(Z, T, CI = FALSE, parameters = c("tau", "nu"), spl
   
   if(!"nu" %in% parameters)
   {
-    
     logtau.fit <- optimize(V.LogLikelihood.Tau, c(-1e10, log(diff(range(T))/2)))
     logtau.hat <- logtau.fit$min
-    logtau.sd <- 1/sqrt(hessian(V.LogLikelihood.Tau, logtau.hat))
+    logtau.sd <- 1/sqrt(numDeriv::hessian(V.LogLikelihood.Tau, logtau.hat))
     tau.hat <- exp(logtau.hat)
     
     LL <- -logtau.fit$obj
@@ -360,18 +363,18 @@ estimateCVM.vLike <- function(Z, T, CI = FALSE, parameters = c("tau", "nu"), spl
   {
     results <- data.frame(t(results), rbind(tau.CI, nu.CI))
     row.names(results) <- c("tau", "nu")
-    names(results) <- c("Estimate", "C.I.low", "C.I.high")
+    names(results) <- c("Estimate", "CI.low", "CI.high")
   }
   if(like) return(list(results=results, LL = LL)) else return(results)
 }
 
 
-estimateCVM.zLike <- function(Z, T, CI = FALSE, tau.min=1e-10, tau.max = max(T)/2)
-{   
+estimateCVM.zLike <- function(Z, T, CI = FALSE, 
+                              tau.min=1e-10, tau.max = max(T)/2){   
   if(T[1] == 0) {T <- T[-1]; Z <- Z[-1]}
   
   logtau.hat <- 	optimize(Z.like2D, interval = c(log(tau.min), log(tau.max)), Z = Z, T = T)$minimum 
-  logtau.sd <- 1/sqrt(hessian(Z.like2D, logtau.hat, Z=Z, T=T)) %>% as.vector
+  logtau.sd <- 1/sqrt(numDeriv::hessian(Z.like2D, logtau.hat, Z=Z, T=T)) %>% as.vector
   
   tau.hat <- exp(logtau.hat)
   tau.CIs <- exp(logtau.hat + c(-1,1)*1.96*logtau.sd)
@@ -404,7 +407,7 @@ estimateCVM.zLike <- function(Z, T, CI = FALSE, tau.min=1e-10, tau.max = max(T)/
   
   results <- data.frame(hats, CIs)
   row.names(results) <- c("tau", "nu", "v0x", "v0y")
-  names(results) <- c("Estimate", "C.I.low", "C.I.high")
+  names(results) <- c("Estimate", "CI.low", "CI.high")
   
   return(results)
 }
