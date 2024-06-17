@@ -65,6 +65,6 @@ plotPhaseParameter <- function(variable, phaselist, cols = 1:length(phaselist),
     segments(start, hat, end, hat, lwd = 2, col=cols)
     segments(end[-length(end)], hat[-length(end)], start[-1], hat[-1], col="grey")
     
-    if(label) mtext(variable, side = 3, at = start[1], font = 3, adj = 0)
+    if(label) mtext(variable, side = 3, at = start[1], font = 3, adj = 0, cex = 0.8)
   })
 }

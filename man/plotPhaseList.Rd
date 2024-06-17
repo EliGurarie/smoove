@@ -7,9 +7,11 @@
 plotPhaseList(
   phaselist,
   cols = gplots::rich.colors(length(phaselist)),
-  legend.where = "bottomright",
+  plot.parameters = TRUE,
   parameters = NULL,
-  plot.parameters = TRUE
+  plot.legend = TRUE,
+  legend.where = "bottomright",
+  layout = c("horizontal", "vertical")
 )
 }
 \arguments{
@@ -17,11 +19,15 @@ plotPhaseList(
 
 \item{cols}{colors for phases (by default uses the `rich.colors` palette from `gplots`)}
 
-\item{legend.where}{location of legend}
+\item{plot.parameters}{whether the parameters are plotted}
 
 \item{parameters}{which parameters to plot (by default - ALL of the estimated parameters)}
 
-\item{plot.parameters}{whether the parameters are plotted}
+\item{plot.legend}{whether to plot a legend}
+
+\item{legend.where}{location of legend}
+
+\item{layout}{"horizontal" (default) or "vertical"- as preferred (partial string matching accepted)}
 }
 \description{
 Plot Phase Partitioning of RACVM analysis

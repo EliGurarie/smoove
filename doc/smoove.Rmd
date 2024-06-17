@@ -336,7 +336,7 @@ For unbiased CVM's, it is simple equal to $\eta$. The rms speed is useful for co
 
 ## 2.3. Example with kestrel data
 
-In the paper, we analyze a phenomenal data set of a single lesser kestrel (*Falco naumanni*) flight in southern Spain from Hernández-Pliego et al (2015a, 2015b). One kestrel's flight is in the package:
+In the paper, we analyze a phenomenal data set of a single lesser kestrel (*Falco naumanni*) flight in southern Spain from HernÃ¡ndez-Pliego et al (2015a, 2015b). One kestrel's flight is in the package:
 
 ```{r KestrelFlight, fig.height=8, fig.width = 6, echo=-1, out.width="3in", fig.align="center"}
 par(bty="l", mgp = c(1.5,0.25,0), tck=0.01, las=1, bty="l")
@@ -355,7 +355,7 @@ We can analyze one portions of the kestrel's flight, mirroring the analysis in G
 The model selection confirms this (note that we specify the time unit of analysis - in this case, seconds).
 
 ```{r K1.fit, cache=TRUE}
-(fit1 <- with(K1, estimateRACVM(XY = cbind(X,Y), T = timestamp, spline=TRUE, 
+(fit1 <- with(K1, estimateRACVM(Z = cbind(X,Y), T = timestamp, spline=TRUE, 
                                 model = "RACVM", time.units = "sec")))
 ```
 
@@ -458,7 +458,7 @@ simSweep <- with(multicvm, sweepRACVM(Z = Z, T = T,
                                       model = "ACVM", progress=FALSE))
 ```
 
-Toggling the `progress` to TRUE will provide reports on the progress of the analysis.  There is also an option to parallelize the analysis using the `doParallel` and `foreach` R packages.  This which can speed things up considerably (roughly in proportion to the number of cores on your processor).  An example of implementation: 
+Toggling the `progress` to TRUE will provide reports on the progress of the analysis.  There is also an option to parallelize the analysis using the `doParallel` R package.  This can speed things up considerably  - roughly in proportion to the number of cores on your processor.  An example of implementation: 
 
 ```{r simSweep.parallel, cache=TRUE, warning = FALSE, eval=FALSE, message = FALSE}
 require(foreach); require(doParallel)
@@ -515,28 +515,28 @@ In the output of `selectRACVM`, the `extremes` column indicates which parameter 
 getCPtable(CPs = CP.clustered, modelset = c("UCVM", "ACVM"),  iterate = TRUE)
 ``` 
 
-We now have a final selected set of change points and, perhaps more usefully, a summary of which parameters precisely changed.  Note that thanks to the magic of `magrittr` piping, the process of finding and selecting change points can be reduced to a single line of code, which is convenient for comparing the robustness of the different settings.  Replicating the above analysis for several cluster widths yield the same result:
+We now have a final selected set of change points and, perhaps more usefully, a summary of which parameters precisely changed.  Note that thanks to the magic of `magrittr` piping, the process of finding and selecting change points can be reduced to a single line of code, which is convenient for comparing the robustness of the different settings.  Replicating the above analysis for several cluster widths yields similar (or same) result:
 
 ```{r exampleCPtables}
-simSweep %>% findCandidateChangePoints(clusterwidth = 2) %>% 
+simSweep |> findCandidateChangePoints(clusterwidth = 2) |>
   getCPtable(modelset = c("UCVM", "ACVM"))
-simSweep %>% findCandidateChangePoints(clusterwidth = 4) %>% 
+simSweep |> findCandidateChangePoints(clusterwidth = 4) |>
   getCPtable(modelset = c("UCVM", "ACVM"))
-simSweep %>% findCandidateChangePoints(clusterwidth = 10) %>% 
+simSweep |> findCandidateChangePoints(clusterwidth = 10) |> 
   getCPtable(modelset = c("UCVM", "ACVM"))
 ```
 
 Compared to the true values (`r durations[1]` and  `r sum(durations[1:2])`), these are excellent estimates of the change points themselves.  However, the analysis didn't pick out the "true" advective model for the initial period.  This is because the model selection step (by default) uses BIC, which tend to select simpler models.  If we use AIC as the criterion instead:  
 
 ```{r simSweep.AIC}
-simSweep %>% findCandidateChangePoints(clusterwidth = 4) %>% 
+simSweep |> findCandidateChangePoints(clusterwidth = 4) |>
   getCPtable(modelset = c("UCVM", "ACVM"), criterion = "AIC")
 ```
 
 we get the correct result.  We can also expand our "model set" to include all four CVM model:
 
 ```{r simSweepAllModels, cache=TRUE}
-simSweep %>% findCandidateChangePoints(clusterwidth = 10, verbose = FALSE) %>% 
+simSweep |> findCandidateChangePoints(clusterwidth = 10, verbose = FALSE) |> 
   getCPtable(modelset ="all", criterion = "AIC")
 ```
 
@@ -568,37 +568,20 @@ You can see that the estimates for the three parameters we set ($\tau$, $\eta$ a
 
  The `summarizePhases`, `getPhaseParameter` and `plotPhaseParameter` functions are useful for obtaining the estimates (with confidence intervals) and plotting their values.  In the code below, we plot the track, color it by  partition, and illustrate the values of the parameters.
 
-```{r SimPhasePlot, message=FALSE, echo = -1, fig.width = 6, fig.height = 6}
-  par(mar=c(4,0,1,0), oma = c(5,5,1,2), xpd=NA, las = 1, cex.lab = 1.5, tck = 0.01, mgp = c(1.5,0.25,0), bty="n")
-  layout(c(1,1,1,2:6))
-  # extract locations and times
-  Z <- multicvm$Z
-  T <- multicvm$T
-  
-  # Note, these are also contained in the attributes of *any* of the 
-  # intermediate objects, e.g.
-  Z <- attributes(simPhaselist)$Z
-  T <- attributes(simPhaselist)$time
-    
-  require(gplots) # for rich colors
-  cols <- rich.colors(length(simPhaselist))
-  T.cuts <- c(T[1], simCP.table$CP, T[length(T)])
-  Z.cols <- cols[cut(T, T.cuts, include.lowest = TRUE)]
-  
-  phaseTable <- summarizePhases(simPhaselist)
-  
-  plot(Z, asp=1, type="l", xpd=FALSE)
-  points(Z, col=Z.cols, pch=21, bg = alpha(Z.cols, 0.5), cex=0.8)
-  legend("top", legend = paste0(phaseTable$phase, ": ", phaseTable$model), 
-         fill=cols, ncol=3, bty="n", title = "Phase: model")
 
-  par(mar=c(0,0,1,0), xpd=NA)
-  plotPhaseParameter("tau", simPhaselist, ylab="", xaxt="n", xlab="", col=cols, log="y")
-  plotPhaseParameter("eta", simPhaselist,  ylab="", xaxt="n", xlab="", col=cols)
-  plotPhaseParameter("mu.x", simPhaselist,  ylab= "", xaxt="n", xlab="", col=cols)
-  plotPhaseParameter("mu.y", simPhaselist,  ylab= "", xaxt="n", xlab="", col=cols)
-  plotPhaseParameter("rms", simPhaselist,  ylab= "", xlab="time", col=cols)
+```{r phaseListPlot1, echo = -1,  fig.width = 4, fig.height = 6}
+par(bty = "l")
+plotPhaseList(simPhaselist, parameters = c("tau","rms","mu.x","mu.y"))
 ```
+
+Is is always helpful / constructive to look at the code for these plotting functions and deconstruct or personalize as you see fit!  There are some alternative ways to arrange these figures:
+
+```{r phaseListPlot2, echo = -1, fig.width = 6, fig.height = 3}
+par(bty = "l")
+plotPhaseList(simPhaselist, layout = "horiz", col = c("red","orange","green"))
+```
+
+
 
 The estimates are fairly accurate with respect to the true values:
 ```{r }
@@ -665,42 +648,20 @@ k.phases <- estimatePhases(k.CPtable, verbose=FALSE)
 summarizePhases(k.phases)
 ```
 
-```{r kestrelMegaPlot, echo=-1, eval=TRUE, warning = FALSE, fig.width = 6, fig.height = 6}
-par(mar=c(4,0,1,0), oma = c(5,5,1,2), xpd=NA, las = 1, cex.lab = 1.25, tck = 0.01, mgp = c(1.5,0.25,0), bty="n")
 
-
-cols <- rich.colors(length(k.phases)/2)
-
-XY <- cbind(k$X, k$Y)
-time <- k$timestamp
-
-T.cuts <- c(time[1], k.CPtable$CP, time[nrow(k)])
-XY.cols <- c(cols,cols)[cut(time, T.cuts, include.lowest = TRUE)]
-
-phaseTable <- summarizePhases(k.phases)
-
-layout(c(1,1,1,1,2:6)) 
-plot(XY, asp=1, type="l", xpd=FALSE, xlab="X (m)")
-points(XY, col=XY.cols, pch=21, bg = alpha(XY.cols, 0.5), cex=0.8)
-legend("topleft", legend = paste0(phaseTable$phase, ": ", phaseTable$model), 
-       fill=cols, ncol=2, bty="n", title = "Phase: model")
-
-par(mar=c(1,0,1,0), xpd=NA)
-plotPhaseParameter("tau", k.phases, ylab="sec", xaxt="n", xlab="", col=cols, log="y")
-plotPhaseParameter("eta", k.phases,  ylab="m / sec", xaxt="n", xlab="",  col=cols)
-plotPhaseParameter("omega", k.phases,  ylab="rad / sec", xaxt="n", xlab="", col=cols)
-plotPhaseParameter("mu.x", k.phases,  ylab="m / sec", xaxt="n", xlab="", col=cols)
-plotPhaseParameter("mu.y", k.phases,  ylab="m / sec", xlab="", col=cols)
+```{r, echo = -1, fig.width = 8, fig.height = 4}
+par(bty = "l")
+plotPhaseList(k.phases, layout = "horiz")
 ```
 
 A subtle nuance: Leaving the `xaxt= "n"` out provided a nicely formatted time axis.  Because R is R, if you try doing this post-facto (e.g., via `axis(1)`), it won't quite work. 
 
 # 4. References {-}
 
-- Gurarie, E., C.Fleming, K. Laidre, W. Fagan, O. Ovaskainen (2017) *Movement Ecology*. 
-- Johnson, D., J. London, M.-A. Lea, and J. Durban (2008) Continuous-time correlated random walk model for animal telemetry data. Ecology 89(5) 1208-1215.
-- Hernández-Pliego, J., C. Rodr{\'i}guez, J. Bustamante (2015) 'Data from: Why do kestrels soar?', Movebank Data Repository. https://www.datarepository.movebank.org/handle/10255/move.486
-- Hernández-Pliego, J., C. Rodríguez, J. Bustamante (2015) 'Why do kestrels soar?', PLoS ONE 10(12).
+- Gurarie, E., C.Fleming, K. Laidre, W. Fagan, O. Ovaskainen (2017) Correlated velocity models as a fundamental unit of animal movement: synthesis and applications. *Movement Ecology* 5(13)
+- Johnson, D., J. London, M.-A. Lea, and J. Durban (2008) Continuous-time correlated random walk model for animal telemetry data. *Ecology* 89(5) 1208-1215.
+- Hernández-Pliego, J., C. Rodríguez, J. Bustamante (2015) 'Data from: Why do kestrels soar?', *Movebank Data Repository*. https://www.datarepository.movebank.org/handle/10255/move.486
+- Hernández-Pliego, J., C. Rodríguez, J. Bustamante (2015) 'Why do kestrels soar?', *PLoS ONE* 10(12).
 
 
 # Appendix: Properties of the rms estimate {-}

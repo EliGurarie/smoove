@@ -17,15 +17,22 @@ getCPtable(
 \arguments{
 \item{CPs}{candidate change points}
 
-\item{modelset}{set of models to compare (combination of UCVM, ACVM, RCVM, RACVM, or \code{all}, which includes all of them)}
+\item{modelset}{set of models to compare (combination of UCVM, ACVM, RCVM, RACVM, or \code{all}, 
+which includes all of them)}
 
-\item{tidy}{criteria by which change points are retained or rejected.  By default, filters by \code{differences}, meaning that if estimates on either side of a change point are outside of the 95\% confidence interval bounds, the change point is considered significant. Other options are \code{AIC} and \code{BIC}, meaning that if the dAIC or dBIC of the change point model is negative, the change point is thrown out.}
+\item{tidy}{criteria by which change points are retained or rejected.  By default, filters by 
+\code{differences}, meaning that if estimates on either side of a change point are outside of 
+the 95\% confidence interval bounds, the change point is considered significant. Other options 
+are \code{AIC} and \code{BIC}, meaning that if the dAIC or dBIC of the change point model is 
+negative, the change point is thrown out.}
 
-\item{iterate}{whether or not to continue removing candidate change points until the most parsimonious set is selected.  Should, generally, be true.}
+\item{iterate}{whether or not to continue removing candidate change points until the most parsimonious 
+set is selected.  Should, generally, be true.}
 
 \item{spline}{whether or not to use the spline approximation for the final estimate.}
 
-\item{criterion}{model selection criterion (choosing between UCVM, ACVM, etc.)- can be either BIC, AIC.  Note, this is different from Change Point retention criterion (in \code{tidy})}
+\item{criterion}{model selection criterion (choosing between UCVM, ACVM, etc.) - can be either 
+BIC, AIC.  Note, this is different from Change Point retention criterion (in \code{tidy})}
 
 \item{...}{arguments to pass the \code{\link{testCP}} function, notably:}
 }
