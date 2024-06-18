@@ -355,7 +355,7 @@ We can analyze one portions of the kestrel's flight, mirroring the analysis in G
 The model selection confirms this (note that we specify the time unit of analysis - in this case, seconds).
 
 ```{r K1.fit, cache=TRUE}
-(fit1 <- with(K1, estimateRACVM(XY = cbind(X,Y), T = timestamp, spline=TRUE, 
+(fit1 <- with(K1, estimateRACVM(Z = cbind(X,Y), T = timestamp, spline=TRUE, 
                                 model = "RACVM", time.units = "sec")))
 ```
 
