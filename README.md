@@ -6,7 +6,7 @@ To install in R:
 
 ```
 require(devtools)
-install_github("EliGurarie/smoove")
+install_github("EliGurarie/smoove", build_vignettes = TRUE)
 ```
 
 To see a detailed vignette:
