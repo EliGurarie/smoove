@@ -9,6 +9,7 @@ plotPhaseParameter(
   phaselist,
   cols = 1:length(phaselist),
   label = TRUE,
+  log = "",
   ...
 )
 }
@@ -21,9 +22,9 @@ plotPhaseParameter(
 
 \item{label}{whether to label the plotted parameter (with the word "tau", "eta", etc.)}
 
-\item{...}{additional arguments to pass to plotting function.  A useful one is \code{log = "y"} for highly skewed data.}
+\item{log}{a character string which contains "y" if the y axis is to be logarithmic and "xy" or "yx" if both axes are to be logarithmic.}
 
-\item{ymax}{maximum y}
+\item{...}{additional arguments to pass to plotting function.  A useful one is \code{log = "y"} for highly skewed data.}
 }
 \value{
 \code{getVariable} returns a data.frame with start time, end time, estimate, low and high 95\% C.I. and selected model for a given parameter, with each row corresponding to an enumerated partition phase.
